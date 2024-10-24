@@ -1,0 +1,1 @@
+Stuff in this folder can be accessed outside the app so long as the URL is known. (We can delete this file later.)

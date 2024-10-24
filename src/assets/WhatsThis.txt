@@ -1,0 +1,1 @@
+Stuff here gets "bundled" with the app once it launches. IDK what this means, but it sounds like stuff in this folder will be less easily accessed outside the app.
