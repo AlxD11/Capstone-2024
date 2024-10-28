@@ -1,0 +1,97 @@
+
+:root
+{
+	/* Raw Swatch Colors */
+	--hot-pink: #EE1D52;
+
+	/* Linked Colors / Color Variables */
+	--nav-text-color: var(--hot-pink);
+	--body-text-light-color: darkgray;
+}
+
+body
+{
+	font-family: "Roboto", "Verdana", sans-serif;
+}
+
+.HomeScreen
+{
+	min-height: 75vh;
+}
+
+.HomeWelcomeMsg > p
+{
+	padding-left: 10vw;
+	color: var(--body-text-light-color);
+}
+
+.HomeScreen-info
+{
+	display: flex;
+	justify-content: space-between;
+	font-size: 0.75em;
+}
+
+.Reminders
+{
+	max-width: 35vw;
+	padding-right: 10px;
+}
+
+.Reminders > .reminder-entry
+{
+	padding-left: 2em;
+}
+
+.Reminders button
+{
+	background-color: black;
+	color: lightgray;
+}
+
+/* NavBar, the top navigation bar. */
+.NavBar
+{
+	display: flex;
+	justify-content: space-between; /* Distribute items along the x axis. */
+	align-items: center; /* Center contents relative to each other along the y-axis. */
+}
+
+.NavBar > nav
+{
+	display: flex;
+	justify-content: space-between;
+
+	min-width: 40vw; /* Force the nav menu to take up most (40%) of the horizontal window space. */
+}
+
+.NavBar > nav > a
+{
+	padding-left: 5px; /* Add padding to the navigation links so they can't touch each other, even when squished together. */
+	padding-right: 5px;
+
+	/* Text Color / Effects */
+	color: var(--nav-text-color);
+	text-decoration: none;
+	font-size: 1.25em;
+	font-weight: bold;
+}
+
+.Footer
+{
+	display: flex;
+}
+
+.Footer-icons
+{
+	display: flex;
+	flex-direction: column; /* Make the divs (app icons vs social icons) stack vertically. */
+
+	min-width: 25vw; /* Force the box of icons to take up at least 20% of the window width (vw). */
+}
+
+.Footer-resources p
+{
+	font-size: 0.75em; /* Make the footer text size smaller. */
+	margin: 0.25em; /* Compact the list of resources. */
+}
