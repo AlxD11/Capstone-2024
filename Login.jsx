@@ -1,5 +1,6 @@
 // src/components/Login.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 
 function Login() {
   // State to manage username and password inputs
@@ -37,10 +38,10 @@ function Login() {
             style={styles.input}
           />
         </label>
-        <button type="submit" style={styles.button}><a href="/main-screen">Login</a></button>
+        <button type="submit" style={styles.button}><Link to="/main-screen">Login</Link></button>
       </form>
       <div style={styles.links}>
-        <a href="/create-account">Create an Account</a> | <a href="/reset-password">Forgot Password?</a>
+        <Link to ="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
       </div>
     </div>
   );
