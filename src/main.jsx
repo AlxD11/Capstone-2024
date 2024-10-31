@@ -4,7 +4,8 @@ import Footer from './Footer.jsx'
 import NavBar from './NavBar.jsx'
 import HomeScreen from './HomeScreen.jsx'
 
-/** This is effectively the main() function. This is how the plain HTML code gets our React code. */
+/**@deprecated
+ *  This is effectively the main() function. This is how the plain HTML code gets our React code. */
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <NavBar />
