@@ -41,7 +41,7 @@ function Reminders()
 function InfoSummary()
 {
 	// TODO: Analyze user's data and determine what to say for the summary.
-	const summary = "Your mood was best on Saturday last week."
+	const summary = "You don't have any mood history yet."
 
 	return(
 		<div className="InfoSummary">

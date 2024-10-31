@@ -37,7 +37,7 @@ function Login() {
             style={styles.input}
           />
         </label>
-        <button type="submit" style={styles.button}>Login</button>
+        <button type="submit" style={styles.button}><a href="/main-screen">Login</a></button>
       </form>
       <div style={styles.links}>
         <a href="/create-account">Create an Account</a> | <a href="/reset-password">Forgot Password?</a>

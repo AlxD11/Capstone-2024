@@ -36,6 +36,7 @@ body
 {
 	max-width: 35vw;
 	padding-right: 10px;
+	margin-top: 6em;
 }
 
 .Reminders > .reminder-entry
@@ -47,6 +48,16 @@ body
 {
 	background-color: black;
 	color: lightgray;
+}
+
+.InfoSummary
+{
+	padding: 4em;
+	margin: 8em;
+	
+	width: 40vw;
+	height: 30vh;
+	background-color: lightgray;
 }
 
 /* NavBar, the top navigation bar. */
