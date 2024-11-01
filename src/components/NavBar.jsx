@@ -1,5 +1,5 @@
 import appLogo from '/vite.svg'
-import profilePic from './assets/profile_picture.jpg'
+import profilePic from '../assets/profile_picture.jpg'
 import './GlobalStyles.css'
 
 function NavBar()
