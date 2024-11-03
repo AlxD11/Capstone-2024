@@ -106,3 +106,13 @@ body
 	font-size: 0.75em; /* Make the footer text size smaller. */
 	margin: 0.25em; /* Compact the list of resources. */
 }
+
+.avatar {
+	vertical-align: middle;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border-width: 5px;
+	border-color: gray;
+	border-style: outset;
+  }

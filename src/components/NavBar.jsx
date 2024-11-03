@@ -1,9 +1,14 @@
 import appLogo from '/vite.svg'
-import profilePic from '../assets/profile_picture.jpg'
+import { useEffect, useState } from "react"
+import { useAuth } from "../contexts/AuthContext"
 import './GlobalStyles.css'
 
 function NavBar()
 {
+	const { currentUser } = useAuth();
+	const [photo, setPhoto] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
 	return(
 		<div className="NavBar">
         	<img src={appLogo} className="logo" alt="App logo" />
@@ -14,7 +19,7 @@ function NavBar()
 				<a href="#">Report</a>
 			</nav>
 
-			<img src={profilePic} className="logo" alt="User avatar" />
+			<img src={photoURL} className="avatar" alt="User avatar" />
 		</div>
 	);
 }
