@@ -1,4 +1,8 @@
-import appLogo from '/vite.svg'
+import appLogo from '../assets/app_logo.png';
+import vwmLogo from '../assets/logo_vwm.png';
+import hlLogo from '../assets/logo_hl.png';
+import ptLogo from '../assets/logo_pt.png';
+
 import './GlobalStyles.css'
 
 function Footer()
@@ -7,22 +11,19 @@ function Footer()
 		<div className="Footer">
 			<div className="Footer-icons">
 				<div>
-					<a href="https://vite.dev" target="_blank">
+					<a href="" target="_blank">
 						<img src={appLogo} alt="App logo" />
 					</a>
 				</div>
 				<div>
-					<a href="https://vite.dev" target="_blank">
-						<img src={appLogo} alt="" />
+					<a href="https://www.verywellmind.com/" target="_blank">
+						<img src={vwmLogo} alt="" />
 					</a>
-					<a href="https://vite.dev" target="_blank">
-						<img src={appLogo} alt="" />
+					<a href="https://www.healthline.com/" target="_blank">
+						<img src={hlLogo} alt="" />
 					</a>
-					<a href="https://vite.dev" target="_blank">
-						<img src={appLogo} alt="" />
-					</a>
-					<a href="https://vite.dev" target="_blank">
-						<img src={appLogo} alt="" />
+					<a href="https://psychologytoday.com/" target="_blank">
+						<img src={ptLogo} alt="" />
 					</a>
 				</div>
 			</div>

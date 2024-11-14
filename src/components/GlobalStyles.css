@@ -17,6 +17,10 @@ body
 .HomeScreen
 {
 	min-height: 75vh;
+	margin-left: 1vw;
+	margin-right: 1vw;
+	margin-top: 1vw;
+	margin-bottom: 1vw;
 }
 
 .HomeWelcomeMsg > p
@@ -37,6 +41,12 @@ body
 	max-width: 35vw;
 	padding-right: 10px;
 	margin-top: 6em;
+	
+	background-color: #F9E0EA;
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FDAFB7;
+	border-radius: 8px;
 }
 
 .Reminders > .reminder-entry
@@ -84,8 +94,20 @@ body
 	/* Text Color / Effects */
 	color: var(--nav-text-color);
 	text-decoration: none;
-	font-size: 1.25em;
+	font-size: 1.5em; /* TODO: Make responsive to page width. */
 	font-weight: bold;
+}
+
+.NavBar > nav > a:hover
+{
+	text-decoration: underline;
+}
+
+.NavBar img
+{
+	max-height: 64px;
+	max-width: 64px;
+	padding: 8px;
 }
 
 .Footer
@@ -99,6 +121,15 @@ body
 	flex-direction: column; /* Make the divs (app icons vs social icons) stack vertically. */
 
 	min-width: 25vw; /* Force the box of icons to take up at least 20% of the window width (vw). */
+}
+
+.Footer-icons img
+{
+	max-width: 32px;
+	max-height: 32px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 8px;
 }
 
 .Footer-resources p
@@ -116,3 +147,51 @@ body
 	border-color: gray;
 	border-style: outset;
   }
+  
+
+.HomeScreen button
+{
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #FDAFB7;
+	color: #fff;
+	font-size: 1.25em;
+	border: none;
+	cursor: pointer;
+	border-style: solid;
+	border-width: 4px;
+	border-color: #FDAFB7;
+	border-radius: 8px;
+}
+
+.MoodPoll
+{
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	
+	margin: 1vw;
+}
+
+.MoodPoll ul
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.MoodPoll li::marker
+{
+	color: white;
+}
+
+.MoodPoll li:hover
+{
+	color:#EE1D52;
+	background-color:#FDAFB7;
+}
+
+.MoodPoll img
+{
+	padding: 16px;
+}

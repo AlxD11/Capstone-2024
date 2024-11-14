@@ -1,4 +1,5 @@
 import './GlobalStyles.css'
+import { Link, useNavigate } from 'react-router-dom';
 
 
 /** The welcome message for the home screen. */
@@ -18,7 +19,7 @@ function ReminderMoodLog()
 	return(
 		<div className="reminder-entry">
 			<p>You haven't logged your mood for today. Would you like to?</p>
-			<button>Take test</button>
+			<button><Link to ="/poll-screen">Take Test</Link></button>
 		</div>
 	);
 }

@@ -1,6 +1,8 @@
-import appLogo from '/vite.svg'
+import appLogo from '../assets/app_logo.png';
+
 import { useEffect, useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
+import { Link, useNavigate } from 'react-router-dom'
 import './GlobalStyles.css'
 
 function NavBar()
@@ -9,12 +11,14 @@ function NavBar()
 	const [photo, setPhoto] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
+	const navigate = useNavigate();
+	
 	return(
 		<div className="NavBar">
         	<img src={appLogo} className="logo" alt="App logo" />
 			
 			<nav>
-				<a href="#">Home</a>
+				<Link to ="/main-screen">Home</Link>
 				<a href="#">Mood Journal</a>
 				<a href="#">Report</a>
 			</nav>
