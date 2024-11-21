@@ -1,8 +1,30 @@
+/* This is the main .css file. Currently, it contains styles for each React component.
+
+I chose to use a single file for all components because I thought it would be easier to keep things consistent,
+such as consistent access to color variables, and catch naming conflicts.
+If this file gets crowded or too confusing to manage, we can split things off later. */
+
+/* Naming Conventions:
+
+I couldn't find a guide on the "proper" naming conventions when using CSS with React, so this is how I'm doing it.
+
+	1. Most components are given a CSS class identifier that matches its name. Capitalization is also matched.
+	For example, the component "HomeScreen" is given a class name of "HomeScreen".
+
+	2. If a component's name appears as a portion of a class identifier, the other parts of the class identifier
+	use standard CSS naming convention.	For example, "HomeScreen-info" combines a component name and some other stuff.
+
+So far, I feel like this makes it easy to tell what CSS rules apply to which components.
+(I'm not sure how much I like using capitals in the class names, though, 'cause that's differrent from most CSS I've seen.)
+If any of this is confusing, or if you know a better way, I'm all ears. */
+
 
 :root
 {
 	/* Raw Swatch Colors */
 	--hot-pink: #EE1D52;
+	--pale-pink: #FDAFB7;
+	--pale-pink-2: #F9E0EA;
 
 	/* Linked Colors / Color Variables */
 	--nav-text-color: var(--hot-pink);
@@ -13,6 +35,9 @@ body
 {
 	font-family: "Roboto", "Verdana", sans-serif;
 }
+
+
+/* ---------------------------------------------- HomeScreen Component Elements ---------------------------------------------- */
 
 .HomeScreen
 {
@@ -36,16 +61,34 @@ body
 	font-size: 0.75em;
 }
 
+.HomeScreen button
+{
+	margin-top: 10px;
+	padding: 10px;
+	background-color: var(--pale-pink);
+	color: #fff;
+	font-size: 1.25em;
+	border: none;
+	cursor: pointer;
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--pale-pink);
+	border-radius: 8px;
+}
+
+
+/* ---------------------------------------------- Reminder Component Elements ---------------------------------------------- */
+
 .Reminders
 {
 	max-width: 35vw;
 	padding-right: 10px;
 	margin-top: 6em;
 	
-	background-color: #F9E0EA;
+	background-color: var(--pale-pink-2);
 	border-style: solid;
 	border-width: 4px;
-	border-color: #FDAFB7;
+	border-color: var(--pale-pink);
 	border-radius: 8px;
 }
 
@@ -56,7 +99,7 @@ body
 
 .Reminders button
 {
-	background-color: black;
+	background-color: var(--pale-pink);
 	color: lightgray;
 }
 
@@ -70,11 +113,14 @@ body
 	background-color: lightgray;
 }
 
+
+/* ---------------------------------------------- NavBar Component Elements ---------------------------------------------- */
+
 /* NavBar, the top navigation bar. */
 .NavBar
 {
 	display: flex;
-	justify-content: space-between; /* Distribute items along the x axis. */
+	justify-content: space-between; /* Distribute contents along the x axis. */
 	align-items: center; /* Center contents relative to each other along the y-axis. */
 }
 
@@ -110,6 +156,20 @@ body
 	padding: 8px;
 }
 
+.avatar
+{
+	vertical-align: middle;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%; /* Makes the border circular. */
+	border-width: 5px;
+	border-color: gray;
+	border-style: outset;
+}
+
+
+/* ---------------------------------------------- Footer Component Elements ---------------------------------------------- */
+
 .Footer
 {
 	display: flex;
@@ -138,31 +198,8 @@ body
 	margin: 0.25em; /* Compact the list of resources. */
 }
 
-.avatar {
-	vertical-align: middle;
-	width: 80px;
-	height: 80px;
-	border-radius: 50%;
-	border-width: 5px;
-	border-color: gray;
-	border-style: outset;
-  }
-  
 
-.HomeScreen button
-{
-	margin-top: 10px;
-	padding: 10px;
-	background-color: #FDAFB7;
-	color: #fff;
-	font-size: 1.25em;
-	border: none;
-	cursor: pointer;
-	border-style: solid;
-	border-width: 4px;
-	border-color: #FDAFB7;
-	border-radius: 8px;
-}
+/* ---------------------------------------------- MoodPoll Component Elements ---------------------------------------------- */
 
 .MoodPoll
 {
@@ -187,8 +224,8 @@ body
 
 .MoodPoll li:hover
 {
-	color:#EE1D52;
-	background-color:#FDAFB7;
+	color: var(--hot-pink);
+	background-color: var(--pale-pink);
 }
 
 .MoodPoll img
