@@ -25,6 +25,7 @@ If any of this is confusing, or if you know a better way, I'm all ears. */
 	--hot-pink: #EE1D52;
 	--pale-pink: #FDAFB7;
 	--pale-pink-2: #F9E0EA;
+	--brown: #4F3422;
 
 	/* Linked Colors / Color Variables */
 	--nav-text-color: var(--hot-pink);
@@ -122,6 +123,14 @@ body
 	display: flex;
 	justify-content: space-between; /* Distribute contents along the x axis. */
 	align-items: center; /* Center contents relative to each other along the y-axis. */
+	
+	border-width: 2px;
+	border-color: lightgray;
+	/* border style: top right bottom left; */
+	background-color:ghostwhite;
+	filter: drop-shadow(0px 4px 2px lightgray);
+	
+	padding: 4px; /* Keep all contents 4px away from the edges. */
 }
 
 .NavBar > nav
@@ -203,32 +212,60 @@ body
 
 .MoodPoll
 {
-	display: flex;
-	flex-direction: column;
-	align-content: center;
-	
-	margin: 1vw;
+	/* Same as HomeScreen. I think I need to restructure the way the main body content (i.e. not navigation hear or footer) is
+	handled. Maybe make a class identifier shared by all main body pages that has these common properties? */
+	min-height: 75vh;
+	margin-left: 1vw;
+	margin-right: 1vw;
+	margin-top: 1vw;
+	margin-bottom: 1vw;
 }
 
-.MoodPoll ul
+.PollQuestion
+{
+	margin-top: 10vh; /* Keep the question block away from the edges of the screen and other questions. */
+	margin-bottom: 10vh;
+	margin-left: 5vw;
+	margin-right: 5vw;
+}
+
+.PollQuestion p
+{
+	color: var(--brown);
+	font-size: 1.5em;
+}
+
+.PollQuestion ul
 {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	flex-direction: column; /* Make the content go vertical, not horizontal. */
+	align-items: center; /* Put the content in the middle of the contianer (horizontally, due to flex-direction: column). */
+	
+	/* Dev Note: align-items (and other align- justify- properties) will be relative to the element's content axis (??).
+	This axis will be wither veritcal or horizontal, depending on the flex-direction property. */
 }
 
-.MoodPoll li::marker
+.PollQuestion li
+{
+	display: flex;
+	align-items: center; /* Align the contents (text and image) vertically. */
+	justify-content: space-around; /* Force the two contained items (text and image) onto opposite ends of the container. */
+	
+	min-width: 35vw; /* Give the container enough width to separate the image and text and make justify-content obvious. */
+}
+
+.PollQuestion li::marker
 {
 	color: white;
 }
 
-.MoodPoll li:hover
+.PollQuestion li:hover
 {
 	color: var(--hot-pink);
 	background-color: var(--pale-pink);
 }
 
-.MoodPoll img
+.PollQuestion img
 {
 	padding: 16px;
 }
