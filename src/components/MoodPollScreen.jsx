@@ -103,15 +103,47 @@ function PollQuestionMentalEnergy()
 	);
 }
 
+function PollQuestionMedDoses()
+{
+	//TODO: Find more user-friendly way to enter a date / time, dear gOD
+	return(
+		<div className="PollQuestion">
+			<p>What are your most recent medication doses?</p>
+			<div>
+				<form>
+					<label>
+						Medication 1:
+						<input type="text" placeholder="Medication Name" />
+						<input type="text" placeholder="Dose" />
+						<input type="datetime-local" placeholder="Time" />
+					</label>
+				</form>
+				<button>Add Dose</button>
+			</div>
+		</div>
+	);
+}
+
+function PollControlls()
+{
+	return(
+		<div className="PollControlls">
+			<p>Next</p>
+		</div>
+	);
+}
+
 function MoodPoll()
 {
 	return (
 		<div className="MoodPoll">
 			<h2>Mood Poll</h2>
 			<p>Let's see how you've been doing lately.</p>
+			<PollQuestionMedDoses />
 			<PollQuestionSleep />
 			<PollQuestionPhysicalEnergy />
 			<PollQuestionMentalEnergy />
+			<PollControlls />
 		</div>
 	);
 }

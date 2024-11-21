@@ -82,10 +82,15 @@ body
 
 .Reminders
 {
+	/* Layout */
 	max-width: 35vw;
-	padding-right: 10px;
-	margin-top: 6em;
 	
+	/* Spacing */
+	margin-top: 6em;
+	padding: 4px;
+	padding-right: 10px;
+	
+	/* Colors and Effects */
 	background-color: var(--pale-pink-2);
 	border-style: solid;
 	border-width: 4px;
@@ -120,17 +125,20 @@ body
 /* NavBar, the top navigation bar. */
 .NavBar
 {
+	/* Layout */
 	display: flex;
 	justify-content: space-between; /* Distribute contents along the x axis. */
 	align-items: center; /* Center contents relative to each other along the y-axis. */
 	
+	/* Spacing */
+	padding: 4px; /* Keep all contents 4px away from the edges. */
+	
+	/* Color and Border */
 	border-width: 2px;
 	border-color: lightgray;
 	/* border style: top right bottom left; */
 	background-color:ghostwhite;
 	filter: drop-shadow(0px 4px 2px lightgray);
-	
-	padding: 4px; /* Keep all contents 4px away from the edges. */
 }
 
 .NavBar > nav
@@ -233,6 +241,7 @@ body
 {
 	color: var(--brown);
 	font-size: 1.5em;
+	font-weight: bold;
 }
 
 .PollQuestion ul
@@ -249,14 +258,17 @@ body
 {
 	display: flex;
 	align-items: center; /* Align the contents (text and image) vertically. */
-	justify-content: space-around; /* Force the two contained items (text and image) onto opposite ends of the container. */
+	justify-content: space-between; /* Force the two contained items (text and image) onto opposite ends of the container. */
 	
-	min-width: 35vw; /* Give the container enough width to separate the image and text and make justify-content obvious. */
+	min-width: 30vw; /* Give the container enough width to separate the image and text and make justify-content obvious. */
+	padding: 16px;
+	
+	font-size: 1.25em;
 }
 
 .PollQuestion li::marker
 {
-	color: white;
+	display: none;
 }
 
 .PollQuestion li:hover
@@ -265,7 +277,31 @@ body
 	background-color: var(--pale-pink);
 }
 
-.PollQuestion img
+.PollQuestion input
 {
-	padding: 16px;
+	padding: 4px;
+	margin: 8px;
+}
+
+.PollQuestion button
+{
+	margin-top: 10px;
+	padding: 10px;
+	background-color: var(--pale-pink);
+	color: #fff;
+	font-size: 1.25em;
+	border: none;
+	cursor: pointer;
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--pale-pink);
+	border-radius: 8px;
+}
+
+.PollControlls
+{
+	color: var(--brown);
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: right; /* Move the "Next" button to the right side of the page. */
 }
