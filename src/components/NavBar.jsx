@@ -19,7 +19,7 @@ function NavBar()
 			
 			<nav>
 				<Link to ="/main-screen">Home</Link>
-				<a href="#">Mood Journal</a>
+				<Link to ="/mood-journal">Mood Journal</Link>
 				<a href="#">Report</a>
 			</nav>
 
