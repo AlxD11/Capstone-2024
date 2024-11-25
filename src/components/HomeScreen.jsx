@@ -68,35 +68,38 @@ function HomeScreen()
 
 	// Fetch user data from Firestore
 	useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const currentUser = auth.currentUser;
-
-                if (!currentUser) {
-                    console.error("No user is signed in.");
-                    setSummary("Please log in to view your data.");
-                    return;
-                }
-
-                const userId = currentUser.uid; // Get the user's UID
-                console.log("Fetching data for user ID:", userId);
-
-                const querySnapshot = await getDocs(collection(db, "user_info"));
-                querySnapshot.forEach((doc) => {
-                    if (doc.id === userId) {
-                        const userData = doc.data();
-                        setFirstName(userData.firstName || "User");
-                        setSummary("Welcome back, " + userData.firstName + "!");
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                setSummary("Error loading data.");
-            }
-        };
-
-        fetchUserData();
-    }, []);
+		const fetchUserData = async () => {
+			try {
+				const currentUser = auth.currentUser;
+	
+				if (!currentUser) {
+					console.error("No user is signed in.");
+					setSummary("Please log in to view your data.");
+					return;
+				}
+	
+				const userId = currentUser.uid; // Get the user's UID
+				console.log("Fetching data for user ID:", userId);
+	
+				// Fetch the specific document with the user's UID
+				const userDoc = await getDoc(doc(db, "user_info", userId));
+	
+				if (userDoc.exists()) {
+					const userData = userDoc.data();
+					setFirstName(userData.firstName || "User");
+					setSummary(`Welcome back, ${userData.firstName}!`);
+				} else {
+					console.log("No user data found for UID:", userId);
+					setSummary("No user data found.");
+				}
+			} catch (error) {
+				console.error("Error fetching user data:", error);
+				setSummary("Error loading data.");
+			}
+		};
+	
+		fetchUserData();
+	}, []);
 
 	return(
 		<div className="HomeScreen">
