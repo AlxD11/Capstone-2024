@@ -1,6 +1,6 @@
 import firebase from  'firebase/compat/app' 
 import 'firebase/compat/auth' 
-import { getFirestore } from "firebase/compat/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const app = firebase.initializeApp({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +14,6 @@ const app = firebase.initializeApp({
 
 export const auth = app.auth()
 
-export const db = app.firestore(); //this is to add firestore to firebase config
+export const db = getFirestore(app); //this is to add firestore to firebase config
 
 export default app;

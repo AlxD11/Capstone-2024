@@ -19,12 +19,11 @@ function CreateAccount() {
 
   // this is to save user info to firestore
 
-  const saveUserToFirestore = async (userId, name, email) => {
+  const saveUserToFirestore = async (userID,name, email) => {
     try {
-        await setDoc(doc(db, "user_info", userId), {
-            name: name, // Store the full name
-            email: email,
-            createdAt: new Date(),
+        await setDoc(doc(db, "user_info",userID), {
+          email: email,  
+          name: name,
         });
         console.log("User successfully added to Firestore");
     } catch (err) {
@@ -43,11 +42,8 @@ const handleCreateAccount = async (e) => {
 
       const userCredential = await signup(email, password);
       const userId = userCredential.user.uid;
-
-      console.log("New user created:", { userId, name, email }); // Debug log
-
-      // Save to Firestore
-      await saveUserToFirestore(userId, name, email);
+      console.log("New user created:", { userId, name, email }); 
+      await saveUserToFirestore(userId,name, email);
       navigate('/main-screen');
   } catch (err) {
       console.error("Error during account creation:", err);

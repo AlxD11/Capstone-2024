@@ -1,7 +1,7 @@
 import './GlobalStyles.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { db, auth } from './firebase';
+import { db, auth } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 
