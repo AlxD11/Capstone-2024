@@ -19,40 +19,43 @@ function CreateAccount() {
 
   // this is to save user info to firestore
 
-  const saveUserToFirestore = async (userId, firstName, lastName, email) => {
+  const saveUserToFirestore = async (userId, name, email) => {
     try {
-      await setDoc(doc(db, "user_info", userId), {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        createdAt: new Date(),
-      });
-      console.log("User added to Firestore");
+        await setDoc(doc(db, "user_info", userId), {
+            name: name, // Store the full name
+            email: email,
+            createdAt: new Date(),
+        });
+        console.log("User successfully added to Firestore");
     } catch (err) {
-      console.error("Error adding user to Firestore:", err);
+        console.error("Error adding user to Firestore:", err);
     }
-  };
+};
 
-  const handleCreateAccount = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      return setError("Passwords do not match")
-    }
-    try {
+const handleCreateAccount = async (e) => {
+  e.preventDefault();
+  if (password !== confirmPassword) {
+      return setError("Passwords do not match");
+  }
+  try {
       setError("");
       setLoading(true);
 
-      const userCredential = await signup(email, password); 
-      const userId = userCredential.user.uid; 
-      await saveUserToFirestore(userId,firstName,lastName,email);
-      navigate('/main-screen')
-      
-    }catch {
-      setError("Failed to create an account")
-    }
+      const userCredential = await signup(email, password);
+      const userId = userCredential.user.uid;
 
-    setLoading(false)
-  };
+      console.log("New user created:", { userId, name, email }); // Debug log
+
+      // Save to Firestore
+      await saveUserToFirestore(userId, name, email);
+      navigate('/main-screen');
+  } catch (err) {
+      console.error("Error during account creation:", err);
+      setError("Failed to create an account");
+  } finally {
+      setLoading(false);
+  }
+};
 
   return (
     <div style={styles.container}>

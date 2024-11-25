@@ -2,15 +2,15 @@ import './GlobalStyles.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db, auth } from './firebase';
-import { collection, getDocs} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 /** The welcome message for the home screen. */
-function HomeWelcomeMsg({firstName})
+function HomeWelcomeMsg({name})
 {
 	return(
 		<div className="HomeWelcomeMsg">
-			<h2>Welcome, {firstName || "User"}</h2>
+			<h2>Welcome, {name || "User"}</h2>
 			<p>Take time for yourself today to do one thing that makes you smile.</p>
 		</div>
 	);
@@ -63,54 +63,52 @@ function HomeScreen()
 		- the mood / energy / sleep summary
 		- the closing footer stuff */
 
-	const [firstName, setFirstName] = useState(""); 
+	const [name, setName] = useState(""); 
 	const [summary, setSummary] = useState("Loading your data...");
 
 	// Fetch user data from Firestore
 	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				const currentUser = auth.currentUser;
-	
-				if (!currentUser) {
-					console.error("No user is signed in.");
-					setSummary("Please log in to view your data.");
-					return;
-				}
-	
-				const userId = currentUser.uid; // Get the user's UID
-				console.log("Fetching data for user ID:", userId);
-	
-				// Fetch the specific document with the user's UID
-				const userDoc = await getDoc(doc(db, "user_info", userId));
-	
-				if (userDoc.exists()) {
-					const userData = userDoc.data();
-					setFirstName(userData.firstName || "User");
-					setSummary(`Welcome back, ${userData.firstName}!`);
-				} else {
-					console.log("No user data found for UID:", userId);
-					setSummary("No user data found.");
-				}
-			} catch (error) {
-				console.error("Error fetching user data:", error);
-				setSummary("Error loading data.");
-			}
-		};
-	
-		fetchUserData();
-	}, []);
+        const fetchUserData = async () => {
+            try {
+                const currentUser = auth.currentUser;
 
-	return(
-		<div className="HomeScreen">
-			<HomeWelcomeMsg firstName={firstName}/>
-			
-			<div className="HomeScreen-info">
-				<Reminders/>
-				<InfoSummary summary={summary}/>
-			</div>
-		</div>
-	)
+                if (!currentUser) {
+                    console.error("No user is signed in.");
+                    setSummary("Please log in to view your data.");
+                    return;
+                }
+
+                const userId = currentUser.uid; 
+                console.log("Fetching data for user ID:", userId);
+
+                const userDoc = await getDoc(doc(db, "user_info", userId));
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setName(userData.name || "User"); 
+                    setSummary(`Welcome back, ${userData.name}!`); 
+                } else {
+                    console.log("No user data found for UID:", userId);
+                    setSummary("No user data found.");
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                setSummary("Error loading data.");
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    return (
+        <div className="HomeScreen">
+            <HomeWelcomeMsg name={name} />
+            <div className="HomeScreen-info">
+                <Reminders />
+                <InfoSummary summary={summary} />
+            </div>
+        </div>
+    );
 }
 
 export default HomeScreen;
