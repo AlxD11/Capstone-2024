@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useAuth } from "../contexts/AuthContext"
 import { Alert } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
+import { db } from "../firebase"; // this is to import firestore
+import { collection, setDoc, doc } from 'firebase/firestore';
 
 function CreateAccount() {
   // State to manage form inputs
@@ -15,22 +17,41 @@ function CreateAccount() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleCreateAccount = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      return setError("Passwords do not match")
-    }
-    try {
-      setError("")
-      setLoading(true)
-      await signup(email, password)
-      navigate('/main-screen')
-    }catch {
-      setError("Failed to create an account")
-    }
+  // this is to save user info to firestore
 
-    setLoading(false)
-  };
+  const saveUserToFirestore = async (userID,name, email) => {
+    try {
+        await setDoc(doc(db, "user_info",userID), {
+          email: email,  
+          name: name,
+        });
+        console.log("User successfully added to Firestore");
+    } catch (err) {
+        console.error("Error adding user to Firestore:", err);
+    }
+};
+
+const handleCreateAccount = async (e) => {
+  e.preventDefault();
+  if (password !== confirmPassword) {
+      return setError("Passwords do not match");
+  }
+  try {
+      setError("");
+      setLoading(true);
+
+      const userCredential = await signup(email, password);
+      const userId = userCredential.user.uid;
+      console.log("New user created:", { userId, name, email }); 
+      await saveUserToFirestore(userId,name, email);
+      navigate('/main-screen');
+  } catch (err) {
+      console.error("Error during account creation:", err);
+      setError("Failed to create an account");
+  } finally {
+      setLoading(false);
+  }
+};
 
   return (
     <div style={styles.container}>
