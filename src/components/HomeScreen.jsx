@@ -2,7 +2,8 @@ import './GlobalStyles.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { BarChart } from './Bar';
 
 
 /** The welcome message for the home screen. */
@@ -10,7 +11,7 @@ function HomeWelcomeMsg({name})
 {
 	return(
 		<div className="HomeWelcomeMsg">
-			<h2>Welcome, {name || "User"}</h2>
+			<h2>Welcome {name},</h2>
 			<p>Take time for yourself today to do one thing that makes you smile.</p>
 		</div>
 	);
@@ -47,7 +48,7 @@ function InfoSummary()
 
 	return(
 		<div className="InfoSummary">
-			<p>{summary}</p>
+			<BarChart/>
 		</div>
 	);
 }
@@ -67,36 +68,36 @@ function HomeScreen()
 	const [summary, setSummary] = useState("Loading your data...");
 
 	// Fetch user data from Firestore
+	const fetchUserData = () => {
+		try {
+			const currentUser = auth.currentUser;
+
+			if (!currentUser) {
+				console.error("No user is signed in.");
+				setSummary("Please log in to view your data.");
+				return;
+			}
+
+			const userId = currentUser.uid; 
+
+			const unsub = onSnapshot(doc(db,"user_info", userId), doc =>{
+				if (doc.exists()) {
+					const userData = doc.data()
+					setName(userData.name || "User") 
+					setSummary(`Welcome back, ${userData.name}!`)
+				} else {
+					console.log("No user data found for UID:", userId)
+					setSummary("No user data found.")
+				}})
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+			setSummary("Error loading data.");
+		}
+		return () =>{
+			unsub();
+		};
+	};
 	useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const currentUser = auth.currentUser;
-
-                if (!currentUser) {
-                    console.error("No user is signed in.");
-                    setSummary("Please log in to view your data.");
-                    return;
-                }
-
-                const userId = currentUser.uid; 
-                console.log("Fetching data for user ID:", userId);
-
-                const userDoc = await getDoc(doc(db, "user_info", userId));
-
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    setName(userData.name || "User"); 
-                    setSummary(`Welcome back, ${userData.name}!`); 
-                } else {
-                    console.log("No user data found for UID:", userId);
-                    setSummary("No user data found.");
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                setSummary("Error loading data.");
-            }
-        };
-
         fetchUserData();
     }, []);
 
