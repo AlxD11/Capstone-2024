@@ -1,4 +1,5 @@
-import { Bar } from "react-chartjs-2"
+import React, { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS, 
     CategoryScale, 
@@ -10,12 +11,12 @@ import {
 } from "chart.js"
 
 ChartJS.register({
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
 });
 
 export const BarChart = (cloudData) => {
