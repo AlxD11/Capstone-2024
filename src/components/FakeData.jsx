@@ -1,4 +1,4 @@
-export const BarChartData = {
+export const BarChartData  = {
     labels: ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"],
     datasets: [
         {

@@ -41,14 +41,15 @@ function Reminders()
 	);
 }
 
-function InfoSummary()
+function InfoSummary({mood})
 {
 	// TODO: Analyze user's data and determine what to say for the summary.
 	const summary = "You don't have any mood history yet."
-
 	return(
 		<div className="InfoSummary">
-			<BarChart/>
+			<BarChart>{mood}
+				
+			</BarChart> 
 		</div>
 	);
 }
@@ -66,8 +67,7 @@ function HomeScreen()
 
 	const [name, setName] = useState(""); 
 	const [summary, setSummary] = useState("Loading your data...");
-
-	// Fetch user data from Firestore
+	const [mood, setMood] = useState([]);
 	const fetchUserData = () => {
 		try {
 			const currentUser = auth.currentUser;
@@ -83,7 +83,8 @@ function HomeScreen()
 			const unsub = onSnapshot(doc(db,"user_info", userId), doc =>{
 				if (doc.exists()) {
 					const userData = doc.data()
-					setName(userData.name || "User") 
+					setName(userData.name || "User")
+					setMood([...userData.Mood])
 					setSummary(`Welcome back, ${userData.name}!`)
 				} else {
 					console.log("No user data found for UID:", userId)
@@ -106,7 +107,7 @@ function HomeScreen()
             <HomeWelcomeMsg name={name} />
             <div className="HomeScreen-info">
                 <Reminders />
-                <InfoSummary summary={summary} />
+                <InfoSummary mood={[mood]} />
             </div>
         </div>
     );

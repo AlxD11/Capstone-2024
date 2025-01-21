@@ -8,7 +8,6 @@ import {
     Tooltip, 
     Legend
 } from "chart.js"
-import {BarChartData} from "./FakeData"
 
 ChartJS.register({
     CategoryScale,
@@ -19,7 +18,7 @@ ChartJS.register({
     Legend
 });
 
-export const BarChart = () => {
+export const BarChart = (cloudData) => {
     const options = {
         responsive: true,
         scales: {
@@ -31,11 +30,29 @@ export const BarChart = () => {
             },
         },
         plugins:{
+            legend: {
+                display: false
+            },
             title:{
                 display: true,
                 text: " This is how you reported your mood was for this week"
             },
         },
     };
-    return <Bar options={options} data={BarChartData}/>
+    console.log(cloudData.children[0])
+    const BarData = {
+        labels: ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"],
+        datasets: [
+            {
+                label: "mood",
+                data: cloudData.children[0],
+                backgroundColor: "rgba(255, 99, 132, 1)",
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 2,
+                borderRadius: Number.MAX_VALUE,
+                borderSkipped: true,
+            },
+    ],
+    }
+    return <Bar options={options} data={BarData}/>
 }
