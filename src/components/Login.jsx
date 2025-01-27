@@ -24,51 +24,49 @@ function Login() {
     }catch {
       setError("Incorrect Email ID or password")
     }
-
     setLoading(false)
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2>Login</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <form onSubmit={handleLogin} style={styles.form}>
-          <label>
-            Email:
-            <input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </label>
-          <label>
-            Password:
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </label>
-          <button disabled={loading} type="submit" style={styles.button}>Login</button>
-        </form>
-        <div style={styles.links}>
-          <Link to ="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
+    <div style={styles.container}>      
+        <div style={styles.formContainer}>
+          <h2>Login</h2>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <form onSubmit={handleLogin} style={styles.form}>
+            <label>
+              Email:
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={styles.input}
+              />
+            </label>
+            <label>
+              Password:
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={styles.input}
+              />
+            </label>
+            <button disabled={loading} type="submit" style={styles.button}>Login</button>
+          </form>
+          <div style={styles.links}>
+            <Link to ="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
+          </div>
         </div>
-      </div>
-      
-      <div style={styles.sidebar}>
-        <h2>Welcome to Neurological Harmony</h2>
-        <img src={appLogo} style={styles.appLogo} alt="App logo" />
         
-      </div>
-      
+        <div style={styles.sidebar}>
+          <h2>Welcome to Neurological Harmony</h2>
+          <img src={appLogo} style={styles.appLogo} alt="App logo" />
+          
+        </div>
     </div>
   );
 }

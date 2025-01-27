@@ -116,7 +116,11 @@ body
 	
 	width: 40vw;
 	height: 30vh;
-	background-color: lightgray;
+	background-color: white;
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--pale-pink);
+	border-radius: 8px;
 }
 
 
