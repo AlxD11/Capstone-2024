@@ -76,7 +76,7 @@ const styles = {
     minHeight: '100vh',
   },
   formContainer: {
-    display: 'flex',
+    display: 'block',
     flexDirection: 'column',
     alignItems: 'center',
     minWidth: '40vw',
