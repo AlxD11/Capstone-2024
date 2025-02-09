@@ -97,6 +97,7 @@ const styles = {
   },
   textareaContainer: {
     marginBottom: "20px",     // Margin between fields
+    padding: '10px',
   },
   textarea: {
     align:"center",
