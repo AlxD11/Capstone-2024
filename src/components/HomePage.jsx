@@ -1,4 +1,7 @@
-import './GlobalStyles.css'
+import '../styles/GlobalStyles.css'
+
+import MainScreen from "./MainScreen";
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
@@ -6,13 +9,36 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { BarChart } from './Bar';
 
 
+/** Returns a random friendly welcome message. */
+function getRandomWelcomeMessage()
+{
+	const messages = [];
+	let i = 0;
+	
+	messages[i] = "Take time for yourself today to do one thing that makes you smile."
+	i++;
+	messages[i] = "It's good to see you!"
+	i++;
+	messages[i] = "In case you need a reminder: you are awesome."
+	i++;
+	messages[i] = "You're doing great today!"
+	i++;
+	messages[i] = "Joy is within you."
+	i++;
+	
+	return messages[Math.floor(Math.random() * messages.length)];
+}
+
 /** The welcome message for the home screen. */
 function HomeWelcomeMsg({name})
 {
+	/* FIXME: This is getting called twice. I think it's an easy fix, but I forget how ATM. */
+	const welcomeMsg = getRandomWelcomeMessage();
+	
 	return(
 		<div className="HomeWelcomeMsg">
 			<h2>Welcome {name},</h2>
-			<p>Take time for yourself today to do one thing that makes you smile.</p>
+			<p>{welcomeMsg}</p>
 		</div>
 	);
 }
@@ -22,8 +48,8 @@ function ReminderMoodLog()
 {
 	return(
 		<div className="reminder-entry">
-			<p>You haven't logged your mood for today. Would you like to?</p>
-			<button><Link to ="/poll-screen">Take Test</Link></button>
+			<p><span>How are you feeling today?</span></p>
+			<button className="linked-button"><Link to ="/poll-screen">Log Mood</Link></button>
 		</div>
 	);
 }
@@ -54,16 +80,16 @@ function InfoSummary({mood})
 	);
 }
 
-/** The main content of the home screen. This should be rendered after the top navigation bar and before the page footer. */
-function HomeScreen()
+/** The main content of the home screen. This should be rendered in a Main Screen component, after the top navigation bar and before the page footer. */
+function HomePage()
 {
 	/* The home screen needs:
-		- the top nav bar
-		- the welcome message
+		X the top nav bar
+		X the welcome message
 		- the day's reminders
-		- the "Take Test" button
+		X the "Take Test" button
 		- the mood / energy / sleep summary
-		- the closing footer stuff */
+		X the closing footer stuff */
 
 	const [name, setName] = useState(""); 
 	const [summary, setSummary] = useState("Loading your data...");
@@ -103,14 +129,16 @@ function HomeScreen()
     }, []);
 
     return (
-        <div className="HomeScreen">
-            <HomeWelcomeMsg name={name} />
-            <div className="HomeScreen-info">
-                <Reminders />
-                <InfoSummary mood={[mood]} />
-            </div>
-        </div>
+        <MainScreen>
+			<div className="HomeScreen">
+				<HomeWelcomeMsg name={name} />
+				<div className="HomeScreen-info">
+					<Reminders />
+					<InfoSummary mood={[mood]} />
+				</div>
+			</div>
+		</MainScreen>
     );
 }
 
-export default HomeScreen;
+export default HomePage;

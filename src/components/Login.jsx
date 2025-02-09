@@ -20,7 +20,7 @@ function Login() {
       setError("")
       setLoading(true)
       await login(email, password)
-      navigate('/main-screen')
+      navigate('/home')
     }catch {
       setError("Incorrect Email ID or password")
     }
