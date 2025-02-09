@@ -110,6 +110,7 @@ const styles = {
   },
   selectContainer: {
     marginBottom: "20px",     // Margin between select and other fields
+    padding: '10px',
   },
   select: {
     width: "100%",            // Make the select input fill the container's width
