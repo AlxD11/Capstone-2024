@@ -4,8 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Login';
 import CreateAccount from './CreateAccount';
 import ResetPassword from './ResetPassword';
-import MainScreen from './MainScreen';
+import HomePage from './HomePage';
 import MoodPollScreen from './MoodPollScreen';
+import ApplicationSettingsPage from './ApplicationSettingsPage';
+import ProfilePage from './ProfilePage';
+import MedicationsPage from './MedicationsPage';
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../contexts/AuthContext';
@@ -18,10 +21,10 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/main-screen"
+          <Route path="/home"
             element={
               <PrivateRoute>
-                <MainScreen />
+                <HomePage />
               </PrivateRoute>
             }
           ></Route>
@@ -34,6 +37,24 @@ function App() {
           <Route path="/mood-journal" element={
             <PrivateRoute>
               <MoodJournal />
+            </PrivateRoute>
+            }
+          ></Route>
+          <Route path="/settings" element={
+            <PrivateRoute>
+              <ApplicationSettingsPage />
+            </PrivateRoute>
+            }
+          ></Route>
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+            }
+          ></Route>
+          <Route path="/medications" element={
+            <PrivateRoute>
+              <MedicationsPage />
             </PrivateRoute>
             }
           ></Route>
