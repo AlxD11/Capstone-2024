@@ -68,36 +68,31 @@ function MoodJournal() {
 
 const styles = {
  container: {
-    display: "flex",         // Use flexbox
-    justifyContent: "center", // Center horizontally
-    alignItems: "center",     // Center vertically
-    height: "100vh",          // Full viewport height
-    width: "100vw",           // Full viewport width
-    backgroundColor: "#F9E0EA",
+    margin: '0 auto',
+    padding: '20px',
+    textAlign: 'center',
+    display: 'flex',
+    backgroundColor: '#F9E0EA',
+    minHeight: '100vh',
   },
   formContainer: {
-    display: "flex",
-    flexDirection: "column",
-    align: "center",
-    height: "100%",
-    width: "50%",  
-    backgroundColor: "white",
-    borderStyle: "solid",
-    borderWidth: "10px",
-    borderColor: "white",
-    borderRadius: "32px",
-    padding: "100px",
-    boxSizing: "border-box",
-    marginTop: "20px",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    minWidth: '40vw',
+    backgroundColor: 'white',
+    borderStyle: 'solid',
+    borderWidth: '10px',
+    borderColor: 'white',
+    borderRadius: '32px',
+    margin: '5vw',
   },
   heading: {
     color: "#E33A5F",         // Color for the heading
   },
   form: {
-    align: "center",
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",            // Ensure the form takes up full width inside the container
+    display: 'flex',
+    flexDirection: 'column',
   },
   textareaContainer: {
     marginBottom: "20px",     // Margin between fields
@@ -129,13 +124,16 @@ const styles = {
     fontSize: "1.1rem",       
   },
   button: {
-    marginTop: "10px",
-    padding: "10px",
-    backgroundColor: "#FDAFB7",
-    color: "#fff",
-    border: "none",
-    cursor: "pointer",
-    borderRadius: "8px",
+    marginTop: '10px',
+    padding: '10px',
+    backgroundColor: '#FDAFB7',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+    borderStyle: 'solid',
+    borderWidth: '4px',
+    borderColor: '#FDAFB7',
+    borderRadius: '8px',
   },
 
 };
