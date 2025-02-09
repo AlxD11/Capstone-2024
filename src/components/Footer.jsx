@@ -3,7 +3,9 @@ import vwmLogo from '../assets/logo_vwm.png';
 import hlLogo from '../assets/logo_hl.png';
 import ptLogo from '../assets/logo_pt.png';
 
-import './GlobalStyles.css'
+import { Link, useNavigate } from 'react-router-dom';
+
+import '../styles/GlobalStyles.css';
 
 function Footer()
 {
@@ -11,9 +13,9 @@ function Footer()
 		<div className="Footer">
 			<div className="Footer-icons">
 				<div>
-					<a href="" target="_blank">
-						<img src={appLogo} alt="App logo" />
-					</a>
+					<Link to ="/home">
+						<img src={appLogo} className="logo" alt="App logo" />
+					</Link>
 				</div>
 				<div>
 					<a href="https://www.verywellmind.com/" target="_blank">
