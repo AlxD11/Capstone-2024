@@ -101,7 +101,6 @@ const styles = {
   textarea: {
     align:"center",
     width: "100%",            // Make textarea fill the width of its container
-    padding: "10px",          // Padding inside the textarea
     marginTop: "5px",         // Margin on top of the textarea
     borderRadius: "8px",
     border: "2px solid black",// Black border around the textarea
