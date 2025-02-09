@@ -80,6 +80,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     minWidth: '40vw',
+    height: 70vh;,
     backgroundColor: 'white',
     borderStyle: 'solid',
     borderWidth: '10px',
