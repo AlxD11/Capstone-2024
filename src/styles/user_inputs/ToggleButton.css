@@ -1,0 +1,98 @@
+/* Contains style rules specific to the ToggleButton.jsx component. */
+
+:root
+{
+	/* Make variable names as specific as possible to avoid naming conflicts.
+	(... Wait, can't React handle stuff like that automatically??) */
+	
+	/* ----- Sizing ----- */
+	/* The width and height of the whole button. */
+	--toggle-button-height: 2rem;
+	--toggle-button-width: 4rem;
+	/* The size and offset of the circle that slides within the button. */
+	--toggle-button-slidy-bit-offset: calc(var(--toggle-button-height) * 0.1); /* A little less than the button height (the smallest dimension). */
+	--toggle-button-slidy-bit-size: calc(var(--toggle-button-height) - (2 * var(--toggle-button-slidy-bit-offset)));
+	
+	/* ----- Linked Colors ----- */
+	/* TODO: set up for prefers-high-contrast. */
+	--toggle-button-color-active: var(--soft-purple); /* --soft-purple comes from the GlobalStyles sheet. */
+	--toggle-button-color-inactive: lightgray;
+	--toggle-button-color-focus: var(--hot-pink);
+	
+	--toggle-button-transition-speed: 0.15s;
+	
+	/* ----- ACCESSIBILITY ----- */
+	@media (prefers-reduced-motion)
+	{
+		--toggle-button-transition-speed: 0s; /* Disable slider transitions */
+	}
+	
+	@media (prefers-contrast)
+	{
+		/* TODO: set up for prefers-high-contrast AND link to high-contrast site setting. */
+	}
+}
+
+/* The default checkbox. */
+.ToggleButton-input
+{
+	/* Reference: https://www.w3schools.com/howto/howto_css_switch.asp */
+	
+	opacity: 0; /* Visually hide the <input> component (the default checkbox). This does not prevent them from being accessed via keyboard / screenreader, which is good. */
+	width: 0; /* Make the default checkbox basically too tiny to click via mouse or affect layout. */
+	height: 0;
+}
+
+/* The actual toggle button. This is mainly for the inactive state. */
+.ToggleButton-slider
+{
+	cursor: pointer;
+	display: inline-block; /* Keeps the slider in place and lets the button to appear next to the text, if there's space. */
+	position: relative; /* Keeps the element in the normal layout flow / allows the label to know how big to be. */ 
+	/* left: 100%; /* Move the button to the right end of the label when position: absolute is used. */
+	
+	width: var(--toggle-button-width); /* Set the width of the actual slider instead of the text label. */
+	height: var(--toggle-button-height);
+	border-radius: 2rem; /* width / 2 */
+	
+	background-color: var(--toggle-button-color-inactive);
+	-webkit-transition: var(--toggle-button-transition-speed);
+	transition: var(--toggle-button-transition-speed);
+}
+
+/* The sliding circle within the toggle button. */
+.ToggleButton-slider:before
+{
+	content: "";
+	
+	position: absolute;
+	top: var(--toggle-button-slidy-bit-offset); /* Keep the circle away from the edge of the button background. */
+	left: var(--toggle-button-slidy-bit-offset);
+	
+	height: var(--toggle-button-slidy-bit-size); /* Set width and height equal to make it a circle. */
+	width: var(--toggle-button-slidy-bit-size);
+	border-radius: 50%;
+	
+	background-color: var(--off-white);
+	-webkit-transition: var(--toggle-button-transition-speed);
+	transition: var(--toggle-button-transition-speed);
+}
+
+/* Toggle switches that are active */
+.ToggleButton-input:checked + .ToggleButton-slider
+{
+	background-color: var(--toggle-button-color-active);
+}
+
+.ToggleButton-input:focus + .ToggleButton-slider
+{
+	/* box-shadow: offset-x, offset-y, blur, spread (thickness), color */
+	box-shadow: 0 0 1px 2px var(--toggle-button-color-focus);
+}
+
+.ToggleButton-input:checked + .ToggleButton-slider:before
+{
+	-webkit-transform: translateX(calc(var(--toggle-button-width)/2));
+	-ms-transform: translateX(calc(var(--toggle-button-width)/2)); /* IExplorer */
+	transform: translateX(calc(var(--toggle-button-width)/2));
+}
