@@ -44,7 +44,7 @@ const handleCreateAccount = async (e) => {
       const userId = userCredential.user.uid;
       console.log("New user created:", { userId, name, email }); 
       await saveUserToFirestore(userId,name, email);
-      navigate('/main-screen');
+      navigate('/home');
   } catch (err) {
       console.error("Error during account creation:", err);
       setError("Failed to create an account");
