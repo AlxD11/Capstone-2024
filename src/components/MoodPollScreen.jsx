@@ -8,6 +8,8 @@ import smile_miserable from '../assets/smile_miserable.png';
 import '../styles/GlobalStyles.css';
 import MainScreen from './MainScreen.jsx';
 
+import React, {useState} from 'react';
+
 
 /** Asks "How's your sleep quality?" */
 // https://duckduckgo.com/?t=ffab&q=React+user+form+tutorial+-noai&iax=videos&ia=videos&iai=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DIkMND33x0qQ
@@ -25,10 +27,76 @@ import MainScreen from './MainScreen.jsx';
  */
 function PollQuestion({ questionName, questionText, desc })
 {
+	/** Create an array of objects that contain the data used to populate
+	 * all the response options for the question. These objects are then
+	 * mapped using `objects.map()` to build the HTML elements that make
+	 * up the responses. */
+	
+	
+	const [selectedOption, setSelectedOption] = useState(null);
+	const options = [
+		{label: "Excellent", value: 4, icon: smile_excellent, iconAlt: "excellent"},
+		{label: "Good", value: 3, icon: smile_good, iconAlt: "good"},
+		{label: "So-so", value: 2, icon: smile_neutral, iconAlt: "neutral"},
+		{label: "Poor", value: 1, icon: smile_poor, iconAlt: "poor"},
+		{label: "Miserable", value: 0, icon: smile_miserable, iconAlt: "miserable"}
+	];
+	
+	const handleSelect = (option) => {
+		setSelectedOption(option);
+	};
+	
+	
+	//const component = document.querySelector("label");
+	//const normalStyle = window.getComputedStyle(component);
+	
+	const normalTextColor = "inherit";
+	const normalBGColor = "inherit";
+	const selectedBGColor = "#E33A5F";
+	const selectedTextColor = "white";
+	
+	const styleClass = "PollQuestion-mc";
+	const selectedStyleClass = "PollQuestion-selection";
+	
+	/** Adds and removes the CSS class that handles styling the user's active selection to the HTML element's class list.
+	 * Reference: https://stackoverflow.com/q/63519495, https://www.geeksforgeeks.org/changing-css-styling-with-react-onclick-event/ */
+	const toggleSelect = (event) =>
+	{
+		// If the class name already includes the class for the selection rules,
+		if (event.target.className.includes(selectedStyleClass))
+		{
+			// Remove the selection rules and reset the style class to the original
+			event.target.className = styleClass;
+		}
+		else
+		{
+			// Append the class for the selection style rules to the class list
+			event.target.className = styleClass + " " + selectedStyleClass;
+		}
+	}
+	
+	//Ref: https://www.freecodecamp.org/news/how-to-render-lists-in-react/
+	
 	return(
 		<div className="PollQuestion">
 			<p>{questionText}</p>
 			<p className="PollQuestion-description">{desc}</p>
+			
+			{options.map((option, index) => (
+				<label
+					key={index}
+					onClick={(e) => toggleSelect(e)}
+					className={styleClass}
+				>
+					{option.label}
+					<input
+						type="radio"
+						name={questionName}
+						value={option.value}
+					/>
+					<img src={option.icon} className="PollQuestion-icon" alt={option.iconAlt} />
+				</label>
+			))}
 			
 			<label className="PollQuestion-mc">Excellent
 				<input
@@ -78,6 +146,8 @@ function PollQuestion({ questionName, questionText, desc })
 	);
 }
 
+/** Renders the poll question that asks the user to enter their medication doses.
+ * TODO: auto-populate suggestions with user's currently listed meds from the settings page. */
 function PollQuestionMedDoses()
 {
 	//TODO: Find more user-friendly way to enter a date / time, dear gOD
@@ -99,6 +169,7 @@ function PollQuestionMedDoses()
 	);
 }
 
+/** Renders navigation buttons to move between questions / pages. */
 function PollControlls()
 {
 	return(

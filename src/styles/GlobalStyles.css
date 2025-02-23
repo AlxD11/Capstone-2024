@@ -363,10 +363,20 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	font-size: 1.25em;
 }
 
-.PollQuestion-dose
+.PollQuestion-selection
 {
-	flex-direction: column;
+	color: white;
+	background-color: #EE1D52;
 }
+
+/*
+.PollQuestion-mc
+{
+	padding: "10px";
+	cursor: "pointer";
+	border: "2px solid black";
+	border-radius: "8px";
+}*/
 
 .PollQuestion-mc:hover
 {
@@ -379,10 +389,17 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	padding: 4px;
 	margin: 8px;
 	
-	opacity: 0;
+	/* Visually hide the input (radio button), but do not disable it so that screenreaders can still see it. */
+	/*opacity: 0;
 	width: 0;
-	height: 0;
+	height: 0;*/
 }
+
+.PollQuestion-dose
+{
+	flex-direction: column;
+}
+
 /* TODO: Make sharable by other buttons */
 .PollQuestion button
 {
