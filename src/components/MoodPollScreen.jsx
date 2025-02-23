@@ -58,21 +58,46 @@ function PollQuestion({ questionName, questionText, desc })
 	const styleClass = "PollQuestion-mc";
 	const selectedStyleClass = "PollQuestion-selection";
 	
-	/** Adds and removes the CSS class that handles styling the user's active selection to the HTML element's class list.
+	/** Toggles the CSS class that handles styling the user's active selection to the HTML element's class list.
 	 * Reference: https://stackoverflow.com/q/63519495, https://www.geeksforgeeks.org/changing-css-styling-with-react-onclick-event/ */
 	const toggleSelect = (event) =>
 	{
-		// If the class name already includes the class for the selection rules,
-		if (event.target.className.includes(selectedStyleClass))
+		/* This event gets triggered for contained child elements and it doesn't propogate
+		back up to the parent, leaving mis-matched colors.
+		To prevent this, restrict the event to only fire if the target (element that triggered the event)
+		is the expected <label>. */
+		
+		// If the firing element is a label (the parent)...
+		// Ref: https://stackoverflow.com/q/254302
+		if (event.target.nodeName.toLowerCase() == "label")
 		{
-			// Remove the selection rules and reset the style class to the original
-			event.target.className = styleClass;
+			// If the class name already includes the class for the selection rules,
+			if (event.target.className.includes(selectedStyleClass))
+			{
+				// Remove the selection rules and reset the style class to the original
+				event.target.className = styleClass;
+			}
+			else
+			{
+				// Append the class for the selection style rules to the class list
+				event.target.className = styleClass + " " + selectedStyleClass;
+			}
 		}
+		// If the firing element is one of the contained children...
 		else
 		{
-			// Append the class for the selection style rules to the class list
-			event.target.className = styleClass + " " + selectedStyleClass;
+			// Get the direct parent (assumed to be the label, like we need)
+			// Ref: https://www.w3schools.com/jsref/prop_node_parentelement.asp
+			if (event.target.parentElement.className.includes(selectedStyleClass))
+			{
+				event.target.parentElement.className = styleClass;
+			}
+			else
+			{
+				event.target.parentElement.className = styleClass + " " + selectedStyleClass;
+			}
 		}
+		
 	}
 	
 	//Ref: https://www.freecodecamp.org/news/how-to-render-lists-in-react/
@@ -85,7 +110,7 @@ function PollQuestion({ questionName, questionText, desc })
 			{options.map((option, index) => (
 				<label
 					key={index}
-					onClick={() => handleSelect(option)}
+					onClick={(e) => toggleSelect(e)}
 					className={styleClass}
 				>
 					{option.label}
