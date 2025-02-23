@@ -85,7 +85,7 @@ function PollQuestion({ questionName, questionText, desc })
 			{options.map((option, index) => (
 				<label
 					key={index}
-					onClick={(e) => toggleSelect(e)}
+					onClick={() => handleSelect(option)}
 					className={styleClass}
 				>
 					{option.label}
