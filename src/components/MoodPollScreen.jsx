@@ -69,7 +69,7 @@ function PollQuestion({ questionName, questionText, desc })
 		
 		// If the firing element is a label (the parent)...
 		// Ref: https://stackoverflow.com/q/254302
-		if (event.target.nodeName.toLowerCase() == "label")
+		if (event.target.nodeName.toLowerCase() !== "img" && event.target.nodeName.toLowerCase() !== "input")
 		{
 			// If the class name already includes the class for the selection rules,
 			if (event.target.className.includes(selectedStyleClass))
@@ -82,6 +82,8 @@ function PollQuestion({ questionName, questionText, desc })
 				// Append the class for the selection style rules to the class list
 				event.target.className = styleClass + " " + selectedStyleClass;
 			}
+			
+			alert("not img");
 		}
 		// If the firing element is one of the contained children...
 		else
@@ -96,6 +98,7 @@ function PollQuestion({ questionName, questionText, desc })
 			{
 				event.target.parentElement.className = styleClass + " " + selectedStyleClass;
 			}
+			alert("IMAGE IMAGE IMAGE");
 		}
 		
 	}
