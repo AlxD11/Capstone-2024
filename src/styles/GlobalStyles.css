@@ -47,11 +47,23 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	--nav-text-color: var(--hot-pink);
 	--body-text-color: black;
 	--body-text-light-color: rgb(92, 105, 118);  /* Close to slategray. */
+	--link-text-color: var(--coral);
+	--link-background-color: inherit;
 	
 	/* ----- ACCESSIBILITY ----- */
 	/* Add @media(query){} blocks here and change stuff accordingly.
 	Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries */
 	/* TODO: Add alternative color swatches for high-contrast preference */
+	
+	/* High Contrast Color Overrides */
+	@media(prefers-contrast)
+	{
+		--nav-text-color: var(--hot-pink);
+		--body-text-color: black;
+		--body-text-light-color: rgb(48, 55, 61);  /* Close to slategray. */
+		--link-text-color: white;
+		--link-background-color: var(--coral);
+	}
 }
 
 body
@@ -61,7 +73,8 @@ body
 
 a
 {
-	color: var(--coral);
+	color: var(--link-text-color);
+	background-color: var(--link-background-color);
 	text-decoration: none;
 }
 
@@ -350,6 +363,14 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .PollQuestion label
 {
+	padding: 16px;
+	
+	font-size: 1.25em;
+}
+
+/* Multiple choice questions */
+.PollQuestion-mc
+{
 	display: flex;
 	align-items: center; /* Align the contents (text and image) vertically. */
 	justify-content: space-between; /* Force the two contained items (text and image) onto opposite ends of the container. */
@@ -358,9 +379,6 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	max-width: 35vw;
 	margin-left: auto; /* Center the content on the page. */
 	margin-right: auto;
-	padding: 16px;
-	
-	font-size: 1.25em;
 }
 
 .PollQuestion-selection
@@ -368,15 +386,6 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	color: white;
 	background-color: #EE1D52;
 }
-
-/*
-.PollQuestion-mc
-{
-	padding: "10px";
-	cursor: "pointer";
-	border: "2px solid black";
-	border-radius: "8px";
-}*/
 
 .PollQuestion-mc:hover
 {
@@ -390,14 +399,25 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	margin: 8px;
 	
 	/* Visually hide the input (radio button), but do not disable it so that screenreaders can still see it. */
-	/*opacity: 0;
-	width: 0;
-	height: 0;*/
+	/*opacity: 0; */
+	
+	/* Make the radio button bigger */
+	width: 3em;
+	height: 3em;
+	
+	accent-color: var(--hot-pink); 	/* Make the radio button a different color */
 }
 
+/* Medication dose questions */
 .PollQuestion-dose
 {
 	flex-direction: column;
+	justify-content: left;
+}
+
+.PollQuestion-dose div
+{
+	padding: 16px; /* Dunno why this didn't inherit from label. */
 }
 
 /* TODO: Make sharable by other buttons */

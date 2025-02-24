@@ -7,6 +7,7 @@ import smile_miserable from '../assets/smile_miserable.png';
 //import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
 import MainScreen from './MainScreen.jsx';
+import MedicationsList from "./user_inputs/MedicationsList.jsx";
 
 import React, {useState} from 'react';
 
@@ -18,7 +19,7 @@ import React, {useState} from 'react';
 
 /** Creates a a multiple-choice question with answers ranging from "Excellent" (value of 4) to "Horrible" (value of 0).
  * 
- * FIXME: Not working well with tab-indexing on keyboard - only (seemingly) jumps to question text.
+ * FIXME: Keyboard users will be forced to submit an answer for each question - consider adding an explicit "No Response" option
  * 
  * @param {Object} param0 
  * @param {string} param0.questionName 	Tells buttons which question they belong to via the `name` attribute. Extra important for radio buttons.
@@ -39,7 +40,8 @@ function PollQuestion({ questionName, questionText, desc })
 		{label: "Good", value: 3, icon: smile_good, iconAlt: "good"},
 		{label: "So-so", value: 2, icon: smile_neutral, iconAlt: "neutral"},
 		{label: "Poor", value: 1, icon: smile_poor, iconAlt: "poor"},
-		{label: "Miserable", value: 0, icon: smile_miserable, iconAlt: "miserable"}
+		{label: "Miserable", value: 0, icon: smile_miserable, iconAlt: "miserable"},
+		{label: "Skip", value: -1, icon: null, iconAlt: ""}
 	];
 	
 	const handleSelect = (option) => {
@@ -58,7 +60,8 @@ function PollQuestion({ questionName, questionText, desc })
 	const styleClass = "PollQuestion-mc";
 	const selectedStyleClass = "PollQuestion-selection";
 	
-	/** Toggles the CSS class that handles styling the user's active selection to the HTML element's class list.
+	/** @deprected:  not used because I'm having trouble understanding how onClick() fires and propogates.
+	 * Toggles the CSS class that handles styling the user's active selection to the HTML element's class list.
 	 * Reference: https://stackoverflow.com/q/63519495, https://www.geeksforgeeks.org/changing-css-styling-with-react-onclick-event/ */
 	const toggleSelect = (event) =>
 	{
@@ -113,63 +116,19 @@ function PollQuestion({ questionName, questionText, desc })
 			{options.map((option, index) => (
 				<label
 					key={index}
-					onClick={(e) => toggleSelect(e)}
 					className={styleClass}
 				>
-					{option.label}
-					<input
-						type="radio"
-						name={questionName}
-						value={option.value}
-					/>
+					<div>
+						<input
+							type="radio"
+							name={questionName}
+							value={option.value}
+						/>
+						{option.label}
+					</div>
 					<img src={option.icon} className="PollQuestion-icon" alt={option.iconAlt} />
 				</label>
 			))}
-			
-			<label className="PollQuestion-mc">Excellent
-				<input
-					type="radio"
-					name={questionName}
-					value="4"
-				/>
-				<img src={smile_excellent} className="poll-icon" alt="excellent" />
-			</label>
-			
-			<label className="PollQuestion-mc">Good
-				<input
-					type="radio"
-					name={questionName}
-					value="3"
-				/>
-				<img src={smile_good} className="poll-icon" alt="good" />
-			</label>
-			
-			<label className="PollQuestion-mc">So-so
-				<input
-					type="radio"
-					name={questionName}
-					value="2"
-				/>
-				<img src={smile_neutral} className="poll-icon" alt="neutral" />
-			</label>
-			
-			<label className="PollQuestion-mc">Poor
-				<input
-					type="radio"
-					name={questionName}
-					value="1"
-				/>
-				<img src={smile_poor} className="poll-icon" alt="poor" />
-			</label>
-			
-			<label className="PollQuestion-mc">Horrible
-				<input
-					type="radio"
-					name={questionName}
-					value="0"
-				/>
-				<img src={smile_miserable} className="poll-icon" alt="miserable" />
-			</label>
 		</div>	
 	);
 }
@@ -178,20 +137,16 @@ function PollQuestion({ questionName, questionText, desc })
  * TODO: auto-populate suggestions with user's currently listed meds from the settings page. */
 function PollQuestionMedDoses()
 {
+	const medName = "";
+	
 	//TODO: Find more user-friendly way to enter a date / time, dear gOD
 	return(
 		<div className="PollQuestion">
 			<p>What are your most recent medication doses?</p>
 			<div>
 				<form>
-					<label className="PollQuestion-dose">
-						Medication 1:
-						<input type="text" placeholder="Medication Name" />
-						<input type="text" placeholder="Dose" />
-						<input type="datetime-local" placeholder="Time" />
-					</label>
+					<MedicationsList />
 				</form>
-				<button>Add Dose</button>
 			</div>
 		</div>
 	);
