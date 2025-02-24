@@ -1,68 +1,84 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Login';
-import CreateAccount from './CreateAccount';
-import ResetPassword from './ResetPassword';
-import HomePage from './HomePage';
-import MoodPollScreen from './MoodPollScreen';
-import ApplicationSettingsPage from './ApplicationSettingsPage';
-import ProfilePage from './ProfilePage';
-import MedicationsPage from './MedicationsPage';
-import MoodJournal from './MoodJournal';
-import PrivateRoute from './PrivateRoute';
-import { AuthProvider } from '../contexts/AuthContext';
+// src/components/MoodJournal.jsx
+import React, { useState, useEffect } from "react";
+import { addMoodEntry, getMoodEntries } from "../services/moodJournalService";
+import { useAuth } from "../contexts/AuthContext"; // adjust the path as needed
 
-function App() {
-  return (  
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/create-account" element={<CreateAccount />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/home"
-            element={
-              <PrivateRoute>
-                <HomePage />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route path="/poll-screen" element={
-            <PrivateRoute>
-              <MoodPollScreen />
-            </PrivateRoute>
-            }
-          ></Route>
-          <Route path="/mood-journal" element={
-            <PrivateRoute>
-              <MoodJournal />
-            </PrivateRoute>
-            }
-          ></Route>
-          <Route path="/settings" element={
-            <PrivateRoute>
-              <ApplicationSettingsPage />
-            </PrivateRoute>
-            }
-          ></Route>
-          <Route path="/profile" element={
-            <PrivateRoute>
-              <ProfilePage />
-            </PrivateRoute>
-            }
-          ></Route>
-          <Route path="/medications" element={
-            <PrivateRoute>
-              <MedicationsPage />
-            </PrivateRoute>
-            }
-          ></Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
-    
+const MoodJournal = () => {
+  const { currentUser } = useAuth(); // Get the current user from AuthContext
+  const userId = currentUser ? currentUser.uid : null;
+
+  const [mood, setMood] = useState("");
+  const [note, setNote] = useState("");
+  const [entries, setEntries] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!userId) return; // Ensure a user is authenticated
+
+    try {
+      const moodData = { mood, note };
+      await addMoodEntry(userId, moodData);
+      loadEntries(); // Refresh entries after submission
+      setMood("");
+      setNote("");
+    } catch (error) {
+      console.error("Error submitting mood entry:", error);
+    }
+  };
+
+  const loadEntries = async () => {
+    if (!userId) return;
+    try {
+      const fetchedEntries = await getMoodEntries(userId);
+      setEntries(fetchedEntries);
+    } catch (error) {
+      console.error("Error loading mood entries:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      loadEntries();
+    }
+  }, [userId]);
+
+  return (
+    <div>
+      <h2>Mood Journal</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Your mood"
+          value={mood}
+          onChange={(e) => setMood(e.target.value)}
+          required
+        />
+        <textarea
+          placeholder="Any notes..."
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
+      <div>
+        <h3>Your Entries</h3>
+        {entries.map((entry) => (
+          <div key={entry.id}>
+            <p><strong>Mood:</strong> {entry.mood}</p>
+            <p><strong>Note:</strong> {entry.note}</p>
+            <p>
+              <em>
+                {entry.createdAt?.toDate
+                  ? entry.createdAt.toDate().toLocaleString()
+                  : "Just now"}
+              </em>
+            </p>
+            <hr />
+          </div>
+        ))}
+      </div>
+    </div>
   );
-}
+};
 
-export default App;
+export default MoodJournal;
