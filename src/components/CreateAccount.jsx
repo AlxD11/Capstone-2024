@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { Alert } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
 import { db } from "../firebase"; // this is to import firestore
-import { collection, setDoc, doc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 function CreateAccount() {
   // State to manage form inputs
@@ -21,9 +21,9 @@ function CreateAccount() {
 
   const saveUserToFirestore = async (userID,name, email) => {
     try {
-        await setDoc(doc(db, "user_info",userID), {
+        await setDoc(doc(db, "user_info",userID,"Data","Profile"), {
           email: email,  
-          name: name,
+          Name: name,
         });
         console.log("User successfully added to Firestore");
     } catch (err) {

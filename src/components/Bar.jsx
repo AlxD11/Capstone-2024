@@ -24,9 +24,11 @@ export const BarChart = (cloudData) => {
         responsive: true,
         scales: {
             x: {
+                suggestedMin: 0,
                 stacked: true
             },
             y: {
+                suggestedMax:5,
                 stacked: true
             },
         },
@@ -42,7 +44,7 @@ export const BarChart = (cloudData) => {
     };
     console.log(cloudData.children[0])
     const BarData = {
-        labels: ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"],
+        labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday"],
         datasets: [
             {
                 label: "mood",
