@@ -8,6 +8,7 @@ import HomePage from './HomePage';
 import MoodPollScreen from './MoodPollScreen';
 import ApplicationSettingsPage from './ApplicationSettingsPage';
 import ProfilePage from './ProfilePage';
+import ProfileViewPage from './ProfileViewPage';
 import MedicationsPage from './MedicationsPage';
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
@@ -47,6 +48,12 @@ function App() {
             }
           ></Route>
           <Route path="/profile" element={
+            <PrivateRoute>
+              <ProfileViewPage />
+            </PrivateRoute>
+            }
+          ></Route>
+          <Route path="/edit-profile" element={
             <PrivateRoute>
               <ProfilePage />
             </PrivateRoute>
