@@ -447,7 +447,7 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 /* ---------------------------------------------- Settings Component Elements ---------------------------------------------- */
 
-.SettingsControls > form
+.SettingsControls > form, .ViewProfileSettings
 {
 	display: flex; /* Make form have columns. */
 	padding: 16px;
@@ -524,12 +524,18 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	padding: 16px;
 }
 
+.ViewSetting
+{
+	margin-left: 1em;
+}
+
 .MedicationsList button
 {
 	padding: 4px;
 	margin: 2px 4px; /* top/ bottom, left/right */
 }
 
+/* Delete buttons on medication list */
 .MedicationsList ol button:first-of-type
 {
 	background-color: orangered;
