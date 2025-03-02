@@ -4,7 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
-import { doc, onSnapshot, addDoc, collection , Timestamp, getDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { doc, onSnapshot, addDoc, collection , Timestamp, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { BarChart } from './Bar';
 
 
