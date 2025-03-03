@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { db, auth } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import NavBar from "./NavBar";
 function MoodJournal() {
   const [summary, setSummary] = useState("");
@@ -6,10 +9,27 @@ function MoodJournal() {
 
   const moods = ["Happy", "Sad", "Angry", "Excited", "Calm"];
   const currentDate = new Date().toLocaleDateString();
-
-  const handleSubmit = (e) => {
+  const navigate = useNavigate()
+  const date = new Date()
+  date.setHours(0, 0, 0, 0)
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    alert(`Summary: ${summary}\nMood: ${mood}`);
+    try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                console.error("No user is signed in.");
+                return;
+            }
+            const userId = currentUser.uid;
+            const userDoc = collection(db,"user_info", userId, "Data", "Mood Poll", "Mood_entries")
+            const newFields = {Summary: summary, Mood: mood, Date: date}
+            await addDoc(userDoc, newFields)
+            navigate('/home')
+            console.log(newFields)
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+  
   };
 
   return (
