@@ -12,6 +12,7 @@ import ProfileViewPage from './ProfileViewPage';
 import MedicationsPage from './MedicationsPage';
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
+import ProfessionalHelp from './ProfessionalHelp';
 import { AuthProvider } from '../contexts/AuthContext';
 
 function App() {
@@ -56,6 +57,12 @@ function App() {
           <Route path="/edit-profile" element={
             <PrivateRoute>
               <ProfilePage />
+            </PrivateRoute>
+            }
+          ></Route>
+          <Route path="/professional-help" element={
+            <PrivateRoute>
+              <ProfessionalHelp />
             </PrivateRoute>
             }
           ></Route>
