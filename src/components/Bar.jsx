@@ -10,14 +10,7 @@ import {
     Legend
 } from "chart.js"
 
-ChartJS.register({
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-});
+
 
 export const BarChart = (cloudData) => {
     const options = {
