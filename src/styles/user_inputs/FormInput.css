@@ -1,40 +1,37 @@
-
-
 /* The container for the text and child input element. */
-.FormInput label
-{
+.FormInput label {
 	cursor: pointer;
 	position: relative;
 	display: inline-block;
 	padding: 10px;
+	color: var(--body-text-color)
 }
 
 /* The label text and long description. */
-.FormInput-text
-{
-	display: inline-block; /* Inline-block lets the button to appear next to the text, if there's space. */
+.FormInput-text {
+	display: inline-block;
+	/* Inline-block lets the button to appear next to the text, if there's space. */
+	font-weight: bold;
+	color: var(--body-text-color)
 }
 
 /* The subtext for the description below the label. */
-.FormInput-description
-{
-	display: block; /* Block prevents the subtext from appearing right next to the label. */
+.FormInput-description {
+	display: block;
+	/* Block prevents the subtext from appearing right next to the label. */
 	font-size: 0.75em;
 	color: var(--body-text-light-color);
 }
 
-.FormInput-child
-{
+.FormInput-child {
 	display: inline-block;
 	vertical-align: middle;
 }
 
-.FormInput-child-vertical
-{
+.FormInput-child-vertical {
 	display: block;
 }
 
-.FormInput textarea
-{
+.FormInput textarea {
 	min-width: 80%;
 }

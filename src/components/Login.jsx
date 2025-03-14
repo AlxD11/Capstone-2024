@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useAuth } from "../contexts/AuthContext"
 import { Alert } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
-
+import { signInWithPopup } from 'firebase/auth';
+import { googleProvider, auth } from '../firebase';
 import appLogo from '../assets/app_logo.png';
 
 function Login() {
@@ -25,6 +26,19 @@ function Login() {
       setError("Incorrect Email ID or password")
     }
     setLoading(false)
+  };
+
+  const signInWithGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await auth.signInWithPopup(googleProvider);
+      navigate('/home');
+    } catch (error) {
+      setError("Google Sign-in failed");
+      console.error("Google Sign-in error:", error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -56,6 +70,7 @@ function Login() {
               />
             </label>
             <button disabled={loading} type="submit" style={styles.button}>Login</button>
+            <button disabled={loading} style={styles.button} onClick={signInWithGoogle}>Sign in with Google</button>
           </form>
           <div style={styles.links}>
             <Link to ="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
