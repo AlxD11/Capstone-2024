@@ -13,6 +13,7 @@ import MedicationsPage from './MedicationsPage';
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../contexts/AuthContext';
+import Reports from './Reports.jsx'
 
 function App() {
   return (  
@@ -40,6 +41,13 @@ function App() {
               <MoodJournal />
             </PrivateRoute>
             }
+
+          ></Route>
+          <Route path="/reports" element={
+            <PrivateRoute>
+              <Reports />
+            </PrivateRoute>
+          }
           ></Route>
           <Route path="/settings" element={
             <PrivateRoute>

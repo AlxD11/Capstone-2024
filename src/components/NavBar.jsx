@@ -22,7 +22,7 @@ function NavBar()
 			<nav>
 				<Link to ="/home">Home</Link>
 				<Link to ="/mood-journal">Mood Journal</Link>
-				<a href="#">Report</a>
+				<Link to="/Reports">Report</Link>
 			</nav>
 
 			<Link to ="/profile">
