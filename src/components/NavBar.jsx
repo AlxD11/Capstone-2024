@@ -12,9 +12,6 @@ function NavBar() {
 			</Link>
 
 			<nav>
-				<Link to="/home">Home</Link>
-				<Link to="/mood-journal">Mood Journal</Link>
-				<a href="#">Report</a>
 				<Link to ="/home">Home</Link>
 				<Link to ="/mood-journal">Mood Journal</Link>
 				<Link to="/Reports">Report</Link>
