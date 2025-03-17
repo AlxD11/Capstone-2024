@@ -1,31 +1,103 @@
 import '../styles/GlobalStyles.css';
-
 import SettingsScreen from './SettingsScreen.jsx';
 import FormInput from './user_inputs/FormInput.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useAuth } from "../contexts/AuthContext"
+import { ClipLoader } from 'react-spinners';
 
 // TODO: This is very similar to the Settings page, so maybe figure out a way to recycle the components.
 
 
 function ProfileSettings() {
-	const [userName, setUserName] = useState('')
-	const [name, setName] = useState('')
-	const [email, setEmail] = useState('')
-	const [phone, setPhone] = useState('')
-	const [userWishes, setUserWishes] = useState('')
-	const [userGoals, setUserGoals] = useState('')
-	const [userHealth, setUserHealth] = useState('')
-	const [userMedication, setUserMedication] =useState('')
-	const [error, setError] = useState("")
-	const [loading, setLoading] = useState(false)
-	const navigate = useNavigate()
+	const [isPopupOpen, setIsPopupOpen] = useState(false);
+	const [selectedFile, setSelectedFile] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState('');
+	const [photoURL, setPhotoURL] = useState('');
+	const [userName, setUserName] = useState('');
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [phone, setPhone] = useState('');
+	const [userWishes, setUserWishes] = useState('');
+	const [userGoals, setUserGoals] = useState('');
+	const [userHealth, setUserHealth] = useState('');
+	const [userMedication, setUserMedication] = useState('');
+	const { upload, currentUser, updateEmail } = useAuth();
+	const [oldUserName, setOldUserName] = useState('');
+	const [oldName, setOldName] = useState('');
+	const [oldEmail, setOldEmail] = useState('');
+	const [oldPhone, setOldPhone] = useState('');
+	// Will probably change to desiredHelp
+	const [oldUserWishes, setOldUserWishes] = useState('');
+	const [oldUserGoals, setOldUserGoals] = useState('');
+	// Make as a list separated by semicolons (??)
+	const [oldUserHealth, setOldUserHealth] = useState('');
+	const [oldUserMedication, setOldUserMedication] = useState('');
+	const promises = []
+	const navigate = useNavigate();
+	const handleOpenPopup = () => setIsPopupOpen(true);
+	const handleClosePopup = () => setIsPopupOpen(false);
+	const handleFileChange = (event) => {
+		setSelectedFile(event.target.files[0]);
+	};
+	const fetchUserData = async () => {
+		setLoading(true)
+		try {
+			const currentUser = auth.currentUser;
+			const userId = currentUser.uid;
+			const unsub = onSnapshot(doc(db, "user_info", userId, "Data", "Profile"), doc => {
+				if (doc.exists()) {
+					const userData = doc.data()
+					setOldName(userData.Name || "Lord Farquaad");
+					setOldUserName(userData.UserName || "xX_Sunny-Haz3_Xx");
+					setOldEmail(userData.email || "example@snailmail.com");
+					setOldPhone(userData.Phone || "(972) 000-0000");
+					setOldUserWishes(userData.Improve || "Example: I wish I could be less stressed about work");
+					setOldUserGoals(userData.Goal || "Example: I want to work towards feeling like it's ok to set boundaries with coworkers and other people.");
+					setOldUserHealth(userData.Health || "Examples: ADHD, anxiety, interpersonal boundaries");
+					setOldUserMedication(userData.Medication || "Yet to set your current Medication/s");
+				} else {
+					console.log("No user data found for UID:", userId)
+				}
+			})
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+		} finally {
+			setLoading(false);
+		}
+		return () => {
+			unsub();
+		};
+	}
+	useEffect(() => {
+		fetchUserData();
+	}, []);
+	if (loading) {
+		return (
+			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+				<ClipLoader color="#36D7B7" size={50} />
+			</div>
+		);
+	}
+	const handleUpload = async () => {
+		if (selectedFile && currentUser) {
+			try {
+				await upload(selectedFile);
+				console.log('File uploaded successfully:');
+				handleClosePopup();
+			} catch (error) {
+				console.error('Error uploading file:', error);
+				setError('Error uploading file.');
+			}
+		}
+	};
 
 	const updateUserData = async (e) => {
 		e.preventDefault();
+		setLoading(true);
 		try {
 			const currentUser = auth.currentUser;
 			if (!currentUser) {
@@ -33,15 +105,36 @@ function ProfileSettings() {
 				return;
 			}
 			const userId = currentUser.uid;
-			const userDoc = doc(db, "user_info", userId, "Data", "Profile")
-			const newFields = {UserName: userName, Name: name, email: email, Phone: phone, Improve: userWishes, Goal: userGoals, Health: userHealth}
-			await updateDoc(userDoc, newFields)
-			navigate('/home')
-			console.log(newFields)
+			const userDoc = doc(db, "user_info", userId, "Data", "Profile");
+			const newFields = {};
+			if (userName) newFields.UserName = userName;
+			if (name) newFields.Name = name;
+			if (email !== currentUser.email) {
+				promises.push(updateEmail(email))
+				newFields.email = email
+			};
+			if (phone) newFields.Phone = phone;
+			if (userWishes) newFields.Improve = userWishes;
+			if (userGoals) newFields.Goal = userGoals;
+			if (userHealth) newFields.Health = userHealth;
+
+			if (Object.keys(newFields).length > 0) {
+				await updateDoc(userDoc, newFields);
+				Promise.all(promises).then(() => {
+					navigate('/profile');
+				})
+				console.log("Updated fields:", newFields);
+			} else {
+				console.log("No fields to update.");
+			}
 		} catch (error) {
-			console.error("Error fetching user data:", error);
+			console.error("Error updating user data:", error);
+			setError("Error updating user data.");
+		} finally {
+			setLoading(false);
 		}
-	}
+	};
+
 	return (
 		<div className="SettingsControls">
 			<form>
@@ -54,9 +147,9 @@ function ProfileSettings() {
 						<input
 							type="text"
 							id="settings-username"
-							placeholder="xX_Sunny-Haz3_Xx"
+							placeholder={oldUserName}
 							value={userName}
-            				onChange={(e) => setUserName(e.target.value)}
+							onChange={(e) => setUserName(e.target.value)}
 						/>
 					</FormInput>
 
@@ -68,9 +161,9 @@ function ProfileSettings() {
 						<input
 							type="text"
 							id="settings-name"
-							placeholder="Lord Farquaad"
+							placeholder={oldName}
 							value={name}
-            				onChange={(e) => setName(e.target.value)}
+							onChange={(e) => setName(e.target.value)}
 						/>
 					</FormInput>
 
@@ -81,9 +174,9 @@ function ProfileSettings() {
 						<input
 							type="email"
 							id="settings-email-address"
-							placeholder="example@snailmail.com"
+							placeholder={oldEmail}
 							value={email}
-            				onChange={(e) => setEmail(e.target.value)}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormInput>
 
@@ -95,9 +188,9 @@ function ProfileSettings() {
 						<input
 							type="tel"
 							id="settings-phone-number"
-							placeholder="(972) 000-0000"
+							placeholder={oldPhone}
 							value={phone}
-            				onChange={(e) => setPhone(e.target.value)}
+							onChange={(e) => setPhone(e.target.value)}
 						/>
 					</FormInput>
 				</div>
@@ -111,9 +204,9 @@ function ProfileSettings() {
 						<textarea
 							id="settings-user-wishes"
 							name="settings-user-wishes"
-							placeholder="Example: I wish I could be less stressed about work"
+							placeholder={oldUserWishes}
 							value={userWishes}
-            				onChange={(e) => setUserWishes(e.target.value)}
+							onChange={(e) => setUserWishes(e.target.value)}
 						/>
 					</FormInput>
 
@@ -125,9 +218,9 @@ function ProfileSettings() {
 						<textarea
 							id="settings-user-goals"
 							name="settings-user-goals"
-							placeholder="Example: I want to work towards feeling like it's ok to set boundaries with coworkers and other people."
+							placeholder={oldUserGoals}
 							value={userGoals}
-            				onChange={(e) => setUserGoals(e.target.value)}
+							onChange={(e) => setUserGoals(e.target.value)}
 						/>
 					</FormInput>
 
@@ -139,9 +232,9 @@ function ProfileSettings() {
 						<textarea
 							id="settings-user-health-concerns"
 							name="settings-user-health-concerns"
-							placeholder="Examples: ADHD, anxiety, interpersonal boundaries"
+							placeholder={oldUserHealth}
 							value={userHealth}
-            				onChange={(e) => setUserHealth(e.target.value)}
+							onChange={(e) => setUserHealth(e.target.value)}
 						/>
 					</FormInput>
 
@@ -168,7 +261,22 @@ function ProfileSettings() {
 					</FormInput>
 				</div>
 			</form>
+			<div>
+				<button type="button" className="linked-button" onClick={handleOpenPopup}>Edit Profile Picture</button>
+				{isPopupOpen && (
+					<div className="popup">
+						<div className="popup-content">
+							<button className="close-button" onClick={handleClosePopup}>X</button>
+							<input type="file" onChange={handleFileChange} />
+							{selectedFile && <p>Selected: {selectedFile.name}</p>}
+							<button type="button" className="linked-button" onClick={handleUpload}>Upload</button>
+						</div>
+					</div>
+				)}
+			</div>
 		</div>
+
+
 	);
 }
 

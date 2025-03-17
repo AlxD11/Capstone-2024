@@ -28,8 +28,7 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	Large Screens 	= up to 1920px wide
 	Huge Screens 	= over 1920px wide  */
 
-:root
-{
+:root {
 	/* ----- Raw Colors ----- */
 	--hot-pink: #EE1D52;
 	--pale-pink: #FDAFB7;
@@ -43,10 +42,10 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	--off-white: ghostwhite;
 	--faint-orange: hsl(26, 100%, 91%);
 
-	/* ----- Linked Colors / Color Variables ----- */
+	/* ----- Linked Colors / Color Variables ----- 
 	--nav-text-color: var(--hot-pink);
 	--body-text-color: black;
-	--body-text-light-color: rgb(92, 105, 118);  /* Close to slategray. */
+	--body-text-light-color: rgb(92, 105, 118); 
 	--link-text-color: var(--coral);
 	--link-background-color: inherit;
 	
@@ -54,66 +53,128 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	/* Add @media(query){} blocks here and change stuff accordingly.
 	Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries */
 	/* TODO: Add alternative color swatches for high-contrast preference */
-	
-	/* High Contrast Color Overrides */
+
+	/* High Contrast Color Overrides 
 	@media(prefers-contrast)
 	{
 		--nav-text-color: var(--hot-pink);
 		--body-text-color: black;
-		--body-text-light-color: rgb(48, 55, 61);  /* Close to slategray. */
+		--body-text-light-color: rgb(48, 55, 61); 
 		--link-text-color: white;
 		--link-background-color: var(--coral);
 	}
+	*/
 }
 
-body
-{
+#light {
+	/* Add light theme specific colors */
+	--pale-pink: #ffe4e1;
+	/* Example light color */
+	--pale-pink-2: #f9f0f9;
+	--soft-purple: #e0b0ff;
+	--coral: #ff7f50;
+	--intense-purple: #9932cc;
+	--faint-orange: #fdd5b1;
+	--off-white: #f8f8ff;
+	--light-gray: #d3d3d3;
+	--brown: #a52a2a;
+	--hot-pink: #ff69b4;
+	
+	background-color: #f3ebf6;
+	--nav-text-color: var(--hot-pink);
+	--body-text-color: black;
+	--body-text-light-color: rgb(92, 105, 118);
+	/* Close to slategray. */
+	--link-text-color: var(--coral);
+	--link-background-color: inherit;
+	--button-text-hover: var(--brown);
+	--nav-bar-background: var(--off-white);
+	--nav-bar-drop-shadow: lightgray;
+	--reminder-entry-background: var(--off-white);
+}
+
+/* Dark Theme */
+#dark {
+	/* Add dark theme specific colors */
+	--pale-pink: #433737;
+	/* Example dark color */
+	--pale-pink-2: #302030;
+	--soft-purple: #553388;
+	--coral: #ff4000;
+	--intense-purple: #662288;
+	--faint-orange: #fa7d00;
+	--off-white: #000000;
+	--light-gray: #2c2e36;
+	--brown: #ff5900;
+	--hot-pink: #ff69b4;
+	
+	background-color: #222;
+	--nav-text-color: var(--hot-pink);
+	--white: #ffffff;
+	--body-text-color: #e0e0e0;
+	/* Corrected: Using white for general text */
+	--body-text-light-color: rgb(180, 180, 180);
+	/* A slightly lighter shade of grey for less emphasized text */
+	--link-text-color: var(--coral);
+	--link-background-color: inherit;
+	--button-text-hover: black;
+	--nav-bar-background: hsl(240, 50%, 15%);
+	--nav-bar-drop-shadow: black;
+	--reminder-entry-background: var(--nav-bar-background);
+}
+
+#dark h2 {
+	color: var(--body-text-color);
+	/* Or a specific color */
+}
+
+#dark p {
+	color: var(--body-text-color);
+	/* Or a specific color */
+}
+
+body {
 	font-family: "Roboto", "Verdana", sans-serif;
 }
 
-a
-{
+a {
 	color: var(--link-text-color);
 	background-color: var(--link-background-color);
 	text-decoration: none;
 }
 
-a:hover
-{
+a:hover {
 	color: var(--brown);
 }
 
 /* Buttons that behave as links.
 FIXME: Padding is such that you must click directly on the text to get to the link. */
-.linked-button
-{
+.linked-button {
 	background-color: var(--pale-pink);
-	
+
 	padding: 14px;
-	
+
 	font-size: 1em;
 	font-weight: bold;
-	
+
 	cursor: pointer;
 	border-style: none;
 	border-color: var(--pale-pink);
 	border-radius: 8px;
 }
 
-.linked-button:hover
-{
+.linked-button:hover {
 	background-color: var(--coral);
+	color: var(--button-text-hover);
 }
 
-.linked-button a
-{
+.linked-button a {
 	/* Note: Despite being a <Link> tag, the <a> selector will still work. */
 	color: var(--brown);
 	text-decoration: none;
 }
 
-.MainScreen-content
-{
+.MainScreen-content {
 	min-height: 75vh;
 	margin-left: 1vw;
 	margin-right: 1vw;
@@ -124,21 +185,28 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 /* ---------------------------------------------- HomeScreen Component Elements ---------------------------------------------- */
 
-.HomeWelcomeMsg > p
-{
+.HomeWelcomeMsg>p {
 	padding-left: 10vw;
 	color: var(--body-text-light-color);
 }
 
-.HomeScreen-info
-{
+.HomeScreen-info {
 	display: flex;
-	justify-content: space-between;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
 	font-size: 0.75em;
 }
 
-.HomeScreen button
-{
+@media (min-width: 1500px) {
+	.HomeScreen-info {
+		justify-content: flex-start;
+		gap: 500px;
+		padding: 20px;
+	}
+}
+
+.HomeScreen button {
 	margin-top: 10px;
 	padding: 10px;
 	font-size: 1.25em;
@@ -147,16 +215,15 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 /* ---------------------------------------------- Reminder Component Elements ---------------------------------------------- */
 
-.Reminders
-{
+.Reminders {
 	/* Layout */
-	max-width: 35vw;
-	
+	max-width: 350px;
+	min-height: 300px;
 	/* Spacing */
 	margin-top: 6em;
 	padding: 4px;
 	padding-right: 10px;
-	
+
 	/* Colors and Effects */
 	background-color: var(--pale-pink-2);
 	background-image: linear-gradient(var(--soft-purple), var(--coral));
@@ -166,74 +233,77 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	border-radius: 8px;
 }
 
-.Reminders h2
-{
+.Reminders h2 {
 	/* Colors and Effects */
 	color: var(--faint-orange);
 	text-shadow: 0 2px 2px var(--intense-purple);
 }
 
-.Reminders > .reminder-entry
-{
-	padding: 0.5em;
-	background-color: var(--off-white);
-	border-radius: 8px;
+.Reminders>.reminder-entry {
+	padding: 1.2em;
+	background-color: var(--reminder-entry-background);
+	border-radius: 15px;
+	font-size: 1.2em;
+	margin-bottom: 1em;
+	min-height: 50px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	line-height: 1.4;
+	font-weight: 500;
 }
 
-.Reminders button
-{
+.Reminders button {
 	background-color: var(--pale-pink);
-	color: lightgray;
 	margin: 4px;
 }
 
-.InfoSummary
-{
-	padding: 4em;
-	margin: 8em;
-	
-	width: 40vw;
-	height: 30vh;
-	background-color: white;
+.InfoSummary {
+	padding: 2em;
+	margin: 2em;
+	max-width: 600px;
+	min-height: 450px;
+	background-color: var(--link-background-color);
 	border-style: solid;
 	border-width: 4px;
 	border-color: var(--pale-pink);
 	border-radius: 8px;
+	color: var(--body-text-color);
 }
 
 
 /* ---------------------------------------------- NavBar Component Elements ---------------------------------------------- */
 
 /* NavBar, the top navigation bar. */
-.NavBar
-{
+.NavBar {
 	/* Layout */
 	display: flex;
-	justify-content: space-between; /* Distribute contents along the x axis. */
-	align-items: center; /* Center contents relative to each other along the y-axis. */
-	
+	justify-content: space-between;
+	/* Distribute contents along the x axis. */
+	align-items: center;
+	/* Center contents relative to each other along the y-axis. */
+
 	/* Spacing */
-	padding: 4px; /* Keep all contents 4px away from the edges. */
-	
+	padding: 4px;
+	/* Keep all contents 4px away from the edges. */
+
 	/* Color and Border */
 	border-width: 2px;
 	border-color: lightgray;
 	/* border style: top right bottom left; */
-	background-color: var(--off-white);
-	filter: drop-shadow(0px 4px 2px lightgray);
+	background-color: var(--nav-bar-background);
+	filter: drop-shadow(0px 4px 2px var(--nav-bar-drop-shadow));
 }
 
-.NavBar > nav
-{
+.NavBar>nav {
 	display: flex;
 	justify-content: space-between;
 
-	min-width: 40vw; /* Force the nav menu to take up most (40%) of the horizontal window space. */
+	min-width: 40vw;
+	/* Force the nav menu to take up most (40%) of the horizontal window space. */
 }
 
-.NavBar > nav > a
-{
-	padding-left: 5px; /* Add padding to the navigation links so they can't touch each other, even when squished together. */
+.NavBar>nav>a {
+	padding-left: 5px;
+	/* Add padding to the navigation links so they can't touch each other, even when squished together. */
 	padding-right: 5px;
 
 	/* Text Color / Effects */
@@ -241,95 +311,112 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	text-decoration: none;
 	font-size: 1.5em;
 	font-weight: bold;
-	
+
 	/* Responsive Overrides */
-	@media (width <= 450px) /* Tiny Screens - shrink text */
-	{
+	@media (width <=450px)
+
+	/* Tiny Screens - shrink text */
+		{
 		font-size: 1em;
 	}
-	@media (450px < width <= 800px) /* Small Screens - shrink text */
-	{
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - shrink text */
+		{
 		font-size: 1em;
 	}
-	@media (800px < width <= 1280px) /* Medium Screens */
-	{
-		
-	}
-	@media (1280px < width <= 1920px) /* Large Screens */
-	{
-		
-	}
-	@media (1920px < width) /* Huge Screens */
-	{
-		
-	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
 }
 
-.NavBar > nav > a:hover
-{
+.NavBar>nav>a:hover {
 	text-decoration: underline;
 }
 
-.NavBar img
-{
+.NavBar img {
 	max-height: 64px;
 	max-width: 64px;
-	padding: 8px;
-	
+	padding: 0px;
+
 	/* Responsive Overrides */
-	@media (width <= 450px) /* Tiny Screens - shrink images */
-	{
+	@media (width <=450px)
+
+	/* Tiny Screens - shrink images */
+		{
 		max-height: 32px;
 		max-width: 32px;
 	}
-	@media (450px < width <= 800px) /* Small Screens - shrink images */
-	{
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - shrink images */
+		{
 		max-height: 48px;
 		max-width: 48px;
 	}
-	@media (800px < width <= 1280px) /* Medium Screens */
-	{
-		
-	}
-	@media (1280px < width <= 1920px) /* Large Screens */
-	{
-		
-	}
-	@media (1920px < width) /* Huge Screens */
-	{
-		
-	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
 }
 
-.avatar
-{
+.avatar {
 	vertical-align: middle;
 	width: 80px;
 	height: 80px;
-	border-radius: 50%; /* Makes the border circular. */
-	border-width: 5px;
+	border-radius: 50%;
+	/* Makes the border circular. */
+	border-width: 1px;
 	border-color: gray;
-	border-style: outset; /* TODO: Causing the extra space around the avatar - can't figure out a good fix RN */
+	border-style: solid;
+	/* Use solid border */
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	/* TODO: Causing the extra space around the avatar - can't figure out a good fix RN */
 }
 
 
 /* ---------------------------------------------- Footer Component Elements ---------------------------------------------- */
 
-.Footer
-{
+.Footer {
 	display: flex;
 }
 
-.Footer-icons
-{
+/* The container to hold the icons for external resources. */
+.Footer-icons {
 	display: flex;
-	flex-direction: column; /* Make the divs (app icons vs social icons) stack vertically. */
+	flex-direction: column;
+	/* Make the divs (app icons vs social icons) stack vertically. */
 
-	min-width: 25vw; /* Force the box of icons to take up at least 20% of the window width (vw). */
+	min-width: 25vw;
+	/* Force the box of icons to take up at least 20% of the window width (vw). */
 }
 
-.Footer-icons img
-{
+.Footer-icons img {
 	max-width: 32px;
 	max-height: 32px;
 	padding-left: 4px;
@@ -337,92 +424,90 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	padding-top: 8px;
 }
 
-.Footer-resources p
-{
-	font-size: 0.75em; /* Make the footer text size smaller. */
-	margin: 0.25em; /* Compact the list of resources. */
+.Footer-resources p {
+	font-size: 0.75em;
+	/* Make the footer text size smaller. */
+	margin: 0.25em;
+	/* Compact the list of resources. */
 }
 
 
 /* ---------------------------------------------- MoodPoll Component Elements ---------------------------------------------- */
 
-.PollQuestion
-{
-	margin-top: 10vh; /* Keep the question block away from the edges of the screen and other questions. */
+.PollQuestion {
+	margin-top: 10vh;
+	/* Keep the question block away from the edges of the screen and other questions. */
 	margin-bottom: 10vh;
 	margin-left: 5vw;
 	margin-right: 5vw;
 }
 
-.PollQuestion p
-{
+.PollQuestion p {
 	color: var(--brown);
 	font-size: 1.5em;
 	font-weight: bold;
 }
 
-.PollQuestion label
-{
+.PollQuestion label {
 	padding: 16px;
-	
+	color: var(--body-text-color);
 	font-size: 1.25em;
 }
 
 /* Multiple choice questions */
-.PollQuestion-mc
-{
+.PollQuestion-mc {
 	display: flex;
-	align-items: center; /* Align the contents (text and image) vertically. */
-	justify-content: space-between; /* Force the two contained items (text and image) onto opposite ends of the container. */
-	
-	min-width: 30vw; /* Give the container enough width to separate the image and text and make justify-content obvious. */
+	align-items: center;
+	/* Align the contents (text and image) vertically. */
+	justify-content: space-between;
+	/* Force the two contained items (text and image) onto opposite ends of the container. */
+
+	min-width: 30vw;
+	/* Give the container enough width to separate the image and text and make justify-content obvious. */
 	max-width: 35vw;
-	margin-left: auto; /* Center the content on the page. */
+	margin-left: auto;
+	/* Center the content on the page. */
 	margin-right: auto;
 }
 
-.PollQuestion-selection
-{
+.PollQuestion-selection {
 	color: white;
 	background-color: #EE1D52;
 }
 
-.PollQuestion-mc:hover
-{
+.PollQuestion-mc:hover {
 	color: var(--hot-pink);
 	background-color: var(--pale-pink);
 }
 
-.PollQuestion-mc input
-{
+.PollQuestion-mc input {
 	padding: 4px;
 	margin: 8px;
-	
+
 	/* Visually hide the input (radio button), but do not disable it so that screenreaders can still see it. */
 	/*opacity: 0; */
-	
+
 	/* Make the radio button bigger */
 	width: 3em;
 	height: 3em;
-	
-	accent-color: var(--hot-pink); 	/* Make the radio button a different color */
+
+	accent-color: var(--hot-pink);
+	/* Make the radio button a different color */
 }
 
 /* Medication dose questions */
-.PollQuestion-dose
-{
+.PollQuestion-dose {
 	flex-direction: column;
 	justify-content: left;
 }
 
-.PollQuestion-dose div
-{
-	padding: 16px; /* Dunno why this didn't inherit from label. */
+.PollQuestion-dose div {
+	padding: 16px;
+	/* Dunno why this didn't inherit from label. */
 }
 
 /* TODO: Make sharable by other buttons */
-.PollQuestion button
-{
+.PollQuestion button {
 	margin-top: 10px;
 	padding: 10px;
 	background-color: var(--pale-pink);
@@ -436,80 +521,95 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	border-radius: 8px;
 }
 
-.PollControlls
-{
+.PollControlls {
 	color: var(--brown);
 	font-size: 1.5em;
 	font-weight: bold;
-	text-align: right; /* Move the "Next" button to the right side of the page. */
+	text-align: right;
+	/* Move the "Next" button to the right side of the page. */
 }
 
 
 /* ---------------------------------------------- Settings Component Elements ---------------------------------------------- */
 
-.SettingsControls > form, .ViewProfileSettings
-{
-	display: flex; /* Make form have columns. */
+.SettingsControls>form,
+.ViewProfileSettings {
+	display: flex;
+	/* Make form have columns. */
 	padding: 16px;
-	
+
 	/* Responsive Overrides */
-	@media (width <= 450px) /* Tiny Screens - single column */
-	{
+	@media (width <=450px)
+
+	/* Tiny Screens - single column */
+		{
 		display: block;
 	}
-	@media (450px < width <= 800px) /* Small Screens - single column */
-	{
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - single column */
+		{
 		display: block;
 	}
-	@media (800px < width <= 1280px) /* Medium Screens */
-	{
-		
-	}
-	@media (1280px < width <= 1920px) /* Large Screens */
-	{
-		
-	}
-	@media (1920px < width) /* Huge Screens */
-	{
-		
-	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
 }
 
-.SettingsControls-column
-{
+.SettingsControls-column {
 	width: 50%;
-	
+
 	/* Responsive Overrides */
-	@media (width <= 450px) /* Tiny Screens - full-width single column */
-	{
+	@media (width <=450px)
+
+	/* Tiny Screens - full-width single column */
+		{
 		width: unset;
 	}
-	@media (450px < width <= 800px) /* Small Screens - full-width single column */
-	{
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - full-width single column */
+		{
 		width: unset;
 	}
-	@media (800px < width <= 1280px) /* Medium Screens */
-	{
-		
-	}
-	@media (1280px < width <= 1920px) /* Large Screens */
-	{
-		
-	}
-	@media (1920px < width) /* Huge Screens */
-	{
-		
-	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
 }
 
-.SettingsScreen
-{
+.SettingsScreen {
 	display: grid;
-	grid-template-columns: 15vw auto; /* Make the first (left) column 15% of the screen width and the other take up the rest of the space. */
+	grid-template-columns: 15vw auto;
+	/* Make the first (left) column 15% of the screen width and the other take up the rest of the space. */
 }
 
-.SettingsSidebar
-{
+.SettingsSidebar {
 	min-width: fit-content;
 	background-color: var(--light-gray);
 	/* TODO: Center image in sidebar.*/
@@ -518,30 +618,59 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 /* ---------------------------------------------- Profile Component Elements ---------------------------------------------- */
 
-.ProfileSettings > form
-{
-	display: flex; /* Make the columns. */
+.ProfileSettings>form {
+	display: flex;
+	/* Make the columns. */
 	padding: 16px;
 }
 
-.ViewSetting
-{
+.ViewSetting {
 	margin-left: 1em;
 }
 
-.MedicationsList button
-{
+.MedicationsList button {
 	padding: 4px;
-	margin: 2px 4px; /* top/ bottom, left/right */
+	margin: 2px 4px;
+	/* top/ bottom, left/right */
 }
 
 /* Delete buttons on medication list */
-.MedicationsList ol button:first-of-type
-{
+.MedicationsList ol button:first-of-type {
 	background-color: orangered;
 }
 
-.MedicationsList li
-{
+.MedicationsList li {
 	padding: 8px;
+}
+
+.popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.popup-content {
+	background-color: var(--link-background-color);
+	padding: 35px;
+	border-radius: 25px;
+	position: relative;
+}
+
+.close-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+.popup-hidden {
+	display: none;
 }

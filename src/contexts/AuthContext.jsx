@@ -1,6 +1,8 @@
-import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../firebase"
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
+import React, { useContext, useState, useEffect } from "react";
+import { auth, storage } from "../firebase";
+import { updateProfile } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 const AuthContext = React.createContext()
 
@@ -35,19 +37,26 @@ export function AuthProvider({ children }) {
   function updatePassword(password) {
     return currentUser.updatePassword(password)
   }
-  
-  async function upload(file, currentUser, setLoading) {
-    const fileRef = ref(storage, currentUser.uid + '.png');
-  
+
+  async function upload(file) {
+    if (!currentUser) {
+      alert("No current user. Please log in.");
+      return;
+    }
+
+    const fileRef = ref(storage, `images/${currentUser.uid}/${currentUser.uid}.png`);
     setLoading(true);
-    
-    const snapshot = await auth.uploadBytes(fileRef, file);
-    const photoURL = await auth.getDownloadURL(fileRef);
-  
-    updateProfile(currentUser, {photoURL});
-    
-    setLoading(false);
-    alert("Uploaded file!");
+    try {
+      await uploadBytes(fileRef, file);
+      const photoURL = await getDownloadURL(fileRef);
+      await updateProfile(currentUser, { photoURL });
+      setLoading(false);
+      alert("Profile Picture Changed Successfully");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setLoading(false);
+      alert("Error uploading file.");
+    }
   }
 
   useEffect(() => {
@@ -66,7 +75,8 @@ export function AuthProvider({ children }) {
     logout,
     resetPassword,
     updateEmail,
-    updatePassword
+    updatePassword,
+    upload,
   }
 
   return (

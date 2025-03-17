@@ -1,18 +1,56 @@
 import '../styles/GlobalStyles.css';
-
+import { useNavigate } from 'react-router-dom';
 import SettingsScreen from './SettingsScreen.jsx';
 import ToggleButton from './user_inputs/ToggleButton.jsx';
 import FormInput from './user_inputs/FormInput.jsx';
-
-// IDK what I'm doing and THAT'S OK!
-// IDK what I'm doing and THAT'S EXPECTED!
-// I'm learning as I go and THAT'S THE GOAL!
-// My old code feels like crap and THAT MEANS I'M LEARNING!
+import { useContext, useState, useEffect } from 'react'; // Import useContext
+import { ThemeContext } from './App.jsx';
+import { useAuth } from "../contexts/AuthContext"
 
 /** TODO: Add confirmation dialog to account delete button */
-function SettingsControls()
-{
-	return(
+function SettingsControls() {
+	const { theme, toggleTheme } = useContext(ThemeContext);
+	const [darkMode, setDarkMode] = useState(false);
+	const { logout } = useAuth();
+	const { error, setError } = useState('')
+	const navigate = useNavigate();
+	useEffect(() => {
+		const storedPreference = localStorage.getItem('darkMode');
+		if (storedPreference !== null) {
+			setDarkMode(storedPreference === 'true');
+		} else {
+			setDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (darkMode) {
+			if (theme !== 'dark') {
+				toggleTheme();
+			}
+			localStorage.setItem('darkMode', 'true');
+		} else {
+			if (theme !== 'light') {
+				toggleTheme();
+			}
+			localStorage.setItem('darkMode', 'false');
+		}
+	}, [darkMode, theme, toggleTheme]); // Dependency array ensures this effect runs when darkMode or toggleTheme changes
+
+	const handleDarkModeChange = (newDarkMode) => {
+		setDarkMode(newDarkMode);
+	};
+
+	async function handleLogout() {
+		try {
+			await logout()
+			navigate('/')
+		}
+		catch {
+			setError('Failed to log out')
+		}
+	}
+	return (
 		<div className="SettingsControls">
 			<form>
 				<div className="SettingsControls-column">
@@ -32,7 +70,7 @@ function SettingsControls()
 							id="settings-desktop-notifications"
 						/>
 					</FormInput>
-					
+
 					<FormInput
 						label="Personalized recommendations"
 						desc="See help recommendations based on your (anonymized) data."
@@ -42,16 +80,18 @@ function SettingsControls()
 							isChecked="true"
 						/>
 					</FormInput>
-					
+
 					<FormInput
-						label="High contrast mode"
+						label="Dark mode"
 					>
 						<ToggleButton
-							id="settings-high-contrast"
+							id="settings-dark-mode"
+							isChecked={darkMode} // Use darkMode state
+							onChange={handleDarkModeChange}
 						/>
 					</FormInput>
 				</div>
-				
+
 				<div className="SettingsControls-column">
 					<FormInput
 						label="Email reminder interval"
@@ -69,7 +109,7 @@ function SettingsControls()
 							<option value="3">weeks</option>
 						</select>
 					</FormInput>
-					
+
 					<FormInput
 						label="MFA method"
 						desc="Choose whether to require a verification code sent to text or email to log in."
@@ -81,7 +121,7 @@ function SettingsControls()
 							<option value="none" selected>None</option>
 						</select>
 					</FormInput>
-					
+
 					<FormInput
 						label="Delete account"
 						desc="Permanently delete your account and data."
@@ -92,6 +132,17 @@ function SettingsControls()
 							value="Delete"
 						/>
 					</FormInput>
+					<FormInput
+						label="Logout"
+						desc="Logout off your account"
+						verticalAlignment="true"
+					>
+						<input
+							type="button"
+							value="Logout"
+							onClick={handleLogout}
+						/>
+					</FormInput>
 				</div>
 			</form>
 		</div>
@@ -99,8 +150,7 @@ function SettingsControls()
 }
 
 /** The main content for the settings page. */
-function ApplicationSettings()
-{
+function ApplicationSettings() {
 	return (
 		<div className="ApplicationSettings">
 			<h2>Application Settings</h2>
@@ -112,8 +162,7 @@ function ApplicationSettings()
 /** The settings page, plus the standard header and footer.
 TODO: It'd be good to have a component that includes the header and footer and changes out the body content
 instead of having each page re-include the header and footer. */
-function ApplicationSettingsPage()
-{
+function ApplicationSettingsPage() {
 	return (
 		<>
 			<SettingsScreen>
