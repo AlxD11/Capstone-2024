@@ -12,6 +12,7 @@ function NavBar() {
 		setShowDropdown((prev) => !prev);
 	};
 
+	const photoURL = ProfilePicture();
 
 	return (
 		<div className="NavBar">
@@ -26,7 +27,7 @@ function NavBar() {
 			</nav>
 
 			<div onClick={handleDropdownToggle} className="avatar-wrapper">
-				<ProfilePicture />
+				<img src={photoURL} className="avatar" alt="User avatar" />
 			</div>
 
 			{showDropdown && (
