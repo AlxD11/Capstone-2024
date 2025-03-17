@@ -219,7 +219,7 @@ const styles = {
     //backgroundColor: 'white',
     borderStyle: 'solid',
     borderWidth: '10px',
-    borderColor: 'white',
+   // borderColor: 'white',
     borderRadius: '32px',
     margin: '5vw',
   },
