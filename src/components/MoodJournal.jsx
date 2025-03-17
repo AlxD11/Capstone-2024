@@ -207,7 +207,7 @@ const styles = {
     padding: '20px',
     textAlign: 'center',
     display: 'block',
-    backgroundColor: '#F9E0EA',
+    //backgroundColor: '#F9E0EA',
     minHeight: '100vh',
   },
   formContainer: {
