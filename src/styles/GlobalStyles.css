@@ -67,13 +67,6 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 }
 
 #light {
-	background-color: #f3ebf6;
-	--nav-text-color: var(--hot-pink);
-	--body-text-color: black;
-	--body-text-light-color: rgb(92, 105, 118);
-	/* Close to slategray. */
-	--link-text-color: var(--coral);
-	--link-background-color: inherit;
 	/* Add light theme specific colors */
 	--pale-pink: #ffe4e1;
 	/* Example light color */
@@ -86,10 +79,35 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	--light-gray: #d3d3d3;
 	--brown: #a52a2a;
 	--hot-pink: #ff69b4;
+	
+	background-color: #f3ebf6;
+	--nav-text-color: var(--hot-pink);
+	--body-text-color: black;
+	--body-text-light-color: rgb(92, 105, 118);
+	/* Close to slategray. */
+	--link-text-color: var(--coral);
+	--link-background-color: inherit;
+	--button-text-hover: var(--brown);
+	--nav-bar-background: var(--off-white);
+	--nav-bar-drop-shadow: lightgray;
+	--reminder-entry-background: var(--off-white);
 }
 
 /* Dark Theme */
 #dark {
+	/* Add dark theme specific colors */
+	--pale-pink: #433737;
+	/* Example dark color */
+	--pale-pink-2: #302030;
+	--soft-purple: #553388;
+	--coral: #ff4000;
+	--intense-purple: #662288;
+	--faint-orange: #fa7d00;
+	--off-white: #000000;
+	--light-gray: #2c2e36;
+	--brown: #ff5900;
+	--hot-pink: #ff69b4;
+	
 	background-color: #222;
 	--nav-text-color: var(--hot-pink);
 	--white: #ffffff;
@@ -99,18 +117,10 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	/* A slightly lighter shade of grey for less emphasized text */
 	--link-text-color: var(--coral);
 	--link-background-color: inherit;
-	/* Add dark theme specific colors */
-	--pale-pink: #dac4c4;
-	/* Example dark color */
-	--pale-pink-2: #302030;
-	--soft-purple: #553388;
-	--coral: #ff4000;
-	--intense-purple: #662288;
-	--faint-orange: #fa7d00;
-	--off-white: #000000;
-	--light-gray: #241f1f;
-	--brown: #ff5900;
-	--hot-pink: #ff69b4;
+	--button-text-hover: black;
+	--nav-bar-background: hsl(240, 50%, 15%);
+	--nav-bar-drop-shadow: black;
+	--reminder-entry-background: var(--nav-bar-background);
 }
 
 #dark h2 {
@@ -155,6 +165,7 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .linked-button:hover {
 	background-color: var(--coral);
+	color: var(--button-text-hover);
 }
 
 .linked-button a {
@@ -230,7 +241,7 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .Reminders>.reminder-entry {
 	padding: 1.2em;
-	background-color: var(--off-white);
+	background-color: var(--reminder-entry-background);
 	border-radius: 15px;
 	font-size: 1.2em;
 	margin-bottom: 1em;
@@ -242,7 +253,6 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .Reminders button {
 	background-color: var(--pale-pink);
-	color: lightgray;
 	margin: 4px;
 }
 
@@ -279,8 +289,8 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	border-width: 2px;
 	border-color: lightgray;
 	/* border style: top right bottom left; */
-	background-color: var(--off-white);
-	filter: drop-shadow(0px 4px 2px lightgray);
+	background-color: var(--nav-bar-background);
+	filter: drop-shadow(0px 4px 2px var(--nav-bar-drop-shadow));
 }
 
 .NavBar>nav {
@@ -396,6 +406,7 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	display: flex;
 }
 
+/* The container to hold the icons for external resources. */
 .Footer-icons {
 	display: flex;
 	flex-direction: column;
