@@ -10,6 +10,7 @@ import ApplicationSettingsPage from './ApplicationSettingsPage';
 import ProfilePage from './ProfilePage';
 import ProfileViewPage from './ProfileViewPage';
 import MedicationsPage from './MedicationsPage';
+import ProfessionalHelp from './ProfessionalHelp';
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../contexts/AuthContext';
@@ -86,6 +87,12 @@ function App() {
                 </PrivateRoute>
               }
               ></Route>
+                <Route path="/professional-help" element={
+            <PrivateRoute>
+              <ProfessionalHelp />
+            </PrivateRoute>
+            }
+            ></Route>
               <Route path="/medications" element={
                 <PrivateRoute>
                   <MedicationsPage />
