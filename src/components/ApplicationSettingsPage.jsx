@@ -6,10 +6,6 @@ import FormInput from './user_inputs/FormInput.jsx';
 import { useContext, useState, useEffect } from 'react'; // Import useContext
 import { ThemeContext } from './App.jsx';
 import { useAuth } from "../contexts/AuthContext"
-// IDK what I'm doing and THAT'S OK!
-// IDK what I'm doing and THAT'S EXPECTED!
-// I'm learning as I go and THAT'S THE GOAL!
-// My old code feels like crap and THAT MEANS I'M LEARNING!
 
 /** TODO: Add confirmation dialog to account delete button */
 function SettingsControls() {
