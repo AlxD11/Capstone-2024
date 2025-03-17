@@ -216,7 +216,7 @@ const styles = {
     alignItems: 'center',
     minWidth: '40vw',
     height: '70vh',
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     borderStyle: 'solid',
     borderWidth: '10px',
     borderColor: 'white',
