@@ -32,7 +32,7 @@ function Footer()
 
 			<div className="Footer-resources">
 				<p><b>Resources</b></p>
-				<p><a href="">Professional Help</a></p>
+				<p><Link to ="/professional-help">Professional Help</Link></p>
 				<p><a href="">Best Practices</a></p>
 				<p><a href="">Support</a></p>
 				<p><a href="">Developers</a></p>
