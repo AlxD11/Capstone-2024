@@ -56,6 +56,12 @@ function App() {
                 </PrivateRoute>
               }
               ></Route>
+              <Route path="/Reports" element={
+                <PrivateRoute>
+                  <Reports />
+                </PrivateRoute>
+              }
+              ></Route>
               <Route path="/mood-journal" element={
                 <PrivateRoute>
                   <MoodJournal />
