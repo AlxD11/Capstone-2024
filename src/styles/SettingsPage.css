@@ -1,0 +1,96 @@
+/* This is currently shared between the Applicatoin Settings Page and Profile Settings Page components. */
+
+
+
+
+/* ---------------------------------------------- Settings Component Elements ---------------------------------------------- */
+
+.SettingsControls>form,
+.ViewProfileSettings {
+	display: flex;
+	/* Make form have columns. */
+	padding: 16px;
+
+	/* Responsive Overrides */
+	@media (width <=450px)
+
+	/* Tiny Screens - single column */
+		{
+		display: block;
+	}
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - single column */
+		{
+		display: block;
+	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
+}
+
+.SettingsControls-column {
+	width: 50%;
+
+	/* Responsive Overrides */
+	@media (width <=450px)
+
+	/* Tiny Screens - full-width single column */
+		{
+		width: unset;
+	}
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - full-width single column */
+		{
+		width: unset;
+	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
+}
+
+.SettingsSidebar {
+	min-width: fit-content;
+	background-color: var(--light-gray);
+	/* TODO: Center image in sidebar.*/
+}
+
+
+/* ---------------------------------------------- Profile Component Elements ---------------------------------------------- */
+
+.ProfileSettings>form {
+	display: flex;
+	/* Make the columns. */
+	padding: 16px;
+}
+
+.ViewSetting {
+	margin-left: 1em;
+}

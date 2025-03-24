@@ -1,10 +1,11 @@
 import '../styles/GlobalStyles.css';
+import '../styles/SettingsScreen.css';
 
 import MainScreen from "./MainScreen";
 import SettingsSidebar from './SettingsSidebar.jsx';
 
 
-/** The settings page, plus the standard header and footer.*/
+/** The settings page, plus the standard header and footer. */
 function SettingsScreen({ children })
 {
 	return (

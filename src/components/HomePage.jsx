@@ -1,4 +1,5 @@
-import '../styles/GlobalStyles.css'
+import '../styles/GlobalStyles.css';
+import '../styles/HomePage.css';
 import MainScreen from "./MainScreen";
 import { ClipLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router-dom';

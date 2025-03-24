@@ -1,0 +1,119 @@
+/* Some variables will be inherited from GlobalStyles.css, like color swatches. */
+
+/* Light Mode / Dark Mode Color Overrides
+The variables here are linked to the style rules below.
+This way, we can just override this block of variables to effectively change the color scheme.
+
+The GlobalStyles.css will handle most colors. You can link to the color variables in that file
+for most things, and they will get changed for light mode and dark mode.
+However, if the default options in GlobalStyles.css don't work nicely, then add a component-specific
+variable here and customize it for light mode and dark mode accoridngly (and add it to the style rules where
+you wanna use it). */
+
+/* Light Theme */
+#light {
+	/* Add light theme specific colors */
+}
+
+/* Dark Theme */
+#dark {
+	/* Add dark theme specific colors */
+}
+
+
+/* ---------------------------------------------- MoodPoll Component Elements ---------------------------------------------- */
+
+.PollQuestion {
+	margin-top: 10vh;
+	/* Keep the question block away from the edges of the screen and other questions. */
+	margin-bottom: 10vh;
+	margin-left: 5vw;
+	margin-right: 5vw;
+}
+
+.PollQuestion p {
+	color: var(--brown);
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.PollQuestion label {
+	padding: 16px;
+	color: var(--body-text-color);
+	font-size: 1.25em;
+}
+
+/* Multiple choice questions */
+.PollQuestion-mc {
+	display: flex;
+	align-items: center;
+	/* Align the contents (text and image) vertically. */
+	justify-content: space-between;
+	/* Force the two contained items (text and image) onto opposite ends of the container. */
+
+	min-width: 30vw;
+	/* Give the container enough width to separate the image and text and make justify-content obvious. */
+	max-width: 35vw;
+	margin-left: auto;
+	/* Center the content on the page. */
+	margin-right: auto;
+}
+
+.PollQuestion-selection {
+	color: white;
+	background-color: #EE1D52;
+}
+
+.PollQuestion-mc:hover {
+	color: var(--hot-pink);
+	background-color: var(--pale-pink);
+}
+
+.PollQuestion-mc input {
+	padding: 4px;
+	margin: 8px;
+
+	/* Visually hide the input (radio button), but do not disable it so that screenreaders can still see it. */
+	/*opacity: 0; */
+
+	/* Make the radio button bigger */
+	width: 3em;
+	height: 3em;
+
+	accent-color: var(--hot-pink);
+	/* Make the radio button a different color */
+}
+
+/* Medication dose questions */
+.PollQuestion-dose {
+	flex-direction: column;
+	justify-content: left;
+}
+
+.PollQuestion-dose div {
+	padding: 16px;
+	/* Dunno why this didn't inherit from label. */
+}
+
+/* TODO: Make sharable by other buttons */
+.PollQuestion button {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: var(--pale-pink);
+	color: #fff;
+	font-size: 1.25em;
+	border: none;
+	cursor: pointer;
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--pale-pink);
+	border-radius: 8px;
+}
+
+.PollControlls {
+	color: var(--brown);
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: right;
+	/* Move the "Next" button to the right side of the page. */
+}

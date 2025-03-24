@@ -1,4 +1,5 @@
 import '../styles/GlobalStyles.css';
+import '../styles/SettingsPage.css';
 import { ClipLoader } from 'react-spinners';
 import SettingsScreen from './SettingsScreen.jsx';
 import FormInput from './user_inputs/FormInput.jsx';

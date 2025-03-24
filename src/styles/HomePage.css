@@ -1,0 +1,110 @@
+/* Some variables will be inherited from GlobalStyles.css, like color swatches. */
+
+/* Light Mode / Dark Mode Color Overrides
+The variables here are linked to the style rules below.
+This way, we can just override this block of variables to effectively change the color scheme.
+
+The GlobalStyles.css will handle most colors. You can link to the color variables in that file
+for most things, and they will get changed for light mode and dark mode.
+However, if the default options in GlobalStyles.css don't work nicely, then add a component-specific
+variable here and customize it for light mode and dark mode accordingly (and add it to the style rules where
+you wanna use it / unlink the default global variable). */
+
+/* Light Theme */
+#light {
+	/* Add light theme specific colors */
+	--reminder-entry-background: var(--off-white);
+}
+
+/* Dark Theme */
+#dark {
+	/* Add dark theme specific colors */
+	--reminder-entry-background: var(--nav-bar-background);
+}
+
+
+/* ---------------------------------------------- HomeScreen Component Elements ---------------------------------------------- */
+
+.HomeWelcomeMsg>p {
+	padding-left: 10vw;
+	color: var(--body-text-light-color);
+}
+
+.HomeScreen-info {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.75em;
+}
+
+@media (min-width: 1500px) {
+	.HomeScreen-info {
+		justify-content: flex-start;
+		gap: 500px;
+		padding: 20px;
+	}
+}
+
+.HomeScreen button {
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1.25em;
+}
+
+
+/* ---------------------------------------------- Reminder Component Elements ---------------------------------------------- */
+
+.Reminders {
+	/* Layout */
+	max-width: 350px;
+	min-height: 300px;
+	/* Spacing */
+	margin-top: 6em;
+	padding: 4px;
+	padding-right: 10px;
+
+	/* Colors and Effects */
+	background-color: var(--pale-pink-2);
+	background-image: linear-gradient(var(--soft-purple), var(--coral));
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--intense-purple);
+	border-radius: 8px;
+}
+
+.Reminders h2 {
+	/* Colors and Effects */
+	color: var(--faint-orange);
+	text-shadow: 0 2px 2px var(--intense-purple);
+}
+
+.Reminders>.reminder-entry {
+	padding: 1.2em;
+	background-color: var(--reminder-entry-background);
+	border-radius: 15px;
+	font-size: 1.2em;
+	margin-bottom: 1em;
+	min-height: 50px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	line-height: 1.4;
+	font-weight: 500;
+}
+
+.Reminders button {
+	background-color: var(--pale-pink);
+	margin: 4px;
+}
+
+.InfoSummary {
+	padding: 2em;
+	margin: 2em;
+	max-width: 600px;
+	min-height: 450px;
+	background-color: var(--link-background-color);
+	border-style: solid;
+	border-width: 4px;
+	border-color: var(--pale-pink);
+	border-radius: 8px;
+	color: var(--body-text-color);
+}

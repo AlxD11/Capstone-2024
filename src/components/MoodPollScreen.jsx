@@ -6,6 +6,7 @@ import smile_miserable from '../assets/smile_miserable.png';
 
 //import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
+import '../styles/MoodPollScreen.css';
 import MainScreen from './MainScreen.jsx';
 import MedicationsList from "./user_inputs/MedicationsList.jsx";
 

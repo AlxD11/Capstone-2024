@@ -6,6 +6,7 @@ import ptLogo from '../assets/logo_pt.png';
 import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/GlobalStyles.css';
+import '../styles/Footer.css';
 
 function Footer()
 {

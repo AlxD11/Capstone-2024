@@ -2,8 +2,10 @@ import appLogo from '../assets/app_logo.png';
 import ProfilePicture from './ProfilePicture';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
+import '../styles/NavBar.css';
 import { useState } from 'react';
 import { useAuth } from "../contexts/AuthContext"
+import '../styles/GlobalStyles.css';
 
 function NavBar() {
 	const [showDropdown, setShowDropdown] = useState(false);

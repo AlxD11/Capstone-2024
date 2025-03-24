@@ -1,0 +1,16 @@
+
+
+.MedicationsList button {
+	padding: 4px;
+	margin: 2px 4px;
+	/* top/ bottom, left/right */
+}
+
+/* Delete buttons on medication list */
+.MedicationsList ol button:first-of-type {
+	background-color: orangered;
+}
+
+.MedicationsList li {
+	padding: 8px;
+}

@@ -1,0 +1,33 @@
+
+
+
+/* ---------------------------------------------- Footer Component Elements ---------------------------------------------- */
+
+.Footer {
+	display: flex;
+}
+
+/* The container to hold the icons for external resources. */
+.Footer-icons {
+	display: flex;
+	flex-direction: column;
+	/* Make the divs (app icons vs social icons) stack vertically. */
+
+	min-width: 25vw;
+	/* Force the box of icons to take up at least 20% of the window width (vw). */
+}
+
+.Footer-icons img {
+	max-width: 32px;
+	max-height: 32px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 8px;
+}
+
+.Footer-resources p {
+	font-size: 0.75em;
+	/* Make the footer text size smaller. */
+	margin: 0.25em;
+	/* Compact the list of resources. */
+}
