@@ -73,7 +73,8 @@ function MoodJournal() {
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
       weekAgo.setHours(0, 0, 0, 0);
-
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const moodEntriesCollection = collection(
         db,
         "user_info",
@@ -85,7 +86,8 @@ function MoodJournal() {
 
       const journalQuery = query(
         moodEntriesCollection,
-        where("date", ">=", Timestamp.fromDate(weekAgo))
+        where("date", ">=", Timestamp.fromDate(weekAgo)),
+        where("date", "<=", Timestamp.fromDate(today))
       );
 
       try {
