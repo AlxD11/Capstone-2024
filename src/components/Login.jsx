@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { useAuth } from "../contexts/AuthContext"
 import { Alert } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, setPersistence, browserLocalPersistence, inMemoryPersistence } from 'firebase/auth'; // Import correct persistence types
 import { googleProvider, auth } from '../firebase';
+import { FaGoogle } from 'react-icons/fa';
 import appLogo from '../assets/app_logo.png';
 
 function Login() {
@@ -14,80 +15,103 @@ function Login() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const [keepSignedIn, setKeepSignedIn] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      setError("")
-      setLoading(true)
-      await login(email, password)
-      navigate('/home')
-    }catch {
-      setError("Incorrect Email ID or password")
+      setError("");
+      setLoading(true);
+
+      // Set persistence based on checkbox
+      if (keepSignedIn) {
+        await setPersistence(auth, browserLocalPersistence);
+      } else {
+        await setPersistence(auth, inMemoryPersistence); // Use inMemoryPersistence for session-only
+      }
+
+      await login(email, password);
+      navigate('/home');
+    } catch (err) {
+      setError("Incorrect Email ID or password");
+      console.error("Login Error:", err);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   const signInWithGoogle = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await auth.signInWithPopup(googleProvider);
+      // Set persistence based on checkbox
+      if (keepSignedIn) {
+        await setPersistence(auth, browserLocalPersistence);
+      } else {
+        await setPersistence(auth, inMemoryPersistence); // Use inMemoryPersistence for session-only
+      }
+      await signInWithPopup(auth, googleProvider);
       navigate('/home');
-    } catch (error) {
+    } catch (err) {
       setError("Google Sign-in failed");
-      console.error("Google Sign-in error:", error);
+      console.error("Google Sign-in error:", err);
     }
     setLoading(false);
   };
 
   return (
-    <div style={styles.container}>      
-        <div style={styles.formContainer}>
-          <h2>Login</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <form onSubmit={handleLogin} style={styles.form}>
-            <label>
-              Email:
-              <input
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={styles.input}
-              />
-            </label>
-            <label>
-              Password:
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                style={styles.input}
-              />
-            </label>
-            <button disabled={loading} type="submit" style={styles.button}>Login</button>
-            <button disabled={loading} style={styles.button} onClick={signInWithGoogle}>Sign in with Google</button>
-          </form>
-          <div style={styles.links}>
-            <Link to ="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
-          </div>
+    <div style={styles.container}>
+      <div style={styles.formContainer}>
+        <h2>Login</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <form onSubmit={handleLogin} style={styles.form}>
+          <label>
+            Email:
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={keepSignedIn}
+              onChange={(e) => setKeepSignedIn(e.target.checked)}
+            />
+            Keep me signed in
+          </label>
+          <button disabled={loading} type="submit" style={styles.button}>Login</button>
+          <button disabled={loading} style={styles.button} onClick={signInWithGoogle}> <FaGoogle />  Sign in with Google</button>
+        </form>
+        <div style={styles.links}>
+          <Link to="/create-account">Create an Account</Link> | <Link to="/reset-password">Forgot Password?</Link>
         </div>
-        
-        <div style={styles.sidebar}>
-          <h2>Welcome to Neurological Harmony</h2>
-          <img src={appLogo} style={styles.appLogo} alt="App logo" />
-          
-        </div>
+      </div>
+
+      <div style={styles.sidebar}>
+        <h2>Welcome to Neurological Harmony</h2>
+        <img src={appLogo} style={styles.appLogo} alt="App logo" />
+
+      </div>
     </div>
   );
 }
 
 // Inline CSS styles (optional, for demonstration)
-//E33A5F
 const styles = {
   container: {
     margin: '0 auto',
@@ -134,6 +158,14 @@ const styles = {
     borderWidth: '4px',
     borderColor: '#FDAFB7',
     borderRadius: '8px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    '& img': {
+      height: '20px',
+      width: '20px',
+    },
   },
   links: {
     marginTop: '20px',
