@@ -49,7 +49,7 @@ function Login() {
       } else {
         await setPersistence(auth, inMemoryPersistence); // Use inMemoryPersistence for session-only
       }
-      await signInWithPopup(auth, googleProvider);
+      await auth.signInWithPopup(googleProvider);
       navigate('/home');
     } catch (err) {
       setError("Google Sign-in failed");

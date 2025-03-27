@@ -1,5 +1,5 @@
 import React from "react";
-import { ResponsiveBar } from '@nivo/bar'
+import { ResponsiveBar } from '@nivo/bar';
 import '../styles/GlobalStyles.css';
 
 export const BarChart = (cloudData) => {
@@ -11,23 +11,29 @@ export const BarChart = (cloudData) => {
         Thursday: { sum: 0, count: 0, exists: false },
         Friday: { sum: 0, count: 0, exists: false },
         Saturday: { sum: 0, count: 0, exists: false },
-
     };
 
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    console.log(cloudData.children[0])
-    cloudData.children[0].forEach((entry) => {
-        const date = entry.date.toDate();
-        const dayOfWeekIndex = date.getDay();
-        const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+    console.log(cloudData.children[0]);
 
-        if (!dailyAverages[dayOfWeek]) {
-            dailyAverages[dayOfWeek] = { sum: 0, count: 0 };
-        }
-        dailyAverages[dayOfWeek].sum += entry.moodLevel;
-        dailyAverages[dayOfWeek].count++;
-        dailyAverages[dayOfWeek].exists = true;
-    });
+    if (cloudData.children && cloudData.children[0]) {
+        cloudData.children[0].forEach((entry) => {
+            const date = entry.date.toDate();
+            const dayOfWeekIndex = date.getDay();
+            const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+
+            if (!dailyAverages[dayOfWeek]) {
+                dailyAverages[dayOfWeek] = { sum: 0, count: 0 };
+            }
+
+            if (Number.isInteger(entry.moodLevel) && entry.moodLevel >= 0 && entry.moodLevel <= 5) {
+                dailyAverages[dayOfWeek].sum += entry.moodLevel;
+                dailyAverages[dayOfWeek].count++;
+                dailyAverages[dayOfWeek].exists = true;
+            }
+        });
+    }
+
     const chartData = Object.entries(dailyAverages).map(([day, data]) => ({
         day,
         mood: data.exists ? data.sum / data.count : 0,
@@ -114,5 +120,5 @@ export const BarChart = (cloudData) => {
                 isInteractive={true}
             />
         </div>
-    )
-}
+    );
+};

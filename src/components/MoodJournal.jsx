@@ -11,7 +11,6 @@ function MoodJournal() {
   const currentDate = new Date().toLocaleDateString();
   const navigate = useNavigate()
   const date = new Date()
-  date.setHours(0, 0, 0, 0)
   const [moodJournals, setMoodJournals] = useState({});
   const [expandedDate, setExpandedDate] = useState(null);
 
@@ -44,7 +43,7 @@ function MoodJournal() {
         where("date", "<=", Timestamp.fromDate(endOfDay)),
       )
       const querySnapshot = await getDocs(q);
-      const newFields = { date: Timestamp.fromDate(date), Summary: summary, Mood: mood };
+      const newFields = { date: Timestamp.fromDate(date), summary: summary, mood: mood };
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (document) => {
           console.log(document, newFields)
@@ -74,7 +73,7 @@ function MoodJournal() {
       weekAgo.setDate(weekAgo.getDate() - 7);
       weekAgo.setHours(0, 0, 0, 0);
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setHours(23, 59, 59, 59);
       const moodEntriesCollection = collection(
         db,
         "user_info",
@@ -99,7 +98,7 @@ function MoodJournal() {
           if (!journals[date]) {
             journals[date] = [];
           }
-          journals[date].push({ Summary: data.Summary, Mood: data.Mood });
+          journals[date].push({ Summary: data.summary, Mood: data.mood });
         });
         setMoodJournals(journals);
         console.log(journals)

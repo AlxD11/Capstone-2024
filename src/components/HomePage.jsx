@@ -143,8 +143,8 @@ function HomePage() {
 			)
 			const checkMoodqs = await getDocs(checkMoodq);
 			checkMoodqs.forEach((doc) => {
-				if (doc.exists()) {
-					setCheckMood(true)
+				if (doc.data() && doc.data().moodLevel) {
+					setCheckMood(true);
 				}
 			});
 		} catch (error) {
