@@ -3,70 +3,69 @@ import ProfilePicture from './ProfilePicture';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
 import '../styles/NavBar.css';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from "../contexts/AuthContext"
-import '../styles/GlobalStyles.css';
 
 function NavBar() {
-	const [showDropdown, setShowDropdown] = useState(false);
-	
-	const navigate = useNavigate();
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+    const photoURL = ProfilePicture();
 
-	const handleDropdownToggle = () => {
-		setShowDropdown((prev) => !prev);
-	};
-	
-	const photoURL = ProfilePicture();
+    const handleDropdownToggle = () => {
+        setShowDropdown((prev) => !prev);
+    };
 
-	const { logout } = useAuth();
-	async function handleLogout() {
-        try {
-            await logout()
-            navigate('/')
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowDropdown(false);
         }
-        catch {
-            setError('Failed to log out')
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    async function handleLogout() {
+        try {
+            await logout();
+            navigate('/');
+        } catch {
+            console.error('Failed to log out');
         }
     }
-	return (
-		<div className="NavBar">
-			<Link to="/home">
-				<img src={appLogo} className="logo" alt="App logo" />
-			</Link>
 
-			<nav>
-				<Link to="/home">Home</Link>
-				<Link to="/mood-journal">Mood Journal</Link>
-				<Link to="/reports">Report</Link>
-			</nav>
+    return (
+        <div className="NavBar">
+            <Link to="/home">
+                <img src={appLogo} className="logo" alt="App logo" />
+            </Link>
 
-			<div className="avatar-wrapper relative" onClick={handleDropdownToggle}>
-				<img src={photoURL} className="avatar" alt="User avatar" />
+            <nav>
+                <Link to="/home">Home</Link>
+                <Link to="/mood-journal">Mood Journal</Link>
+                <Link to="/reports">Report</Link>
+            </nav>
 
-				{showDropdown && (
-					<div className="dropdown-menu p-4 w-52 shadow-lg absolute left-0 top-full mt-2">
-						<ul>
-							<li className="p-2 text-lg cursor-pointer rounded hover:bg-blue-100">
-								<Link to="/profile">Profile</Link>
-							</li>
-							<li className="p-2 text-lg cursor-pointer rounded hover:bg-blue-100">
-								<Link to="/edit-profile">Profile Settings</Link>
-							</li>
-							<li className="p-2 text-lg cursor-pointer rounded hover:bg-blue-100">
-								<Link to="/settings">Application Settings</Link>
-							</li>
-							<li
-    							className="p-2 text-lg cursor-pointer rounded hover:bg-blue-100"
-    							onClick={handleLogout} // Add onClick handler
-							>
-   							 Logout
-							</li>
-						</ul>
-					</div>
-				)}
-			</div>
-		</div>
-	);
+            <div className="avatar-wrapper relative" ref={dropdownRef}>
+                <img src={photoURL} className="avatar cursor-pointer" alt="User avatar" onClick={handleDropdownToggle} />
+                {showDropdown && (
+                    <div className="dropdown-menu">
+                        <ul>
+                            <li><Link to="/profile">Profile</Link></li>
+                            <li><Link to="/edit-profile">Profile Settings</Link></li>
+                            <li><Link to="/settings">Application Settings</Link></li>
+                            <li onClick={handleLogout}>Logout</li>
+                        </ul>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default NavBar;
