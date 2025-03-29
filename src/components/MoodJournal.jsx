@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc } from 'firebase/firestore'
+import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import NavBar from "./NavBar";
-import '../styles/MoodJournal.css'; // Import new CSS file
+import NavBar from './NavBar';
 
 function MoodJournal() {
-  const [summary, setSummary] = useState("");
-  const [mood, setMood] = useState("");
+  const [summary, setSummary] = useState('');
+  const [mood, setMood] = useState('');
   const [loading, setLoading] = useState(false);
-  const moods = ["Happy", "Sad", "Angry", "Excited", "Calm"];
+  const moods = ['Happy', 'Sad', 'Angry', 'Excited', 'Calm'];
   const currentDate = new Date().toLocaleDateString();
   const navigate = useNavigate();
   const date = new Date();
@@ -22,7 +21,7 @@ function MoodJournal() {
       setLoading(true);
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        console.error("No user is signed in.");
+        console.error('No user is signed in.');
         return;
       }
       const userId = currentUser.uid;
@@ -32,32 +31,34 @@ function MoodJournal() {
       endOfDay.setHours(23, 59, 59, 999);
       const moodEntriesCollection = collection(
         db,
-        "user_info",
+        'user_info',
         userId,
-        "Data",
-        "Mood Poll",
-        "Mood_entries"
+        'Data',
+        'Mood Poll',
+        'Mood_entries'
       );
 
       const q = query(
         moodEntriesCollection,
-        where("date", ">=", Timestamp.fromDate(startOfDay)),
-        where("date", "<=", Timestamp.fromDate(endOfDay))
+        where('date', '>=', Timestamp.fromDate(startOfDay)),
+        where('date', '<=', Timestamp.fromDate(endOfDay))
       );
       const querySnapshot = await getDocs(q);
       const newFields = { date: Timestamp.fromDate(date), summary: summary, mood: mood };
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (document) => {
+          console.log(document, newFields);
           await updateDoc(doc(moodEntriesCollection, document.id), newFields);
         });
-        console.log("Document updated:", newFields);
+        console.log('Document updated:', newFields);
       } else {
         await addDoc(moodEntriesCollection, newFields);
-        console.log("Document added:", newFields);
+        console.log('Document added:', newFields);
       }
-      navigate("/home");
+
+      navigate('/home');
     } catch (error) {
-      console.error("Error handling mood entry:", error);
+      console.error('Error handling mood entry:', error);
     } finally {
       setLoading(false);
     }
@@ -75,23 +76,23 @@ function MoodJournal() {
       today.setHours(23, 59, 59, 59);
       const moodEntriesCollection = collection(
         db,
-        "user_info",
+        'user_info',
         userId,
-        "Data",
-        "Mood Poll",
-        "Mood_entries"
+        'Data',
+        'Mood Poll',
+        'Mood_entries'
       );
 
       const journalQuery = query(
         moodEntriesCollection,
-        where("date", ">=", Timestamp.fromDate(weekAgo)),
-        where("date", "<=", Timestamp.fromDate(today))
+        where('date', '>=', Timestamp.fromDate(weekAgo)),
+        where('date', '<=', Timestamp.fromDate(today))
       );
 
       try {
-        const journalQuerySnapshot = await getDocs(journalQuery);
+        const jounalQuerySnapshot = await getDocs(journalQuery);
         const journals = {};
-        journalQuerySnapshot.forEach((document1) => {
+        jounalQuerySnapshot.forEach((document1) => {
           const data = document1.data();
           const date = data.date.toDate().toISOString().split('T')[0];
           if (!journals[date]) {
@@ -100,8 +101,9 @@ function MoodJournal() {
           journals[date].push({ Summary: data.summary, Mood: data.mood });
         });
         setMoodJournals(journals);
+        console.log(journals);
       } catch (error) {
-        console.error("Error fetching mood journals:", error);
+        console.error('Error fetching mood journals:', error);
       }
     };
 
@@ -118,8 +120,10 @@ function MoodJournal() {
       <div className="mood-journal-form-container">
         <h2 className="mood-journal-heading">Mood Journal - {currentDate}</h2>
         <form onSubmit={handleSubmit} className="mood-journal-form">
-          <div className="textarea-container">
-            <label htmlFor="summary" className="label">Summary of the Day:</label>
+          <div className="mood-journal-textarea-container">
+            <label htmlFor="summary" className="mood-journal-label">
+              Summary of the Day:
+            </label>
             <textarea
               id="summary"
               value={summary}
@@ -128,25 +132,69 @@ function MoodJournal() {
               rows="5"
               cols="50"
               required
-              className="textarea"
+              className="mood-journal-textarea"
             />
           </div>
-          <div className="select-container">
-            <label htmlFor="mood" className="label">Select your Mood:</label>
+          <div className="mood-journal-select-container">
+            <label htmlFor="mood" className="mood-journal-label">
+              Select your Mood:
+            </label>
             <select
               id="mood"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
               required
-              className="select"
+              className="mood-journal-select"
             >
-              <option value="" disabled>Choose a mood</option>
+              <option value="" disabled>
+                Choose a mood
+              </option>
               {moods.map((mood) => (
-                <option key={mood} value={mood}>{mood}</option>
+                <option key={mood} value={mood}>
+                  {mood}
+                </option>
               ))}
             </select>
           </div>
-          <button type="submit" className="submit-button">Save</button>
+          <div>
+            <button type="submit" className="mood-journal-button">
+              Save
+            </button>
+          </div>
+          <div className="mood-journal-journal-display">
+            <label className="mood-journal-heading">
+              <h2>Your journals from the last seven days</h2>
+            </label>
+            {Object.keys(moodJournals)
+              .sort((a, b) => new Date(b) - new Date(a))
+              .map((date) => (
+                <div key={date}>
+                  <div
+                    className="mood-journal-expand-toggle"
+                    onClick={() => toggleExpand(date)}
+                  >
+                    <button className="mood-journal-toggle-button">
+                      {expandedDate === date ? '-' : '+'}
+                    </button>
+                    <span className="mood-journal-date">{date}</span>
+                  </div>
+                  {expandedDate === date && (
+                    <div className="mood-journal-expanded-content">
+                      {moodJournals[date].map((journal, index) => (
+                        <div key={index} className="mood-journal-entry">
+                          <h4>
+                            <p>Mood: {journal.Mood}</p>
+                          </h4>
+                          <h4>
+                            <p>Summary: {journal.Summary}</p>
+                          </h4>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+          </div>
         </form>
       </div>
     </div>
