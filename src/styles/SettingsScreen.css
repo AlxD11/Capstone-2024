@@ -1,0 +1,7 @@
+
+
+.SettingsScreen {
+	display: grid;
+	grid-template-columns: 15vw auto;
+	/* Make the first (left) column 15% of the screen width and the other take up the rest of the space. */
+}

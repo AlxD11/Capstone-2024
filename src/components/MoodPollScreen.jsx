@@ -6,6 +6,7 @@ import smile_miserable from '../assets/smile_miserable.png';
 import { useNavigate } from 'react-router-dom';
 //import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
+import '../styles/MoodPollScreen.css';
 import MainScreen from './MainScreen.jsx';
 import MedicationsList from "./user_inputs/MedicationsList.jsx";
 import { db, auth } from '../firebase';

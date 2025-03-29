@@ -1,4 +1,5 @@
 import '../../styles/GlobalStyles.css';
+import '../../styles/user_inputs/MedicationList.css';
 
 import React, {useState} from 'react';
 

@@ -1,4 +1,5 @@
 import '../styles/GlobalStyles.css';
+import '../styles/SettingsPage.css'; // Sharing style rules with Application Settings Page for now
 import SettingsScreen from './SettingsScreen.jsx';
 import FormInput from './user_inputs/FormInput.jsx';
 import { useState, useEffect } from 'react';

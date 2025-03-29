@@ -1,4 +1,5 @@
 import '../styles/GlobalStyles.css';
+import '../styles/SettingsPage.css';
 import { useNavigate } from 'react-router-dom';
 import SettingsScreen from './SettingsScreen.jsx';
 import ToggleButton from './user_inputs/ToggleButton.jsx';

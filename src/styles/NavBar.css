@@ -1,0 +1,143 @@
+/* Some variables will be inherited from GlobalStyles.css, like color swatches. */
+
+/* Light Mode / Dark Mode Color Overrides
+The variables here are linked to the style rules below.
+This way, we can just override this block of variables to effectively change the color scheme.
+
+The GlobalStyles.css will handle most colors. You can link to the color variables in that file
+for most things, and they will get changed for light mode and dark mode.
+However, if the default options in GlobalStyles.css don't work nicely, then add a component-specific
+variable here and customize it for light mode and dark mode accoridngly (and add it to the style rules where
+you wanna use it / unlink the default global variable). */
+
+/* Light Theme */
+#light {
+	/* Add light theme specific colors */
+	--nav-bar-background: var(--off-white);
+	--nav-bar-drop-shadow: lightgray;
+	--nav-text-color: var(--hot-pink);
+}
+
+/* Dark Theme */
+#dark {
+	/* Add dark theme specific colors */
+	--nav-text-color: var(--hot-pink);
+	--nav-bar-background: var(--dark-indigo);
+	--nav-bar-drop-shadow: black;
+}
+
+
+/* ---------------------------------------------- NavBar Component Elements ---------------------------------------------- */
+
+/* NavBar, the top navigation bar. */
+.NavBar {
+	/* Layout */
+	display: flex;
+	justify-content: space-between;
+	/* Distribute contents along the x axis. */
+	align-items: center;
+	/* Center contents relative to each other along the y-axis. */
+
+	/* Spacing */
+	padding: 4px;
+	/* Keep all contents 4px away from the edges. */
+
+	/* Color and Border */
+	border-width: 2px;
+	border-color: lightgray;
+	/* border style: top right bottom left; */
+	background-color: var(--nav-bar-background);
+	filter: drop-shadow(0px 4px 2px var(--nav-bar-drop-shadow));
+}
+
+.NavBar>nav {
+	display: flex;
+	justify-content: space-between;
+
+	min-width: 40vw;
+	/* Force the nav menu to take up most (40%) of the horizontal window space. */
+}
+
+.NavBar>nav>a {
+	padding-left: 5px;
+	/* Add padding to the navigation links so they can't touch each other, even when squished together. */
+	padding-right: 5px;
+
+	/* Text Color / Effects */
+	color: var(--nav-text-color);
+	text-decoration: none;
+	font-size: 1.5em;
+	font-weight: bold;
+
+	/* Responsive Overrides */
+	@media (width <=450px)
+
+	/* Tiny Screens - shrink text */
+		{
+		font-size: 1em;
+	}
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - shrink text */
+		{
+		font-size: 1em;
+	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
+}
+
+.NavBar>nav>a:hover {
+	text-decoration: underline;
+}
+
+.NavBar img {
+	max-height: 64px;
+	max-width: 64px;
+	padding: 0px;
+
+	/* Responsive Overrides */
+	@media (width <=450px)
+
+	/* Tiny Screens - shrink images */
+		{
+		max-height: 32px;
+		max-width: 32px;
+	}
+
+	@media (450px < width <=800px)
+
+	/* Small Screens - shrink images */
+		{
+		max-height: 48px;
+		max-width: 48px;
+	}
+
+	@media (800px < width <=1280px)
+
+	/* Medium Screens */
+		{}
+
+	@media (1280px < width <=1920px)
+
+	/* Large Screens */
+		{}
+
+	@media (1920px < width)
+
+	/* Huge Screens */
+		{}
+}
