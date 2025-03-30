@@ -4,8 +4,8 @@ import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc } 
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 
-import '../styles/GlobalStyles.css'; 
-import './styles/MoodJournal.css';     
+import '../styles/GlobalStyles.css';
+import '../styles/MoodJournal.css';
 
 function MoodJournal() {
   const [summary, setSummary] = useState('');
