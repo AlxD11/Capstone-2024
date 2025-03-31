@@ -1,4 +1,4 @@
-import '../styles/GlobalStyles.css';
+import '../styles/ProfessionalHelp.css';
 import MainScreen from './MainScreen.jsx';
 import { useState, useEffect } from 'react';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
