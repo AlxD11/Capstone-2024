@@ -327,14 +327,25 @@ function MonthReport() {
             <h2>Your mood in {monthName}</h2>
             <div className="MonthReportInfo">
                 <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
-                {userDataCurrent.map((day, index) => (
-                    <div>
-                        <h3>Overview</h3>
-                        <p>Your <span className="category">sleep</span> has been {describeData(day.sleepQuality)}.</p>
-                        <p>Your <span className="category">physical energy</span> has been {describeData(day.physicalEnergy)}.</p>
-                        <p>Your <span className="category">mental energy</span> has been {describeData(day.mentalEnergy)}.</p>
-                    </div>
-                ))}
+                <div>
+                    {userDataCurrent.map((day, index) => (
+                        <div>
+                            <h3>Overview</h3>
+                            <p>Your <span className="category">sleep</span> has been {describeData(day.sleepQuality)}.</p>
+                            <p>Your <span className="category">physical energy</span> has been {describeData(day.physicalEnergy)}.</p>
+                            <p>Your <span className="category">mental energy</span> has been {describeData(day.mentalEnergy)}.</p>
+                        </div>
+                    ))}
+                    {userDataPrevious.map((day, index) => (
+                        <div>
+                            <h3>Compared to Last Month</h3>
+                            <p>Your <span className="category">sleep</span> was {describeData(day.sleepQuality)}.</p>
+                            <p>Your <span className="category">physical energy</span> was {describeData(day.physicalEnergy)}.</p>
+                            <p>Your <span className="category">mental energy</span> was {describeData(day.mentalEnergy)}.</p>
+                        </div>
+                    ))}
+                    
+                </div>
             </div>
         </div>
     );
