@@ -5,11 +5,11 @@ import { db, auth } from '../firebase';
 import MainScreen from './MainScreen';
 import '../styles/GlobalStyles.css';
 import '../styles/Reports.css';
-
+import { useLoading } from './Loading';
 // Ref(?): https://nivo.rocks/time-range/
 const MyResponsiveTimeRange = ({rangeStart, rangeEnd}) => {
     const [calendarData, setCalendarData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const {setLoading} = useLoading();
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -71,10 +71,7 @@ const MyResponsiveTimeRange = ({rangeStart, rangeEnd}) => {
         fetchData();
     }, []);
     console.log("Calendar Data:", calendarData);
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
+    
     if (error) {
         return <div>Error: {error.message}</div>;
     }
