@@ -18,7 +18,6 @@ function ProfileSettings() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [photoURL, setPhotoURL] = useState('');
-	const [userName, setUserName] = useState('');
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
@@ -27,7 +26,6 @@ function ProfileSettings() {
 	const [userHealth, setUserHealth] = useState('');
 	const [userMedication, setUserMedication] = useState('');
 	const { upload, currentUser, updateEmail } = useAuth();
-	const [oldUserName, setOldUserName] = useState('');
 	const [oldName, setOldName] = useState('');
 	const [oldEmail, setOldEmail] = useState('');
 	const [oldPhone, setOldPhone] = useState('');
@@ -53,7 +51,6 @@ function ProfileSettings() {
 				if (doc.exists()) {
 					const userData = doc.data()
 					setOldName(userData.Name || "Lord Farquaad");
-					setOldUserName(userData.UserName || "xX_Sunny-Haz3_Xx");
 					setOldEmail(userData.email || "example@snailmail.com");
 					setOldPhone(userData.Phone || "(972) 000-0000");
 					setOldUserWishes(userData.Improve || "Example: I wish I could be less stressed about work");
@@ -108,7 +105,6 @@ function ProfileSettings() {
 			const userId = currentUser.uid;
 			const userDoc = doc(db, "user_info", userId, "Data", "Profile");
 			const newFields = {};
-			if (userName) newFields.UserName = userName;
 			if (name) newFields.Name = name;
 			if (email !== currentUser.email) {
 				promises.push(updateEmail(email))
@@ -140,20 +136,6 @@ function ProfileSettings() {
 		<div className="SettingsControls">
 			<form>
 				<div className="SettingsControls-column">
-					<FormInput
-						label="Username"
-						desc="The name you use to log in."
-						verticalAlignment="true"
-					>
-						<input
-							type="text"
-							id="settings-username"
-							placeholder={oldUserName}
-							value={userName}
-							onChange={(e) => setUserName(e.target.value)}
-						/>
-					</FormInput>
-
 					<FormInput
 						label="Name"
 						desc="The name you want to go by."
