@@ -4,6 +4,11 @@ h3
 	color: var(--brown);
 }
 
+h2 {
+	
+	margin-top: 6em;
+}
+
 .category
 {
 	color: var(--intense-purple);
