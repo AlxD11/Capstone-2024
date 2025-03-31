@@ -118,19 +118,6 @@ const MyResponsiveTimeRange = ({rangeStart, rangeEnd}) => {
     );
 };
 
-/** Returns the total number of times the user reported being sad, excited, calm, happy, angry, etc. */
-function GetMoods() {    
-    
-}
-
-function TodayReport() {
-    
-}
-
-function WeekReport() {
-    
-}
-
 function MonthReport() {
     
     let today = new Date();
@@ -322,6 +309,9 @@ function MonthReport() {
     }
     
     // Use toDateString() to leave out the time info, which can throw off the report calendar display.
+    /* TODO: I feel this will probably duplicate the overview for as many days the user has logged data this month.
+    I'm trying to figure out how to get just the average sleep / physical energy / mental energy for each month instead of a day-by-day array.
+    Also, I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
     return (
         <div className="MonthReport">
             <h2>Your mood in {monthName}</h2>
@@ -351,7 +341,10 @@ function MonthReport() {
     );
 }
 
-/** Assumes a scale of 1 to 5 (same as mood poll choice values). */
+/** Returns a human-readable description of the data.
+ * The descriptions closely match the mood poll options, but the "bad" options have slightly
+ * more positive language.
+ * Assumes a scale of 1 to 5 (same as mood poll choice values), where higher is better. */
 function describeData(data)
 {
     if (data > 4)
@@ -380,11 +373,13 @@ function describeData(data)
     }
 }
 
+/** Returns a descriptive comparision of how data1 relates to data2.
+ * Data is assumed to go from low values (worse) to high values (better). */
 function compareData(data1, data2)
 {
     if (data2 == null)
     {
-        return "";
+        return "(unmeasurable, whoops)";
     }
     else if ((data1 - data2) > 0.25)
     {
@@ -392,16 +387,24 @@ function compareData(data1, data2)
     }
     else if ((data1 - data2) > 0.5)
     {
-        return "a lot better";
+        return "better";
+    }
+    else if ((data1 - data2) > 1)
+    {
+        return "much better";
     }
     else if ((data2 - data1) > 0.25)
     {
-        return "not quite as good";
+        return "a little less";
     }
     // If data2 is larger (better) by a lot,
     else if ((data2 - data1) > 0.5)
     {
-        return "a big drop";
+        return "not quite as good";
+    }
+    else if ((data2 - data1) > 1)
+    {
+        return "not nearly as good";
     }
     else
     {
