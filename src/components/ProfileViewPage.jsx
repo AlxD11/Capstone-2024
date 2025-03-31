@@ -37,7 +37,7 @@ function ViewProfileSettings() {
 					setPhone(userData.Phone ? userData.Phone : <span style={{ color: 'red' }}>Yet to set your Phone Number</span>);
 					setUserWishes(userData.Improve ? userData.Improve : <span style={{ color: 'red' }}>Yet to set your Wishes</span>);
 					setUserGoals(userData.Goal ? userData.Goal : <span style={{ color: 'red' }}>Yet to set your goals</span>);
-					setUserHealth(userData.Health ? userData.Health : <span style={{ color: 'red' }}>Yet to set your Current health concerns/conditions</span>);
+					setUserHealth(userData.mentalHealthTopic ? userData.Health : <span style={{ color: 'red' }}>Yet to set your Current health concerns/conditions</span>);
 					setUserMedication(userData.Medication ? userData.Medication : <span style={{ color: 'red' }}>Yet to set your current Medication/s</span>);
 				} else {
 					console.log("No user data found for UID:", userId)

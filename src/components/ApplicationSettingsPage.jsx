@@ -6,77 +6,40 @@ import FormInput from './user_inputs/FormInput.jsx';
 import { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from './App.jsx';
 import { useAuth } from "../contexts/AuthContext"
-import { doc, getDoc } from "firebase/firestore";
-import { db } from '../firebase';
+import { doc, updateDoc } from "firebase/firestore";
+import { db, auth } from '../firebase';
+import { useLoading } from './Loading.jsx';
 
-/** TODO: Add confirmation dialog to account delete button */
 function SettingsControls() {
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(theme === 'dark');
     const { logout } = useAuth();
-    const { error, setError } = useState('')
+    const { error, setError } = useState('');
     const navigate = useNavigate();
+    const { setLoading } = useLoading();
 
     useEffect(() => {
-        const fetchInitialDarkMode = async () => {
-            if (useAuth().currentUser) {
-                try {
-                    const userDocRef = doc(db, "user_info", useAuth().currentUser.uid, "Data", "Preferences");
-                    const docSnap = await getDoc(userDocRef);
+        setDarkMode(theme === 'dark');
+    }, [theme]);
 
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (data && data.dark_mode !== undefined) {
-                            setDarkMode(data.dark_mode);
-                            return;
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error fetching dark mode preference:", error);
-                }
-
-                const storedPreference = localStorage.getItem('darkMode');
-                if (storedPreference === 'true' || storedPreference === 'false') {
-                    setDarkMode(storedPreference === 'true');
-                    return;
-                }
-
-                setDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            } else {
-                setDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            }
-        };
-
-        fetchInitialDarkMode();
-    }, [useAuth().currentUser]); // Add useAuth().currentUser as a dependency
-
-    useEffect(() => {
-        if (darkMode) {
-            if (theme !== 'dark') {
-                toggleTheme();
-            }
-            localStorage.setItem('darkMode', 'true');
-        } else {
-            if (theme !== 'light') {
-                toggleTheme();
-            }
-            localStorage.setItem('darkMode', 'false');
-        }
-    }, [darkMode, theme, toggleTheme]);
-
-    const handleDarkModeChange = (newDarkMode) => {
+    const handleDarkModeChange = async (newDarkMode) => {
         setDarkMode(newDarkMode);
+        toggleTheme();
+
+        if (auth.currentUser) {
+            try {
+                setLoading(true);
+                const userDocRef = doc(db, "user_info", auth.currentUser.uid, "Data", "Preferences");
+                await updateDoc(userDocRef, { dark_mode: newDarkMode });
+            } catch (error) {
+                console.error("Error updating dark mode preference:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        localStorage.setItem('darkMode', newDarkMode.toString());
     };
 
-    async function handleLogout() {
-        try {
-            await logout()
-            navigate('/')
-        }
-        catch {
-            setError('Failed to log out')
-        }
-    }
     return (
         <div className="SettingsControls">
             <form>
@@ -113,7 +76,7 @@ function SettingsControls() {
                     >
                         <ToggleButton
                             id="settings-dark-mode"
-                            isChecked={darkMode} // Use darkMode state
+                            isChecked={darkMode}
                             onChange={handleDarkModeChange}
                         />
                     </FormInput>
@@ -159,24 +122,12 @@ function SettingsControls() {
                             value="Delete"
                         />
                     </FormInput>
-                    <FormInput
-                        label="Logout"
-                        desc="Logout off your account"
-                        verticalAlignment="true"
-                    >
-                        <input
-                            type="button"
-                            value="Logout"
-                            onClick={handleLogout}
-                        />
-                    </FormInput>
                 </div>
             </form>
         </div>
     );
 }
 
-/** The main content for the settings page. */
 function ApplicationSettings() {
     return (
         <div className="ApplicationSettings">
@@ -186,9 +137,6 @@ function ApplicationSettings() {
     );
 }
 
-/** The settings page, plus the standard header and footer.
-TODO: It'd be good to have a component that includes the header and footer and changes out the body content
-instead of having each page re-include the header and footer. */
 function ApplicationSettingsPage() {
     return (
         <>

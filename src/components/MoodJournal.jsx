@@ -3,10 +3,12 @@ import { db, auth } from '../firebase';
 import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom';
 import NavBar from "./NavBar";
+import { useLoading } from "./Loading";
+
 function MoodJournal() {
   const [summary, setSummary] = useState("");
   const [mood, setMood] = useState("");
-  const [loading, setLoading] = useState(false)
+  const { setLoading } = useLoading()
   const moods = ["Happy", "Sad", "Angry", "Excited", "Calm"];
   const currentDate = new Date().toLocaleDateString();
   const navigate = useNavigate()
@@ -67,7 +69,7 @@ function MoodJournal() {
   useEffect(() => {
     const fetchMoodJournals = async () => {
       if (!auth.currentUser) return;
-
+      setLoading(true)
       const userId = auth.currentUser.uid;
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
@@ -105,6 +107,9 @@ function MoodJournal() {
       } catch (error) {
         console.error("Error fetching mood journals:", error);
       }
+      finally {
+        setLoading(false)
+      }
     };
 
     fetchMoodJournals();
@@ -113,6 +118,7 @@ function MoodJournal() {
   const toggleExpand = (date) => {
     setExpandedDate(expandedDate === date ? null : date);
   };
+
   return (
     <div style={styles.container}>
       <NavBar />
@@ -220,7 +226,7 @@ const styles = {
     //backgroundColor: 'white',
     borderStyle: 'solid',
     borderWidth: '10px',
-   // borderColor: 'white',
+    // borderColor: 'white',
     borderRadius: '32px',
     margin: '5vw',
   },

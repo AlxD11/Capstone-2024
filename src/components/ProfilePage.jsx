@@ -57,7 +57,7 @@ function ProfileSettings() {
 					setOldPhone(userData.Phone || "(972) 000-0000");
 					setOldUserWishes(userData.Improve || "Example: I wish I could be less stressed about work");
 					setOldUserGoals(userData.Goal || "Example: I want to work towards feeling like it's ok to set boundaries with coworkers and other people.");
-					setOldUserHealth(userData.Health || "Examples: ADHD, anxiety, interpersonal boundaries");
+					setOldUserHealth(userData.mentalHealthTopic || "Examples: ADHD, anxiety, interpersonal boundaries");
 					setOldUserMedication(userData.Medication || "Yet to set your current Medication/s");
 				} else {
 					console.log("No user data found for UID:", userId)
@@ -116,7 +116,7 @@ function ProfileSettings() {
 			if (phone) newFields.Phone = phone;
 			if (userWishes) newFields.Improve = userWishes;
 			if (userGoals) newFields.Goal = userGoals;
-			if (userHealth) newFields.Health = userHealth;
+			if (userHealth) newFields.mentalHealthTopic = userHealth;
 
 			if (Object.keys(newFields).length > 0) {
 				await updateDoc(userDoc, newFields);
