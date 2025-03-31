@@ -134,6 +134,7 @@ function MonthReport() {
     let endMonthPrevious = dateStart.getMonth() - 1;
     let endYearPrevious = dateStart.getYear();
     
+    // Move to the previous year if we went from January (0) to December (11)
     if (endMonthPrevious == -1) {
         endMonthPrevious = 11;
         endYearPrevious --;
@@ -308,32 +309,82 @@ function MonthReport() {
         return <div>Error: {error.message}</div>;
     }
     
+    // Calculate the overall averages for the sleep / energy / mood data
+    let sleepAvg = 0;
+    let sleepCount = 0;
+    let physicalAvg = 0;
+    let physicalCount = 0;
+    let mentalAvg = 0;
+    let mentalCount = 0;
+    /* 0: Object { day: "2025-03-16", sleepQuality: 0, physicalEnergy: 0, … } */
+    userDataCurrent.forEach((item) => {
+        if (item.sleepQuality != 0) {
+            sleepAvg += item.sleepQuality;
+            sleepCount++;
+        }
+        if (item.physicalEnergy != 0) {
+            physicalAvg += item.physicalEnergy;
+            physicalCount++;
+        }
+        if (item.mentalEnergy != 0) {
+            mentalAvg += item.mentalEnergy;
+            mentalCount++;
+        }
+       
+    });
+    
+    sleepAvg = sleepAvg / sleepCount;
+    physicalAvg = physicalAvg / physicalCount;
+    mentalAvg = mentalAvg / mentalCount;
+    
+    // Calculate the overall averages for last month's sleep / energy / mood data
+    let sleepAvgPrevious = 0;
+    sleepCount = 0;
+    let physicalAvgPrevious = 0;
+    physicalCount = 0;
+    let mentalAvgPrevious = 0;
+    mentalCount = 0;
+    /* 0: Object { day: "2025-03-16", sleepQuality: 0, physicalEnergy: 0, … } */
+    userDataPrevious.forEach((item) => {
+        if (item.sleepQuality != 0) {
+            sleepAvgPrevious += item.sleepQuality;
+            sleepCount++;
+        }
+        if (item.physicalEnergy != 0) {
+            physicalAvgPrevious += item.physicalEnergy;
+            physicalCount++;
+        }
+        if (item.mentalEnergy != 0) {
+            mentalAvgPrevious += item.mentalEnergy;
+            mentalCount++;
+        }
+       
+    });
+    
+    sleepAvgPrevious = sleepAvgPrevious / sleepCount;
+    physicalAvgPrevious = physicalAvgPrevious / physicalCount;
+    mentalAvgPrevious = mentalAvgPrevious / mentalCount;
+    
     // Use toDateString() to leave out the time info, which can throw off the report calendar display.
-    /* TODO: I feel this will probably duplicate the overview for as many days the user has logged data this month.
-    I'm trying to figure out how to get just the average sleep / physical energy / mental energy for each month instead of a day-by-day array.
-    Also, I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
+    /* TODO: I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
     return (
         <div className="MonthReport">
             <h2>Your mood in {monthName}</h2>
             <div className="MonthReportInfo">
                 <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
-                <div>
-                    {userDataCurrent.map((day, index) => (
-                        <div>
-                            <h3>Overview</h3>
-                            <p>Your <span className="category">sleep</span> has been {describeData(day.sleepQuality)}.</p>
-                            <p>Your <span className="category">physical energy</span> has been {describeData(day.physicalEnergy)}.</p>
-                            <p>Your <span className="category">mental energy</span> has been {describeData(day.mentalEnergy)}.</p>
-                        </div>
-                    ))}
-                    {userDataPrevious.map((day, index) => (
-                        <div>
-                            <h3>Compared to Last Month</h3>
-                            <p>Your <span className="category">sleep</span> was {describeData(day.sleepQuality)}.</p>
-                            <p>Your <span className="category">physical energy</span> was {describeData(day.physicalEnergy)}.</p>
-                            <p>Your <span className="category">mental energy</span> was {describeData(day.mentalEnergy)}.</p>
-                        </div>
-                    ))}
+                <div className="summaries">
+                    <div className="overview">
+                        <h3>Overview</h3>
+                        <p>Your <span className="category">sleep</span> has been {describeData(sleepAvg)}</p>
+                        <p>Your <span className="category">physical energy</span> has been {describeData(physicalAvg)}</p>
+                        <p>Your <span className="category">mental energy</span> has been {describeData(mentalAvg)}</p>
+                    </div>
+                    <div>
+                        <h3>Compared to Last Month</h3>
+                        <p>Your <span className="category">sleep</span> was {describeData(sleepAvgPrevious)}</p>
+                        <p>Your <span className="category">physical energy</span> was {describeData(physicalAvgPrevious)}</p>
+                        <p>Your <span className="category">mental energy</span> was {describeData(mentalAvgPrevious)}</p>
+                    </div>
                     
                 </div>
             </div>
@@ -349,66 +400,68 @@ function describeData(data)
 {
     if (data > 4)
     {
-        return "excellent";
+        return "excellent. Congrats!";
     }
     else if (data > 3)
     {
-        return "good";
+        return "good. Nice work! Your efforts are paying off.";
     }
     else if (data > 2)
     {
-        return "okay"; //"so-so"
+        return "okay. You're doing good."; //"so-so"
     }
     else if (data > 1)
     {
-        return "not the best"; //poor
+        return "not the best. That's ok, these thins take time."; //poor
     }
     else if (data > 0)
     {
-        return "needing a lot of attention"; //miserable
+        return "needing a lot of attention. Don't worry, we'll get there."; //miserable
     }
     else
     {
-        return "unmeasured";
+        return "unmeasured.";
     }
 }
 
-/** Returns a descriptive comparision of how data1 relates to data2.
+/** @status - logic is bugged and needs refining
+ *  
+ * Returns a descriptive comparision of how data1 relates to data2.
  * Data is assumed to go from low values (worse) to high values (better). */
 function compareData(data1, data2)
 {
-    if (data2 == null)
+    if (data2 == null || data1 == null)
     {
-        return "(unmeasurable, whoops)";
+        return "unmeasurable";
     }
     else if ((data1 - data2) > 0.25)
     {
-        return "a little better";
+        return "a little better then";
     }
     else if ((data1 - data2) > 0.5)
     {
-        return "better";
+        return "better then";
     }
     else if ((data1 - data2) > 1)
     {
-        return "much better";
+        return "much better then";
     }
     else if ((data2 - data1) > 0.25)
     {
-        return "a little less";
+        return "a little less then";
     }
     // If data2 is larger (better) by a lot,
     else if ((data2 - data1) > 0.5)
     {
-        return "not quite as good";
+        return "not quite as good as";
     }
     else if ((data2 - data1) > 1)
     {
-        return "not nearly as good";
+        return "not nearly as good as";
     }
     else
     {
-        return "about the same";
+        return "about the same as"; // occuring when one data is "unmeasurable" but the other is valid
     }
 }
 
