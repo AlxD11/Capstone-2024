@@ -5,6 +5,7 @@ import '../styles/GlobalStyles.css';
 import '../styles/NavBar.css';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from "../contexts/AuthContext"
+import { FaUser, FaCog, FaSignOutAlt, FaUserEdit } from 'react-icons/fa';
 
 function NavBar() {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -56,10 +57,24 @@ function NavBar() {
                 {showDropdown && (
                     <div className="dropdown-menu">
                         <ul>
-                            <li><Link to="/profile">Profile</Link></li>
-                            <li><Link to="/edit-profile">Profile Settings</Link></li>
-                            <li><Link to="/settings">Application Settings</Link></li>
-                            <li onClick={handleLogout}>Logout</li>
+                            <li>
+                                <Link to="/profile">
+                                    <FaUser className="dropdown-icon" /> Profile
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/edit-profile">
+                                    <FaUserEdit className="dropdown-icon" /> Profile Settings
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/settings">
+                                    <FaCog className="dropdown-icon" /> Application Settings
+                                </Link>
+                            </li>
+                            <li onClick={handleLogout}>
+                                <FaSignOutAlt className="dropdown-icon" /> Logout
+                            </li>
                         </ul>
                     </div>
                 )}

@@ -1,4 +1,3 @@
-// src/App.js
 import React, { createContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
@@ -18,12 +17,12 @@ import Reports from './Reports.jsx';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db, auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { LoadingProvider, LoadingComponent } from './Loading';
 
 export const ThemeContext = createContext(null);
 
 function App() {
     const [theme, setTheme] = useState("light");
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -36,7 +35,6 @@ function App() {
                         const data = docSnap.data();
                         if (data && data.dark_mode !== undefined) {
                             setTheme(data.dark_mode ? "dark" : "light");
-                            setLoading(false);
                             return;
                         }
                     }
@@ -47,24 +45,14 @@ function App() {
                 const storedPreference = localStorage.getItem('darkMode');
                 if (storedPreference === 'true' || storedPreference === 'false') {
                     setTheme(storedPreference === 'true' ? 'dark' : 'light');
-                    setLoading(false);
                     return;
                 }
+            }
 
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    setTheme('dark');
-                } else {
-                    setTheme('light');
-                }
-                setLoading(false);
-
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
             } else {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    setTheme("dark");
-                } else {
-                    setTheme("light");
-                }
-                setLoading(false);
+                setTheme('light');
             }
         });
 
@@ -79,43 +67,40 @@ function App() {
             try {
                 const userDocRef = doc(db, "user_info", auth.currentUser.uid, "Data", "Preferences");
                 await setDoc(userDocRef, { dark_mode: newTheme === "dark" }, { merge: true });
-                localStorage.setItem('darkMode', newTheme === "dark");
             } catch (error) {
                 console.error("Error updating dark mode preference:", error);
             }
-        } else {
-            localStorage.setItem('darkMode', newTheme === "dark");
         }
+        localStorage.setItem('darkMode', newTheme === "dark");
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            <div className="a" id={theme}>
-                <AuthProvider>
-                    <Router>
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/create-account" element={<CreateAccount />} />
-                            <Route path="/reset-password" element={<ResetPassword />} />
-                            <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
-                            <Route path="/poll-screen" element={<PrivateRoute><MoodPollScreen /></PrivateRoute>} />
-                            <Route path="/Reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
-                            <Route path="/mood-journal" element={<PrivateRoute><MoodJournal /></PrivateRoute>} />
-                            <Route path="/settings" element={<PrivateRoute><ApplicationSettingsPage /></PrivateRoute>} />
-                            <Route path="/profile" element={<PrivateRoute><ProfileViewPage /></PrivateRoute>} />
-                            <Route path="/edit-profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-                            <Route path="/professional-help" element={<PrivateRoute><ProfessionalHelp /></PrivateRoute>} />
-                            <Route path="/medications" element={<PrivateRoute><MedicationsPage /></PrivateRoute>} />
-                        </Routes>
-                        <NavigateHomeIfLoggedIn />
-                    </Router>
-                </AuthProvider>
-            </div>
-        </ThemeContext.Provider>
+        <LoadingProvider>
+            <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                <div className="a" id={theme}>
+                    <AuthProvider>
+                        <Router>
+                            <Routes>
+                                <Route path="/" element={<Login />} />
+                                <Route path="/create-account" element={<CreateAccount />} />
+                                <Route path="/reset-password" element={<ResetPassword />} />
+                                <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+                                <Route path="/poll-screen" element={<PrivateRoute><MoodPollScreen /></PrivateRoute>} />
+                                <Route path="/Reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
+                                <Route path="/mood-journal" element={<PrivateRoute><MoodJournal /></PrivateRoute>} />
+                                <Route path="/settings" element={<PrivateRoute><ApplicationSettingsPage /></PrivateRoute>} />
+                                <Route path="/profile" element={<PrivateRoute><ProfileViewPage /></PrivateRoute>} />
+                                <Route path="/edit-profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+                                <Route path="/professional-help" element={<PrivateRoute><ProfessionalHelp /></PrivateRoute>} />
+                                <Route path="/medications" element={<PrivateRoute><MedicationsPage /></PrivateRoute>} />
+                            </Routes>
+                            <NavigateHomeIfLoggedIn />
+                        </Router>
+                    </AuthProvider>
+                </div>
+            </ThemeContext.Provider>
+            <LoadingComponent />
+        </LoadingProvider>
     );
 }
 

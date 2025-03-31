@@ -4,7 +4,6 @@ import smile_neutral from '../assets/smile_neutral.png';
 import smile_poor from '../assets/smile_poor.png';
 import smile_miserable from '../assets/smile_miserable.png';
 import { useNavigate } from 'react-router-dom';
-//import { Link, useNavigate } from 'react-router-dom';
 import '../styles/GlobalStyles.css';
 import '../styles/MoodPollScreen.css';
 import MainScreen from './MainScreen.jsx';
