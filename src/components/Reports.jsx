@@ -118,69 +118,9 @@ const MyResponsiveTimeRange = ({rangeStart, rangeEnd}) => {
     );
 };
 
-function MonthReport() {
+function Report({dateStart, dateEnd, dateStartPrevious, title, timeframe}) {
     
-    let today = new Date();
-    let dateStart = new Date(today.valueOf() - ((today.getDate() - 1) * 86400000)); // 86,400,000 milliseconds per day
-    let endMonth = dateStart.getMonth() + 1;
-    let endYear = dateStart.getFullYear();
-    // Move to the next year if we went from December (11) to January (0)
-    if (endMonth == 12) {
-        endMonth = 0;
-        endYear ++;
-    }
-    let dateEnd = new Date(endYear + "-" + (endMonth + 1) + "-01"); // Add 1 to month to account for 0-index offset
     
-    let endMonthPrevious = dateStart.getMonth() - 1;
-    let endYearPrevious = dateStart.getYear();
-    
-    // Move to the previous year if we went from January (0) to December (11)
-    if (endMonthPrevious == -1) {
-        endMonthPrevious = 11;
-        endYearPrevious --;
-    }
-    let dateStartPrevious = new Date(endYearPrevious + "-" + (endMonthPrevious + 1) + "-01");
-    
-    let monthName = "this month";
-    switch(dateStart.getMonth())
-    {
-        case 0:
-            monthName = "January";
-            break;
-        case 1:
-            monthName = "February";
-            break;
-        case 2:
-            monthName = "March";
-            break;
-        case 3:
-            monthName = "April";
-            break;
-        case 4:
-            monthName = "May";
-            break;
-        case 5:
-            monthName = "June";
-            break;
-        case 6:
-            monthName = "July";
-            break;
-        case 7:
-            monthName = "August";
-            break;
-        case 8:
-            monthName = "September";
-            break;
-        case 9:
-            monthName = "October";
-            break;
-        case 10:
-            monthName = "November";
-            break;
-        case 11:
-            monthName = "December";
-            break;
-    }
     
     const [userDataCurrent, setUserDataCurrent] = useState([]);
     const [userDataPrevious, setUserDataPrevious] = useState([]);
@@ -369,7 +309,7 @@ function MonthReport() {
     /* TODO: I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
     return (
         <div className="MonthReport">
-            <h2>Your mood in {monthName}</h2>
+            <h2>Your mood {title}</h2>
             <div className="MonthReportInfo">
                 <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
                 <div className="summaries">
@@ -380,7 +320,7 @@ function MonthReport() {
                         <p>Your <span className="category">mental energy</span> has been {describeData(mentalAvg)}</p>
                     </div>
                     <div>
-                        <h3>Compared to Last Month</h3>
+                        <h3>Compared to Last {timeframe}</h3>
                         <p>Your <span className="category">sleep</span> was {describeData(sleepAvgPrevious)}</p>
                         <p>Your <span className="category">physical energy</span> was {describeData(physicalAvgPrevious)}</p>
                         <p>Your <span className="category">mental energy</span> was {describeData(mentalAvgPrevious)}</p>
@@ -465,6 +405,87 @@ function compareData(data1, data2)
     }
 }
 
+function WeekReport() {
+    let today = new Date();
+    let dateStart = new Date(today.valueOf() - ((today.getDay()) * 86400000)); // 86,400,000 milliseconds per day
+    let dateEnd = new Date(dateStart.valueOf() + (7 * 86400000)); // Add 7 days
+    let dateStartPrevious = new Date(dateStart.valueOf() - (7 * 86400000)); //Rewind 7 days
+    
+    return(
+        <Report dateStart={dateStart} dateEnd={dateEnd} dateStartPrevious={dateStartPrevious} title="this Week" timeframe="Week" />
+     );
+}
+
+function MonthReport() {
+    let today = new Date();
+    let dateStart = new Date(today.valueOf() - ((today.getDate() - 1) * 86400000)); // 86,400,000 milliseconds per day
+    let endMonth = dateStart.getMonth() + 1;
+    let endYear = dateStart.getFullYear();
+    // Move to the next year if we went from December (11) to January (0)
+    if (endMonth == 12) {
+        endMonth = 0;
+        endYear ++;
+    }
+    let dateEnd = new Date(endYear + "-" + (endMonth + 1) + "-01"); // Add 1 to month to account for 0-index offset
+    
+    let endMonthPrevious = dateStart.getMonth() - 1;
+    let endYearPrevious = dateStart.getYear();
+    
+    // Move to the previous year if we went from January (0) to December (11)
+    if (endMonthPrevious == -1) {
+        endMonthPrevious = 11;
+        endYearPrevious --;
+    }
+    let dateStartPrevious = new Date(endYearPrevious + "-" + (endMonthPrevious + 1) + "-01");
+    
+    let monthName = "this ";
+    switch(dateStart.getMonth())
+    {
+        case 0:
+            monthName += "January";
+            break;
+        case 1:
+            monthName += "February";
+            break;
+        case 2:
+            monthName += "March";
+            break;
+        case 3:
+            monthName += "April";
+            break;
+        case 4:
+            monthName += "May";
+            break;
+        case 5:
+            monthName += "June";
+            break;
+        case 6:
+            monthName += "July";
+            break;
+        case 7:
+            monthName += "August";
+            break;
+        case 8:
+            monthName += "September";
+            break;
+        case 9:
+            monthName += "October";
+            break;
+        case 10:
+            monthName += "November";
+            break;
+        case 11:
+            monthName += "December";
+            break;
+        default:
+            "month";
+    }
+    
+    return(
+       <Report dateStart={dateStart} dateEnd={dateEnd} dateStartPrevious={dateStartPrevious} title={monthName} timeframe="Month" />
+    );
+}
+
 function YearReport() {
     let year = new Date().getFullYear();
     
@@ -480,10 +501,13 @@ function YearReport() {
 }
 
 function Reports() {
+    
+    
     return (
         <>
             <MainScreen>
                 <div className="Reports">
+                    <WeekReport />
                     <MonthReport/>
                     <YearReport/>
                 </div>
