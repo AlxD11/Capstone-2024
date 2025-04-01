@@ -1,39 +1,42 @@
 import '../styles/GlobalStyles.css';
 import MainScreen from './MainScreen.jsx';
-import { Link, useNavigate } from 'react-router-dom';
 
-function Func({ link })
-{
-	<div>
-		<p> link is <a href={link}>here</a>. (link)</p>
-	</div>
-}
-function Support()
-{
-	
-	return (
-		<div className="Support">
-			<h2>Resources</h2>
-			<p>Put all your cool stuff here</p>
-			
-			<Func link="https://duckduckgo.com/?t=ffab&q=BroCode+React+cards+tutorial+-noai&iax=videos&ia=videos&iai=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DyYiwxYqQ9vg" />
-		</div>
-	);
-}
+function Support() {
+    return (
+        <div className="Support">
+            <h2>Contact & Support</h2>
+            <p>
+                If you or someone you know needs support, please don’t hesitate to reach out. Below are various ways you can connect with mental health professionals, crisis helplines, and community support groups.
+            </p>
 
-// These last two things are what this file "returns."
+            <div className="contact-section">
+                <h3>📞 Emergency & Crisis Support</h3>
+                <p><strong>National Suicide Prevention Lifeline:</strong> 988 (24/7, Free & Confidential)</p>
+                <p><strong>Crisis Text Line:</strong> Text <em>"HELLO"</em> to 741741</p>
+                <p><strong>Substance Abuse Helpline:</strong> 1-800-662-HELP (4357)</p>
+            </div>
 
+            <div className="contact-section">
+                <h3>📬 Reach Out to Us</h3>
+                <p><strong>Email:</strong> <a href="mailto:support@yourwebsite.com">support@yourwebsite.com</a></p> {/*placeholder email for rn*/}
+                <p><strong>Phone:</strong> <span className="phone-number">+1 (234) 567-890</span></p> {/*placeholder number for rn*/}
+            </div>
 
-function SupportPage(){
-	/* Important: React components MUST return only one element.
-	Either wrap everything in a <div>, or use blank tags like this does. */
-	return (
-		<>
-			<MainScreen>
-				<Support />
-			</MainScreen>
-		</>
-	);
+           
+
+            
+        </div>
+    );
 }
 
-export default SupportPage
+function SupportPage() {
+    return (
+        <>
+            <MainScreen>
+                <Support />
+            </MainScreen>
+        </>
+    );
+}
+
+export default SupportPage;
