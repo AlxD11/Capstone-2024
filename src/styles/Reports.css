@@ -4,8 +4,8 @@ h3
 	color: var(--brown);
 }
 
-h2 {
-	
+.Reports h2 {
+
 	margin-top: 6em;
 }
 
@@ -18,7 +18,7 @@ h2 {
 {
 	display: grid;
 	grid-template-columns: 55vw 30vw;
-	
+
 	/* Single column o narrow screens */
 	@media (max-width: 1024px) {
 		display: block;
