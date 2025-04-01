@@ -119,7 +119,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
     const [lineData, setLineData] = useState([]);
     const { setLoading } = useLoading();
     const [error, setError] = useState(null);
-  
+
     useEffect(() => {
       const fetchData = async () => {
         setLoading(true);
@@ -134,16 +134,16 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
 
           const startDate = new Date(rangeStart);
           const endDate = new Date(rangeEnd);
-  
+
           const startTimestamp = Timestamp.fromDate(startDate);
           const endTimestamp = Timestamp.fromDate(endDate);
-  
+
           const q = query(
             collection(db, "user_info", userId, "Data", "Mood Poll", "Mood_entries"),
             where("date", ">=", startTimestamp),
             where("date", "<", endTimestamp)
           );
-  
+
           const querySnapshot = await getDocs(q);
           const data = querySnapshot.docs.map((doc) => {
             const docData = doc.data();
@@ -168,7 +168,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
               data: data.map((item) => ({ x: item.day, y: item.mentalEnergy })),
             },
           ];
-  
+
           setLineData(transformedData);
           console.log("Line fetched:", transformedData);
           setLoading(false);
@@ -177,10 +177,10 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
           setLoading(false);
         }
       };
-  
+
       fetchData();
-    }, [rangeStart, rangeEnd]); 
-  
+    }, [rangeStart, rangeEnd]);
+
     console.log("Line Data:", lineData);
 
     if (error) {
@@ -218,7 +218,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
             }}
             axisLeft={{
                 tickSize: 3,
-                tickPadding: 5, 
+                tickPadding: 5,
                 tickRotation: 0,
                 legend: 'Value',
                 legendOffset: -40,
@@ -430,7 +430,7 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
     /* TODO: I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
     return (
         <div className="MonthReport">
-            <h2>Your mood {title}</h2>
+            <h2 className="ReportHeader2">Your mood {title}</h2>
             <div className="MonthReportInfo" style={{ display: 'flex', alignItems: 'flex-start' }}>
                 <div style={{ flex: '1', marginRight: '20px' }}> {/* Container for MyResponsiveTimeRange, flex 1 */}
                     <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
@@ -483,7 +483,7 @@ function describeData(data) {
 }
 
 /** @status - logic is bugged and needs refining
- *  
+ *
  * Returns a descriptive comparision of how data1 relates to data2.
  * Data is assumed to go from low values (worse) to high values (better). */
 function compareData(data1, data2) {

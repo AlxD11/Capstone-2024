@@ -109,7 +109,7 @@ function OtherResources() {
                 title={resource.title}
                 description="Click here to learn more."
                 link={resource.href}
-                imageUrl={resource.img} 
+                imageUrl={resource.img}
             />
         );
     }
@@ -121,7 +121,7 @@ function ProfessionalHelp() {
         <div className="ProfessionalHelp">
             <h2>Professional Help Resources</h2>
             <p className="crisis-hotline">Crisis Hotline: 988</p>
-            <div className="resource-cards-container"> 
+            <div className="resource-cards-container">
                 <FindTherapist />
                 <MedicationResources />
                 <OtherResources />
