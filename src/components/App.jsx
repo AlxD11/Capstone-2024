@@ -10,6 +10,9 @@ import ProfilePage from './ProfilePage';
 import ProfileViewPage from './ProfileViewPage';
 import MedicationsPage from './MedicationsPage';
 import ProfessionalHelp from './ProfessionalHelp';
+import BestPractices from './BestPractices'; // 3/31
+import Support from './Support'; // 3/31
+import Developers from './Developers'; // 3/31
 import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../contexts/AuthContext';
@@ -93,6 +96,10 @@ function App() {
                                 <Route path="/settings" element={<PrivateRoute><ApplicationSettingsPage /></PrivateRoute>} />
                                 <Route path="/profile" element={<PrivateRoute><ProfileViewPage /></PrivateRoute>} />
                                 <Route path="/edit-profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+                                <Route path="/professional-help" element={<PrivateRoute><ProfessionalHelp /></PrivateRoute>} />
+                                <Route path="/best-practices" element={<PrivateRoute><BestPractices /></PrivateRoute>} />            // 3/31
+                                <Route path="/support" element={<PrivateRoute><Support /></PrivateRoute>} />                        // 3/31
+                                <Route path="/developers" element={<PrivateRoute><Developers /></PrivateRoute>} />                 //3/31
                                 <Route path="/professional-help" element={<PrivateRoute><ProfessionalHelp /></PrivateRoute>} />
                                 <Route path="/medications" element={<PrivateRoute><MedicationsPage /></PrivateRoute>} />
                             </Routes>

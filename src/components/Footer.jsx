@@ -34,9 +34,9 @@ function Footer()
 			<div className="Footer-resources">
 				<p><b>Resources</b></p>
 				<p><Link to ="/professional-help">Professional Help</Link></p>
-				<p><a href="">Best Practices</a></p>
-				<p><a href="">Support</a></p>
-				<p><a href="">Developers</a></p>
+				<p><Link to ="/best-practices">Best Practices</Link></p>
+				<p><Link to ="/support">Support</Link></p>
+				<p><Link to ="/developers">Developers</Link></p>
 			</div>
 		</div>
 	);
