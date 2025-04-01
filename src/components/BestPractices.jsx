@@ -8,11 +8,11 @@ function Func({ link })
 		<p> link is <a href={link}>here</a>. (link)</p>
 	</div>
 }
-function ProfessionalHelp()
+function BestPractices()
 {
 	
 	return (
-		<div className="ProfessionalHelp">
+		<div className="BestPractices">
 			<h2>Professional Help Resources</h2>
 			<p>Put all your cool stuff here</p>
 			
