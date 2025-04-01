@@ -14,6 +14,7 @@ import MoodJournal from './MoodJournal';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import Reports from './Reports.jsx';
+import DetailedReports from "./DetailedReports.jsx"
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db, auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -87,6 +88,7 @@ function App() {
                                 <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
                                 <Route path="/poll-screen" element={<PrivateRoute><MoodPollScreen /></PrivateRoute>} />
                                 <Route path="/Reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
+                                <Route path="/DetailedReports" element={<PrivateRoute><DetailedReports /></PrivateRoute>} />
                                 <Route path="/mood-journal" element={<PrivateRoute><MoodJournal /></PrivateRoute>} />
                                 <Route path="/settings" element={<PrivateRoute><ApplicationSettingsPage /></PrivateRoute>} />
                                 <Route path="/profile" element={<PrivateRoute><ProfileViewPage /></PrivateRoute>} />

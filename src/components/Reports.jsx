@@ -7,6 +7,7 @@ import MainScreen from './MainScreen';
 import '../styles/GlobalStyles.css';
 import '../styles/Reports.css';
 import { useLoading } from './Loading';
+import { useNavigate } from 'react-router-dom';
 
 const MyResponsiveTimeRange = ({ rangeStart, rangeEnd }) => {
     const [calendarData, setCalendarData] = useState([]);
@@ -115,132 +116,7 @@ const MyResponsiveTimeRange = ({ rangeStart, rangeEnd }) => {
     );
 };
 
-const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
-    const [lineData, setLineData] = useState([]);
-    const { setLoading } = useLoading();
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const currentUser = auth.currentUser;
-          if (!currentUser) {
-            console.error("No user is signed in.");
-            return;
-          }
-          const userId = currentUser.uid;
 
-          const startDate = new Date(rangeStart);
-          const endDate = new Date(rangeEnd);
-  
-          const startTimestamp = Timestamp.fromDate(startDate);
-          const endTimestamp = Timestamp.fromDate(endDate);
-  
-          const q = query(
-            collection(db, "user_info", userId, "Data", "Mood Poll", "Mood_entries"),
-            where("date", ">=", startTimestamp),
-            where("date", "<", endTimestamp)
-          );
-  
-          const querySnapshot = await getDocs(q);
-          const data = querySnapshot.docs.map((doc) => {
-            const docData = doc.data();
-            return {
-              day: docData.date.toDate().toISOString().slice(0, 10),
-              sleepQuality: docData.sleepQuality || 0,
-              physicalEnergy: docData.physicalEnergy || 0,
-              mentalEnergy: docData.mentalEnergy || 0,
-            };
-          });
-          const transformedData = [
-            {
-              id: "Sleep Quality",
-              data: data.map((item) => ({ x: item.day, y: item.sleepQuality })),
-            },
-            {
-              id: "Physical Energy",
-              data: data.map((item) => ({ x: item.day, y: item.physicalEnergy })),
-            },
-            {
-              id: "Mental Energy",
-              data: data.map((item) => ({ x: item.day, y: item.mentalEnergy })),
-            },
-          ];
-  
-          setLineData(transformedData);
-          console.log("Line fetched:", transformedData);
-          setLoading(false);
-        } catch (err) {
-          setError(err);
-          setLoading(false);
-        }
-      };
-  
-      fetchData();
-    }, [rangeStart, rangeEnd]); 
-  
-    console.log("Line Data:", lineData);
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
-
-    return (
-        <ResponsiveLine
-            data={lineData}
-            margin={{ top: 20, right: 30, bottom: 60, left: 50 }}
-            width={500}
-            height={400}
-            xScale={{ type: 'point' }}
-            yScale={{ type: 'linear', min: 0 }}
-            yFormat=" >-.2f"
-            curve="monotoneX"
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-                tickSize: 3,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'Day',
-                legendOffset: 40,
-                legendPosition: 'middle',
-                truncateTickAt: 0,
-                format: (value) => {
-                    const date = new Date(value);
-                    return date.toLocaleDateString('en-US', { day: 'numeric' });
-                },
-                style: {
-                    tickTextColor: 'black',
-                    tickTextFontSize: 12,
-                },
-            }}
-            axisLeft={{
-                tickSize: 3,
-                tickPadding: 5, 
-                tickRotation: 0,
-                legend: 'Value',
-                legendOffset: -40,
-                legendPosition: 'middle',
-                truncateTickAt: 0,
-                tickValues: [0, 1, 2, 3, 4, 5],
-                style: {
-                    tickTextColor: 'black',
-                    tickTextFontSize: 12,
-                },
-            }}
-            pointSize={6}
-            pointColor={{ theme: 'background' }}
-            pointBorderWidth={1}
-            pointBorderColor={{ from: 'serieColor' }}
-            pointLabel="data.yFormatted"
-            pointLabelYOffset={-8}
-            enableTouchCrosshair={true}
-            useMesh={true}
-        />
-    );
-};
 
 function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
     const [userDataCurrent, setUserDataCurrent] = useState([]);
@@ -435,9 +311,6 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
                 <div style={{ flex: '1', marginRight: '20px' }}> {/* Container for MyResponsiveTimeRange, flex 1 */}
                     <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
                 </div>
-                <div style={{ flex: '1', height: '300px' }}> {/* Container for MyResponsiveLine, flex 1 */}
-                    <MyResponsiveLine rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()}/>
-                </div>
                 <div style={{ flex: '1', marginLeft: '20px', display: 'flex', flexDirection: 'column' }}> {/* Container for summaries, flex 1 */}
                     <div className="overview" style={{ marginBottom: '20px' }}>
                         <h3>Overview</h3>
@@ -610,14 +483,19 @@ function YearReport() {
 
 
 function Reports() {
+    const navigate = useNavigate();
     return (
         <>
             <MainScreen>
                 <div className="Reports">
                     <WeekReport />
-
                     <MonthReport />
                     <YearReport />
+                    <button
+                        type="button"
+                        className="linked-button"
+                        onClick={() => navigate('/DetailedReports')}>Detailed Reports
+                    </button>
                 </div>
             </MainScreen>
         </>
