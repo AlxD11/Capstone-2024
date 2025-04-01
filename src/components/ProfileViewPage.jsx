@@ -14,7 +14,6 @@ function ViewProfileSettings() {
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
-	const [userName, setUserName] = useState('');
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [phone, setPhone] = useState('');
@@ -33,7 +32,6 @@ function ViewProfileSettings() {
 				if (doc.exists()) {
 					const userData = doc.data()
 					setName(userData.Name ? userData.Name : <span style={{ color: 'red' }}>Yet to set your Name</span>);
-					setUserName(userData.UserName ? userData.UserName : <span style={{ color: 'red' }}>Yet to set your Username</span>);
 					setEmail(userData.email ? userData.email : <span style={{ color: 'red' }}>Yet to set your Email ID</span>);
 					setPhone(userData.Phone ? userData.Phone : <span style={{ color: 'red' }}>Yet to set your Phone Number</span>);
 					setUserWishes(userData.Improve ? userData.Improve : <span style={{ color: 'red' }}>Yet to set your Wishes</span>);
@@ -67,14 +65,6 @@ function ViewProfileSettings() {
 	return (
 		<div className="ViewProfileSettings">
 			<div className="SettingsControls-column">
-				<FormInput
-					label="Username"
-					verticalAlignment="true"
-					textOnly="true"
-				>
-					<p className="ViewSetting">{userName}</p>
-				</FormInput>
-
 				<FormInput
 					label="Name"
 					verticalAlignment="true"
