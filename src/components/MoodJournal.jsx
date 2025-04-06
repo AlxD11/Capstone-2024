@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc, orderBy } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "./NavBar";
 import { useLoading } from "./Loading";
@@ -87,16 +87,18 @@ function MoodJournal() {
 
       const journalQuery = query(
         moodEntriesCollection,
-        where('date', '>=', Timestamp.fromDate(weekAgo)),
-        where('date', '<=', Timestamp.fromDate(today))
+        where("date", ">=", Timestamp.fromDate(weekAgo)),
+        where("date", "<=", Timestamp.fromDate(today)),
+        orderBy("date")
       );
+
 
       try {
         const jounalQuerySnapshot = await getDocs(journalQuery);
         const journals = {};
         jounalQuerySnapshot.forEach((document1) => {
           const data = document1.data();
-          const date = data.date.toDate().toISOString().split('T')[0];
+          const date = data.date.toDate().toDateString();
           if (!journals[date]) {
             journals[date] = [];
           }

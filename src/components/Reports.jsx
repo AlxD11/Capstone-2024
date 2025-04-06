@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ResponsiveTimeRange } from '@nivo/calendar';
-import { ResponsiveLine } from '@nivo/line'
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import MainScreen from './MainScreen';
@@ -40,8 +39,13 @@ const MyResponsiveTimeRange = ({ rangeStart, rangeEnd }) => {
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => {
                     const docData = doc.data();
+                    const date = docData.date.toDate();
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
                     return {
-                        day: docData.date.toDate().toISOString().slice(0, 10),
+                        day: formattedDate,
                         value: docData.moodLevel || 0,
                     };
                 });
@@ -152,7 +156,7 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
                 const data = querySnapshot.docs.map((doc) => {
                     const docData = doc.data();
                     return {
-                        day: docData.date.toDate().toISOString().slice(0, 10),
+                        day: docData.date.toDate().toDateString(),
                         sleepQuality: docData.sleepQuality || 0,
                         physicalEnergy: docData.physicalEnergy || 0,
                         mentalEnergy: docData.mentalEnergy || 0,
@@ -195,7 +199,7 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
                 const dataPrevious = querySnapshotPrevious.docs.map((doc) => {
                     const docData = doc.data();
                     return {
-                        day: docData.date.toDate().toISOString().slice(0, 10),
+                        day: docData.date.toDate().toDateString(),
                         sleepQuality: docData.sleepQuality || 0,
                         physicalEnergy: docData.physicalEnergy || 0,
                         mentalEnergy: docData.mentalEnergy || 0,

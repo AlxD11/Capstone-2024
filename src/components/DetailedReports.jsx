@@ -43,7 +43,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
                         const docData = doc.data();
                         if (docData) {
                             return {
-                                day: docData.date.toDate().toISOString().slice(0, 10),
+                                day: docData.date.toDate().toDateString(),
                                 sleepQuality: docData.sleepQuality || 0,
                                 physicalEnergy: docData.physicalEnergy || 0,
                                 mentalEnergy: docData.mentalEnergy || 0,
@@ -100,7 +100,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
     return (
         <ResponsiveLine
             data={lineData}
-            margin={{ top: 20, right: 30, bottom: 60, left: 50 }}
+            margin={{ top: 20, right: 150, bottom: 60, left: 50 }}
             width={500}
             height={400}
             xScale={{ type: 'point' }}
@@ -110,11 +110,37 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
             axisTop={null}
             axisRight={null}
             theme={{
+                textColor: "var(--body-text-color)",
                 labels: {
                     text: {
                         fill: "var(--body-text-color)",
                     },
-                }
+                },
+                legends: {
+                    text: {
+                        fill: "var(--body-text-color)",
+                    },
+                },
+                grid: {
+                    line: {
+                        stroke: "var(--body-text-color)",
+                        strokeWidth: 1,
+                    },
+                },
+                axis: {
+                    legend:{
+                        text: {
+                            fontSize: 12,
+                            fill: "var(--body-text-color)",
+                        },
+                    },
+                    ticks: {
+                        text: {
+                            fontSize: 12,
+                            fill: "var(--body-text-color)",
+                        },
+                    },
+                },
             }}
             axisBottom={{
                 tickSize: 3,
@@ -128,10 +154,6 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
                     const date = new Date(value);
                     return date.toLocaleDateString('en-US', { day: 'numeric' });
                 },
-                style: {
-                    tickTextColor: "var(--body-text-color)",
-                    tickTextFontSize: 12,
-                },
             }}
             axisLeft={{
                 tickSize: 3,
@@ -142,11 +164,8 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
                 legendPosition: 'middle',
                 truncateTickAt: 0,
                 tickValues: [0, 1, 2, 3, 4, 5],
-                style: {
-                    tickTextColor: "var(--body-text-color)",
-                    tickTextFontSize: 12,
-                },
             }}
+            colors={{ scheme: 'category10' }}
             pointSize={6}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={1}
@@ -155,6 +174,32 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
             pointLabelYOffset={-8}
             enableTouchCrosshair={true}
             useMesh={true}
+            legends={[
+                {
+                    anchor: 'bottom-right',
+                    direction: 'column',
+                    justify: false,
+                    translateX: 100,
+                    translateY: 0,
+                    itemsSpacing: 0,
+                    itemDirection: 'left-to-right',
+                    itemWidth: 80,
+                    itemHeight: 20,
+                    itemOpacity: 0.75,
+                    symbolSize: 12,
+                    symbolShape: 'circle',
+                    symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                    effects: [
+                        {
+                            on: 'hover',
+                            style: {
+                                itemBackground: 'rgba(0, 0, 0, .03)',
+                                itemOpacity: 1
+                            }
+                        }
+                    ]
+                }
+            ]}
         />
     );
 };
