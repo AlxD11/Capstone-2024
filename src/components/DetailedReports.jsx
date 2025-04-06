@@ -237,7 +237,7 @@ function Report({ dateStart, dateEnd, title, dateStartPrevious }) {
                 const journals = {};
                 jounalQuerySnapshot.forEach((document1) => {
                     const data = document1.data();
-                    const date = data.date.toDate().toISOString().split('T')[0];
+                    const date = data.date.toDate().toDateString();
                     if (!journals[date]) {
                         journals[date] = [];
                     }
