@@ -65,13 +65,14 @@ function OtherResources() {
 
                 if (userDocSnap.exists()) {
                     const userData = userDocSnap.data();
-                    const mentalHealthConcern = userData.mentalHealthTopic.toLowerCase();
+                    const mentalHealthConcern = userData.mentalHealthTopic;
 
                     if (mentalHealthConcern) {
                         const resourcesCollectionRef = collection(db, 'namiBlogLinks');
+                        const lowerCaseConcern = mentalHealthConcern.toLowerCase()
                         const q = query(
                             resourcesCollectionRef,
-                            where('keywords', 'array-contains', mentalHealthConcern)
+                            where('keywords', 'array-contains', lowerCaseConcern)
                         );
                         const querySnapshot = await getDocs(q);
 
@@ -79,10 +80,23 @@ function OtherResources() {
                             const resourceData = querySnapshot.docs[0].data();
                             setResource(resourceData);
                         } else {
-                            setError('No resources found for your specific concern.');
+                            setError('No resources found for your specific concern1.');
                         }
                     } else {
-                        setError('Mental health concern not found in your profile.');
+                        const resourcesCollectionRef = collection(db, 'namiBlogLinks');
+                        const q = query(
+                            resourcesCollectionRef,
+                            where('keywords', 'array-contains', 'mental health')
+                        );
+                        const querySnapshot = await getDocs(q);
+
+                        if (!querySnapshot.empty) {
+                            const resourceData = querySnapshot.docs[0].data();
+                            setResource(resourceData);
+                        }
+                        else {
+                            setError('No resources found for your specific concern.');
+                        }
                     }
                 } else {
                     setError('User profile not found.');
