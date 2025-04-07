@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ResponsiveTimeRange } from '@nivo/calendar';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
@@ -8,83 +8,13 @@ import '../styles/Reports.css';
 import { useLoading } from './Loading';
 import { useNavigate } from 'react-router-dom';
 
-const MyResponsiveTimeRange = ({ rangeStart, rangeEnd }) => {
-    const [calendarData, setCalendarData] = useState([]);
-    const { setLoading } = useLoading();
-    const [error, setError] = useState(null);
+const MyResponsiveTimeRange = ({ rangeStart, rangeEnd, calenData }) => {
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const currentUser = auth.currentUser;
-                if (!currentUser) {
-                    console.error("No user is signed in.");
-                    return;
-                }
-                const userId = currentUser.uid;
-                const now = new Date();
-                const startOfYear = new Date(now.getFullYear(), 0, 1);
-                const startTimestamp = Timestamp.fromDate(startOfYear);
-                const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
-                const endTimestamp = Timestamp.fromDate(endOfYear);
-
-                const q = query(
-                    collection(db, "user_info", userId, "Data", "Mood Poll", "Mood_entries"),
-                    where('date', '>=', startTimestamp),
-                    where('date', '<', endTimestamp)
-                );
-
-                const querySnapshot = await getDocs(q);
-                const data = querySnapshot.docs.map((doc) => {
-                    const docData = doc.data();
-                    const date = docData.date.toDate();
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const formattedDate = `${year}-${month}-${day}`;
-                    return {
-                        day: formattedDate,
-                        value: docData.moodLevel || 0,
-                    };
-                });
-                const aggregatedData = Object.values(
-                    data.reduce((acc, item) => {
-                        const day = item.day;
-                        if (!acc[day]) {
-                            acc[day] = { day: day, sum: 0, count: 0 };
-                        }
-                        acc[day].sum += item.value;
-                        acc[day].count++;
-                        return acc;
-                    }, {})
-                ).map((item) => ({
-                    day: item.day,
-                    value: item.count > 0 ? Math.round(item.sum / item.count) : 0,
-                }));
-
-                setCalendarData(aggregatedData);
-                console.log("Data fetched:", aggregatedData);
-                setLoading(false);
-            } catch (err) {
-                setError(err);
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-    console.log("Calendar Data:", calendarData);
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
 
     return (
         <div style={{ height: '400px' }}>
             <ResponsiveTimeRange
-                data={calendarData}
+                data={calenData}
                 from={rangeStart}
                 to={rangeEnd}
                 emptyColor="#eeeeee"
@@ -123,9 +53,11 @@ const MyResponsiveTimeRange = ({ rangeStart, rangeEnd }) => {
 
 
 function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
+    console.log("Report rendered with:", { dateStart, dateEnd, timeframe})
+    const [calendarData, setCalendarData] = useState([]);
     const [userDataCurrent, setUserDataCurrent] = useState([]);
     const [userDataPrevious, setUserDataPrevious] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -143,6 +75,46 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
                 const endTimestamp = Timestamp.fromDate(dateEnd);
                 const startTimestampPrevious = Timestamp.fromDate(dateStartPrevious);
                 const endTimestampPrevious = Timestamp.fromDate(dateStart);
+
+                const now = new Date();
+                const startOfYear = new Date(now.getFullYear(), 0, 1);
+                const startYearTimestamp = Timestamp.fromDate(startOfYear);
+                const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+                const endYearTimestamp = Timestamp.fromDate(endOfYear);
+
+                const qc = query(
+                    collection(db, "user_info", userId, "Data", "Mood Poll", "Mood_entries"),
+                    where('date', '>=', startYearTimestamp),
+                    where('date', '<', endYearTimestamp)
+                );
+
+                const calQuerySnapshot = await getDocs(qc);
+                const calData = calQuerySnapshot.docs.map((doc) => {
+                    const docData1 = doc.data();
+                    const date = docData1.date.toDate();
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+                    return {
+                        day: formattedDate,
+                        value: docData1.moodLevel || 0,
+                    };
+                });
+                const calAggregatedData = Object.values(
+                    calData.reduce((acc, item) => {
+                        const day = item.day;
+                        if (!acc[day]) {
+                            acc[day] = { day: day, sum: 0, count: 0 };
+                        }
+                        acc[day].sum += item.value;
+                        acc[day].count++;
+                        return acc;
+                    }, {})
+                ).map((item) => ({
+                    day: item.day,
+                    value: item.count > 0 ? Math.round(item.sum / item.count) : 0,
+                }));
 
                 const q = query(
                     collection(db, "user_info", userId, "Data", "Mood Poll", "Mood_entries"),
@@ -229,10 +201,12 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
                     mentalEnergy: item.mentalCount > 0 ? Math.round(item.mentalSum / item.mentalCount) : 0,
                 }));
 
+                setCalendarData(calAggregatedData);
                 setUserDataCurrent(aggregatedData);
                 setUserDataPrevious(aggregatedDataPrevious);
-                console.log("Data fetched:", userDataCurrent);
+
                 setLoading(false);
+
             } catch (err) {
                 setError(err);
                 setLoading(false);
@@ -241,10 +215,6 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
 
         fetchData();
     }, []);
-    console.log("User Data:", userDataCurrent);
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -308,30 +278,40 @@ function Report({ dateStart, dateEnd, dateStartPrevious, title, timeframe }) {
 
     // Use toDateString() to leave out the time info, which can throw off the report calendar display.
     /* TODO: I'd like to make the comparisions more smooth / say something like "which is better / the same as /wrose than last month." */
-    return (
-        <div className="MonthReport">
-            <h2>Your mood {title}</h2>
-            <div className="MonthReportInfo" style={{ display: 'flex', alignItems: 'flex-start' }}>
-                <div style={{ flex: '1', marginRight: '20px' }}> {/* Container for MyResponsiveTimeRange, flex 1 */}
-                    <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
-                </div>
-                <div style={{ flex: '1', marginLeft: '20px', display: 'flex', flexDirection: 'column' }}> {/* Container for summaries, flex 1 */}
-                    <div className="overview" style={{ marginBottom: '20px' }}>
-                        <h3>Overview</h3>
-                        <p>Your <span className="category">sleep</span> has been {describeData(sleepAvg)}</p>
-                        <p>Your <span className="category">physical energy</span> has been {describeData(physicalAvg)}</p>
-                        <p>Your <span className="category">mental energy</span> has been {describeData(mentalAvg)}</p>
+    if (timeframe === "Month" || timeframe === "Week") {
+        return (
+            <div className="MonthReport">
+                <h2>Your mood {title}</h2>
+                <div className="MonthReportInfo" style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    <div style={{ flex: '1', marginRight: '20px' }}> {/* Container for MyResponsiveTimeRange, flex 1 */}
+                        <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} calenData={calendarData} />
                     </div>
-                    <div>
-                        <h3>Compared to Last {timeframe}</h3>
-                        <p>Your <span className="category">sleep</span> was {describeData(sleepAvgPrevious)}</p>
-                        <p>Your <span className="category">physical energy</span> was {describeData(physicalAvgPrevious)}</p>
-                        <p>Your <span className="category">mental energy</span> was {describeData(mentalAvgPrevious)}</p>
+                    <div style={{ flex: '1', marginLeft: '20px', display: 'flex', flexDirection: 'column' }}> {/* Container for summaries, flex 1 */}
+                        <div className="overview" style={{ marginBottom: '20px' }}>
+                            <h3>Overview</h3>
+                            <p>Your <span className="category">sleep</span> has been {describeData(sleepAvg)}</p>
+                            <p>Your <span className="category">physical energy</span> has been {describeData(physicalAvg)}</p>
+                            <p>Your <span className="category">mental energy</span> has been {describeData(mentalAvg)}</p>
+                        </div>
+                        <div>
+                            <h3>Compared to Last {timeframe}</h3>
+                            <p>Your <span className="category">sleep</span> was {describeData(sleepAvgPrevious)}</p>
+                            <p>Your <span className="category">physical energy</span> was {describeData(physicalAvgPrevious)}</p>
+                            <p>Your <span className="category">mental energy</span> was {describeData(mentalAvgPrevious)}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    } 
+     if(timeframe == "Year") {
+        return (
+            <div className="YearReport">
+                <h2>Your mood in {title}</h2>
+                <MyResponsiveTimeRange rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} calenData={calendarData} />
+            </div>
+        );
+    }
 }
 
 /** Returns a human-readable description of the data.
@@ -472,16 +452,12 @@ function MonthReport() {
 }
 
 function YearReport() {
-    let year = new Date().getFullYear();
-
-    let dateStart = year + "-01-01";
-    let dateEnd = year + "-12-31";
-
+    const now = new Date();
+    let dateStart = new Date(now.getFullYear(), 0, 1);
+    let dateEnd = new Date(now.getFullYear() + 1, 0, 1);
+    let dateStartPrevious = new Date(dateStart.getFullYear() - 1);
     return (
-        <div className="YearReport">
-            <h2>Your mood in {year}</h2>
-            <MyResponsiveTimeRange rangeStart={dateStart} rangeEnd={dateEnd} />
-        </div>
+        <Report dateStart={dateStart} dateEnd={dateEnd} dateStartPrevious={dateStartPrevious} title="This Year" timeframe="Year" />
     );
 }
 
@@ -504,6 +480,7 @@ function Reports() {
             </MainScreen>
         </>
     );
+
 }
 
 export default Reports;
