@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { useAuth } from "../contexts/AuthContext"
 import { Alert } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
-import { signInWithPopup, setPersistence, browserLocalPersistence, inMemoryPersistence } from 'firebase/auth'; // Import correct persistence types
+import { setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth';
+import { db } from "../firebase"; // this is to import firestore
+import { doc, setDoc, getDoc} from 'firebase/firestore';
 import { googleProvider, auth } from '../firebase';
 import { FaGoogle } from 'react-icons/fa';
 import appLogo from '../assets/app_logo.png';
@@ -23,11 +25,10 @@ function Login() {
       setError("");
       setLoading(true);
 
-      // Set persistence based on checkbox
       if (keepSignedIn) {
         await setPersistence(auth, browserLocalPersistence);
       } else {
-        await setPersistence(auth, inMemoryPersistence); // Use inMemoryPersistence for session-only
+        await setPersistence(auth, browserSessionPersistence);
       }
 
       await login(email, password);
@@ -43,13 +44,27 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      // Set persistence based on checkbox
       if (keepSignedIn) {
         await setPersistence(auth, browserLocalPersistence);
       } else {
-        await setPersistence(auth, inMemoryPersistence); // Use inMemoryPersistence for session-only
+        await setPersistence(auth, browserSessionPersistence);
       }
-      await auth.signInWithPopup(googleProvider);
+      const result = await auth.signInWithPopup(googleProvider);;
+      const user = result.user;
+      console.log("User UID:", user.uid);
+      const userDocRef = doc(db, "user_info", user.uid, "Data", "Profile");
+      const docSnap = await getDoc(userDocRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userDocRef, {
+          Name: user.displayName || '',
+          email: user.email || '',
+        });
+        console.log("New user data created in Firestore.");
+        window.location.reload();
+      } else {
+        console.log("User data already exists in Firestore.");
+      }
       navigate('/home');
     } catch (err) {
       setError("Google Sign-in failed");

@@ -38,45 +38,48 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
 
                 const querySnapshot = await getDocs(q);
 
-                const data = querySnapshot.docs
-                    .map((doc) => {
-                        const docData = doc.data();
-                        if (docData) {
-                            return {
-                                day: docData.date.toDate().toDateString(),
-                                sleepQuality: docData.sleepQuality || 0,
-                                physicalEnergy: docData.physicalEnergy || 0,
-                                mentalEnergy: docData.mentalEnergy || 0,
-                            };
-                        }
-                        return null;
-                    })
-                    .filter(item => item !== null);
+                const moodEntries = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        date: data.date.toDate().toDateString() ,
+                        sleepQuality: data.sleepQuality || 0,
+                        physicalEnergy: data.physicalEnergy || 0,
+                        mentalEnergy: data.mentalEnergy || 0,
+                    };
+                });
+
+                const dateRange = [];
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDate) {
+                    dateRange.push(new Date(currentDate).toDateString());
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
 
                 const transformedData = [
                     {
                         id: "Sleep Quality",
-                        data: data.map((item) => ({ x: item.day, y: item.sleepQuality })),
+                        data: dateRange.map(date => {
+                            const entry = moodEntries.find(e => e.date === date);
+                            return { x: date, y: entry ? entry.sleepQuality : 0 };
+                        }),
                     },
                     {
                         id: "Physical Energy",
-                        data: data.map((item) => ({ x: item.day, y: item.physicalEnergy })),
+                        data: dateRange.map(date => {
+                            const entry = moodEntries.find(e => e.date === date);
+                            return { x: date, y: entry ? entry.physicalEnergy : 0 };
+                        }),
                     },
                     {
                         id: "Mental Energy",
-                        data: data.map((item) => ({ x: item.day, y: item.mentalEnergy })),
+                        data: dateRange.map(date => {
+                            const entry = moodEntries.find(e => e.date === date);
+                            return { x: date, y: entry ? entry.mentalEnergy : 0 };
+                        }),
                     },
                 ];
 
-                // Check if all data arrays in transformedData are populated
-                const allDataPopulated = transformedData.every(series => series.data.length > 0);
-
-                if (allDataPopulated) {
-                    setLineData(transformedData);
-                } else {
-                    setLineData([]); // Set to empty array if not fully populated
-                }
-
+                setLineData(transformedData.filter(series => series.data.some(item => item.y !== null)));
                 console.log("Line fetched:", transformedData);
                 setLoading(false);
             } catch (err) {
@@ -95,8 +98,9 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
     }
 
     if (lineData.length === 0) {
-        return <div>Loading chart data...</div>;
+        return <div>No mood data available for the selected range.</div>;
     }
+
     return (
         <ResponsiveLine
             data={lineData}
@@ -204,7 +208,7 @@ const MyResponsiveLine = ({ rangeStart, rangeEnd }) => {
     );
 };
 
-function Report({ dateStart, dateEnd, title, dateStartPrevious }) {
+function Report({ dateStart, dateEnd, title}) {
     const { setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [moodJournals, setMoodJournals] = useState({});
@@ -262,7 +266,7 @@ function Report({ dateStart, dateEnd, title, dateStartPrevious }) {
         <div className="MonthReport">
             <h2>Your mood {title}</h2>
             <div className="MonthReportInfo" style={{ display: 'flex', alignItems: 'flex-start' }}>
-                <div style={{ flex: '1', height: '300px' }}> {/* Container for MyResponsiveLine, flex 1 */}
+                <div style={{ flex: '1', height: '450px', display: 'flex', flexDirection: 'column'  }}>
                     <MyResponsiveLine rangeStart={dateStart.toDateString()} rangeEnd={dateEnd.toDateString()} />
                 </div>
                 <div style={{ flex: '1', marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
@@ -304,9 +308,9 @@ function Report({ dateStart, dateEnd, title, dateStartPrevious }) {
 }
 function WeekReport() {
     let today = new Date();
-    let dateStart = new Date(today.valueOf() - ((today.getDay()) * 86400000)); // 86,400,000 milliseconds per day
-    let dateEnd = new Date(dateStart.valueOf() + (7 * 86400000)); // Add 7 days
-    let dateStartPrevious = new Date(dateStart.valueOf() - (7 * 86400000)); //Rewind 7 days
+    let dateStart = new Date(today.valueOf() - ((today.getDay()) * 86400000));
+    let dateEnd = new Date(dateStart.valueOf() + (7 * 86400000) - 86400000);
+    let dateStartPrevious = new Date(dateStart.valueOf() - (7 * 86400000));
 
     return (
         <Report dateStart={dateStart} dateEnd={dateEnd} dateStartPrevious={dateStartPrevious} title="this Week" />
@@ -315,11 +319,11 @@ function WeekReport() {
 
 function LastTwoWeeksReport() {
     let today = new Date();
-    let dateEnd = new Date(today.valueOf() - ((today.getDay()) * 86400000)); // End of current week (Sunday)
-    let dateStart = new Date(dateEnd.valueOf() - (14 * 86400000)); // Start of two weeks ago
+    let dateEnd = new Date(today.valueOf() - ((today.getDay()) * 86400000) - 86400000);
+    let dateStart = new Date(dateEnd.valueOf() - (13 * 86400000));
 
-    let dateEndPrevious = new Date(dateStart.valueOf() - 86400000); // end of previous 2 week period.
-    let dateStartPrevious = new Date(dateEndPrevious.valueOf() - (14 * 86400000)); // start of previous 2 week period.
+    let dateEndPrevious = new Date(dateStart.valueOf() - 86400000);
+    let dateStartPrevious = new Date(dateEndPrevious.valueOf() - (13 * 86400000));
 
     return (
         <Report dateStart={dateStart} dateEnd={dateEnd} dateStartPrevious={dateStartPrevious} dateEndPrevious={dateEndPrevious} title="Last Two Weeks" />
