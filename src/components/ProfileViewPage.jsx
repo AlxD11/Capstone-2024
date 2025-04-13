@@ -1,18 +1,17 @@
 import '../styles/GlobalStyles.css';
 import '../styles/SettingsPage.css';
-import { ClipLoader } from 'react-spinners';
 import SettingsScreen from './SettingsScreen.jsx';
 import FormInput from './user_inputs/FormInput.jsx';
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Link, useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import { useLoading } from './Loading';
 
 function ViewProfileSettings() {
 	// TODO: Get from backend
 
-	const [loading, setLoading] = useState(false);
+	const { setLoading } = useLoading();
 	const [error, setError] = useState('');
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
@@ -22,7 +21,7 @@ function ViewProfileSettings() {
 	const [userGoals, setUserGoals] = useState('');
 	// Make as a list separated by semicolons (??)
 	const [userHealth, setUserHealth] = useState('');
-	const [userMedication, setUserMedication] = useState('');
+	const [userMedication, setUserMedication] = useState([]);
 	const fetchUserData = async () => {
 		setLoading(true)
 		try {
@@ -36,8 +35,13 @@ function ViewProfileSettings() {
 					setPhone(userData.Phone ? userData.Phone : <span style={{ color: 'red' }}>Yet to set your Phone Number</span>);
 					setUserWishes(userData.Improve ? userData.Improve : <span style={{ color: 'red' }}>Yet to set your Wishes</span>);
 					setUserGoals(userData.Goal ? userData.Goal : <span style={{ color: 'red' }}>Yet to set your goals</span>);
-					setUserHealth(userData.mentalHealthTopic ? userData.Health : <span style={{ color: 'red' }}>Yet to set your Current health concerns/conditions</span>);
-					setUserMedication(userData.Medication ? userData.Medication : <span style={{ color: 'red' }}>Yet to set your current Medication/s</span>);
+					setUserHealth(userData.mentalHealthTopic ? userData.mentalHealthTopic.toUpperCase() : <span style={{ color: 'red' }}>Yet to set your Current health concerns/conditions</span>);
+					const loadedMeds = userData.medications.map((med, index) => ({
+						id: index.toString(),
+						name: med.name,
+						order: med.order !== undefined ? med.order : index
+					})).sort((a, b) => a.order - b.order);
+					setUserMedication(loadedMeds.length > 0 ? loadedMeds : <span style={{ color: 'red' }}>Yet to set your current Medication/s</span>);
 				} else {
 					console.log("No user data found for UID:", userId)
 				}
@@ -54,14 +58,7 @@ function ViewProfileSettings() {
 	useEffect(() => {
 		fetchUserData();
 	}, []);
-	//Loading state
-	if (loading) {
-		return (
-			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-				<ClipLoader color="#36D7B7" size={50} />
-			</div>
-		);
-	}
+
 	return (
 		<div className="ViewProfileSettings">
 			<div className="SettingsControls-column">
@@ -120,7 +117,21 @@ function ViewProfileSettings() {
 					verticalAlignment="true"
 					textOnly="true"
 				>
-					<p className="ViewSetting">{userMedication}</p>
+					<div className="ViewSetting">
+						{Array.isArray(userMedication) ? (
+							userMedication.length > 0 ? (
+								<p>
+									{userMedication.map((med) => (
+										<li key={med.id}>{med.name}</li>
+									))}
+								</p>
+							) : (
+								userMedication
+							)
+						) : (
+							<p>{userMedication}</p>
+						)}
+					</div>
 				</FormInput>
 			</div>
 		</div>

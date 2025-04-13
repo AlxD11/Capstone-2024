@@ -7,7 +7,7 @@ import { db, auth } from '../firebase';
 import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext"
-import { ClipLoader } from 'react-spinners';
+import { useLoading } from './Loading';
 
 // TODO: This is very similar to the Settings page, so maybe figure out a way to recycle the components.
 
@@ -15,7 +15,7 @@ import { ClipLoader } from 'react-spinners';
 function ProfileSettings() {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const { setLoading } = useLoading();
 	const [error, setError] = useState('');
 	const [photoURL, setPhotoURL] = useState('');
 	const [name, setName] = useState('');
@@ -34,7 +34,6 @@ function ProfileSettings() {
 	const [oldUserGoals, setOldUserGoals] = useState('');
 	// Make as a list separated by semicolons (??)
 	const [oldUserHealth, setOldUserHealth] = useState('');
-	const [oldUserMedication, setOldUserMedication] = useState('');
 	const promises = []
 	const navigate = useNavigate();
 	const handleOpenPopup = () => setIsPopupOpen(true);
@@ -56,7 +55,6 @@ function ProfileSettings() {
 					setOldUserWishes(userData.Improve || "Example: I wish I could be less stressed about work");
 					setOldUserGoals(userData.Goal || "Example: I want to work towards feeling like it's ok to set boundaries with coworkers and other people.");
 					setOldUserHealth(userData.mentalHealthTopic || "Examples: ADHD, anxiety, interpersonal boundaries");
-					setOldUserMedication(userData.Medication || "Yet to set your current Medication/s");
 				} else {
 					console.log("No user data found for UID:", userId)
 				}
@@ -73,13 +71,7 @@ function ProfileSettings() {
 	useEffect(() => {
 		fetchUserData();
 	}, []);
-	if (loading) {
-		return (
-			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-				<ClipLoader color="#36D7B7" size={50} />
-			</div>
-		);
-	}
+
 	const handleUpload = async () => {
 		if (selectedFile && currentUser) {
 			try {

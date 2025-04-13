@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
-
+import { useLoading } from './Loading';
 
 /* TODO: Recyle component for use on Profile page.
 Also make into a mini-navigation to get between profile settings and and application settings */
 function SettingsSidebar() {
 	const photoURL = ProfilePicture();
-	const [loading, setLoading] = useState(false);
+	const { setLoading } = useLoading();
 	const [error, setError] = useState('');
 	const [name, setName] = useState("Hello!");
 
@@ -39,14 +39,6 @@ function SettingsSidebar() {
 	useEffect(() => {
 		fetchUserData();
 	}, []);
-	//Loading state
-	if (loading) {
-		return (
-			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-				<ClipLoader color="#36D7B7" size={50} />
-			</div>
-		);
-	}
 
 	return (
 		<div className="SettingsSidebar">

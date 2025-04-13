@@ -188,8 +188,8 @@ you wanna use it / unlink the default global variable). */
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;

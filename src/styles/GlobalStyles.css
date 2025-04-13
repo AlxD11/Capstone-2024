@@ -80,7 +80,7 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	--light-gray: #d3d3d3;
 	--brown: #a52a2a;
 	--hot-pink: #ff69b4;
-	
+
 	background-color: #f3ebf6;
 	--body-text-color: black;
 	--body-text-light-color: rgb(92, 105, 118);
@@ -104,7 +104,7 @@ Variables cannot be used in @media queries, but I'm defining them anyway.
 	--light-gray: #2c2e36;
 	--brown: #ff5900;
 	--hot-pink: #ff69b4;
-	
+
 	background-color: #222;
 	--white: #ffffff;
 	--body-text-color: #e0e0e0;
@@ -183,11 +183,11 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .popup {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
+	top: 50%;
+    left: 50%; 
+    width: 20%;
+    height: auto;
+	background-color: var(--light-gray);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -195,6 +195,7 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 
 .popup-content {
 	background-color: var(--link-background-color);
+    color: var(--body-text-color);
 	padding: 35px;
 	border-radius: 25px;
 	position: relative;
@@ -207,9 +208,9 @@ FIXME: Padding is such that you must click directly on the text to get to the li
 	background: none;
 	border: none;
 	cursor: pointer;
+	color: var(--body-text-color);
 }
 
 .popup-hidden {
 	display: none;
 }
-

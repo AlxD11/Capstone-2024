@@ -77,11 +77,22 @@
 }
 
 .SettingsSidebar {
-	min-width: fit-content;
-	background-color: var(--light-gray);
-	/* TODO: Center image in sidebar.*/
+    min-width: fit-content;
+    background-color: var(--light-gray);
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    width: 15vw;
+    box-sizing: border-box;
 }
 
+.SettingsSidebar .avatar {
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover; 
+    margin-bottom: 20px;
+}
 
 /* ---------------------------------------------- Profile Component Elements ---------------------------------------------- */
 

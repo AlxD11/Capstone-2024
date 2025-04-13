@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
 import { collection, addDoc, query, where, getDocs, updateDoc, Timestamp, doc, orderBy } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import NavBar from "./NavBar";
+import MainScreen from "./MainScreen";
 import { useLoading } from "./Loading";
 import '../styles/GlobalStyles.css';
 import '../styles/MoodJournal.css';
@@ -122,8 +122,8 @@ function MoodJournal() {
   };
 
   return (
+    <MainScreen>
     <div className="mood-journal-container">
-      <NavBar />
       <div className="mood-journal-form-container">
         <h2 className="mood-journal-heading">Mood Journal - {currentDate}</h2>
         <form onSubmit={handleSubmit} className="mood-journal-form">
@@ -205,6 +205,7 @@ function MoodJournal() {
         </form>
       </div>
     </div>
+    </MainScreen>
   );
 }
 
