@@ -329,7 +329,7 @@ function describeData(data) {
         return "okay. You're doing good."; //"so-so"
     }
     else if (data > 1) {
-        return "not the best. That's ok, these thins take time."; //poor
+        return "not the best. That's ok, these things take time."; //poor
     }
     else if (data > 0) {
         return "needing a lot of attention. Don't worry, we'll get there."; //miserable
