@@ -6,15 +6,14 @@ import ToggleButton from './user_inputs/ToggleButton.jsx';
 import FormInput from './user_inputs/FormInput.jsx';
 import { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from './App.jsx';
-import { useAuth } from "../contexts/AuthContext"
 import { doc, updateDoc } from "firebase/firestore";
 import { db, auth } from '../firebase';
+import firebase from 'firebase/compat/app';
 import { useLoading } from './Loading.jsx';
 
 function SettingsControls() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const [darkMode, setDarkMode] = useState(theme === 'dark');
-    const { logout } = useAuth();
     const { error, setError } = useState('');
     const navigate = useNavigate();
     const { setLoading } = useLoading();
@@ -22,6 +21,39 @@ function SettingsControls() {
     useEffect(() => {
         setDarkMode(theme === 'dark');
     }, [theme]);
+
+
+    const handleDeleteAccount = async () => {
+        const user = auth.currentUser;
+    
+        if (user) {
+          const confirmDelete = window.confirm(
+            'Are you sure you want to delete your account? This action cannot be undone.'
+          );
+    
+          if (confirmDelete) {
+            const password = prompt('Please enter your password to confirm deletion:');
+    
+            if (password) {
+              const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+    
+              try {
+                await user.reauthenticateWithCredential(credential);
+                await user.delete();
+                navigate('/');
+              } catch (reauthError) {
+                console.error('Error re-authenticating or deleting:', reauthError);
+                setError(getErrorMessage(reauthError.code));
+              }
+            } else {
+              setError('Password is required to delete the account.');
+            }
+          }
+        } else {
+          console.log('No user is currently logged in.');
+          setError('No user is currently logged in.');
+        }
+      };
 
     const handleDarkModeChange = async (newDarkMode) => {
         setDarkMode(newDarkMode);
@@ -121,6 +153,7 @@ function SettingsControls() {
                         <input
                             type="button"
                             value="Delete"
+                            onClick={handleDeleteAccount}
                         />
                     </FormInput>
                 </div>
