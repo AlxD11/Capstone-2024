@@ -1,10 +1,10 @@
 # Capstone 2024 - Team 9
 Team Members:
-Alex
-Rohan
-Deakon
-Salma
-Vishnu
+Alex Dierks,
+Rohan James,
+Deakon Watson,
+Salma Omary,
+Vishnu Kumar
 
 # Project description 
 We chose to create a web tool where users can journal their thoughts and emotions, record their physical and mental state for the day, and review trends in this data to see patterns.  
