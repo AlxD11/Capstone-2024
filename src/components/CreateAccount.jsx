@@ -8,7 +8,6 @@ import { doc, setDoc } from 'firebase/firestore';
 import appLogo from '../assets/app_logo.png';
 
 function CreateAccount() {
-  // State to manage form inputs
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,8 +16,6 @@ function CreateAccount() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-
-  // this is to save user info to firestore
 
   const saveUserToFirestore = async (userID, name, email) => {
     try {
@@ -69,6 +66,7 @@ function CreateAccount() {
               required
               style={styles.input}
             />
+            <small style={styles.helperText}>This field cannot be blank</small>
           </label>
           <label>
             Email:
@@ -79,6 +77,7 @@ function CreateAccount() {
               required
               style={styles.input}
             />
+            <small style={styles.helperText}>Please enter a valid email address</small>
           </label>
           <label>
             Password:
@@ -89,6 +88,7 @@ function CreateAccount() {
               required
               style={styles.input}
             />
+            <small style={styles.helperText}>Must be greater than 6 characters</small>
           </label>
           <label>
             Confirm Password:
@@ -99,6 +99,7 @@ function CreateAccount() {
               required
               style={styles.input}
             />
+            <small style={styles.helperText}>Must match the password above</small>
           </label>
           <button disabled={loading} type="submit" style={styles.button}>
             Create Account
@@ -108,10 +109,10 @@ function CreateAccount() {
           <Link to="/">Have an account? Login</Link>
         </div>
       </div>
-          <div style={styles.sidebar}>
-            <h2>Welcome to Neurological Harmony</h2>
-            <img src={appLogo} style={styles.appLogo} alt="App logo" />
-          </div>
+      <div style={styles.sidebar}>
+        <h2>Welcome to Neurological Harmony</h2>
+        <img src={appLogo} style={styles.appLogo} alt="App logo" />
+      </div>
     </div>
   );
 }
@@ -124,6 +125,7 @@ const styles = {
     display: 'flex',
     backgroundColor: '#F9E0EA',
     minHeight: '100vh',
+    fontFamily: 'sans-serif',
   },
   formContainer: {
     display: 'flex',
@@ -148,8 +150,17 @@ const styles = {
     flexDirection: 'column',
   },
   input: {
-    margin: '10px 0',
+    margin: '10px 0 2px 0',
     padding: '8px',
+    fontFamily: 'inherit',
+  },
+  helperText: {
+    fontSize: '0.75rem',
+    color: '#555',
+    marginBottom: '8px',
+    textAlign: 'left',
+    display: 'block',
+    fontFamily: 'inherit',
   },
   button: {
     marginTop: '10px',
@@ -162,6 +173,7 @@ const styles = {
     borderWidth: '4px',
     borderColor: '#FDAFB7',
     borderRadius: '8px',
+    fontFamily: 'inherit',
   },
   links: {
     marginTop: '20px',
