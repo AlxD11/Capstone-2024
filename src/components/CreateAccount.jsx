@@ -57,8 +57,8 @@ function CreateAccount() {
         <h2>Create an Account</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <form onSubmit={handleCreateAccount} style={styles.form}>
-          <label>
-            Name:
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Name:</label>
             <input
               type="text"
               value={name}
@@ -67,9 +67,9 @@ function CreateAccount() {
               style={styles.input}
             />
             <small style={styles.helperText}>This field cannot be blank</small>
-          </label>
-          <label>
-            Email:
+          </div>
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Email:</label>
             <input
               type="email"
               value={email}
@@ -78,9 +78,9 @@ function CreateAccount() {
               style={styles.input}
             />
             <small style={styles.helperText}>Please enter a valid email address</small>
-          </label>
-          <label>
-            Password:
+          </div>
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Password:</label>
             <input
               type="password"
               value={password}
@@ -89,9 +89,9 @@ function CreateAccount() {
               style={styles.input}
             />
             <small style={styles.helperText}>Must be greater than 6 characters</small>
-          </label>
-          <label>
-            Confirm Password:
+          </div>
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Confirm Password:</label>
             <input
               type="password"
               value={confirmPassword}
@@ -100,7 +100,7 @@ function CreateAccount() {
               style={styles.input}
             />
             <small style={styles.helperText}>Must match the password above</small>
-          </label>
+          </div>
           <button disabled={loading} type="submit" style={styles.button}>
             Create Account
           </button>
@@ -148,18 +148,30 @@ const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'stretch',
+    width: '80%',
+  },
+  fieldGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    marginBottom: '15px',
+  },
+  label: {
+    textAlign: 'left',
+    fontWeight: 'bold',
+    marginBottom: '4px',
+    fontFamily: 'inherit',
   },
   input: {
-    margin: '10px 0 2px 0',
     padding: '8px',
     fontFamily: 'inherit',
   },
   helperText: {
     fontSize: '0.75rem',
     color: '#555',
-    marginBottom: '8px',
+    marginTop: '4px',
     textAlign: 'left',
-    display: 'block',
     fontFamily: 'inherit',
   },
   button: {
